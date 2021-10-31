@@ -1,6 +1,6 @@
 {
   "name": "chuquyuan",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "main": "index.js",
   "repository": "https://github.com/code4history/ChuQuyuan.git",
   "author": "kobakazu0429 <kobakazu10@gmail.com>",
@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "handlebars": "^4.7.7",
+    "nunjucks": "^3.2.3",
     "panolens": "0.12.0",
     "swiper": "^7.0.8"
   }

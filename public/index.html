@@ -65,53 +65,47 @@
     <script src="https://unpkg.com/mapbox-gl-leaflet/leaflet-mapbox-gl.js"></script>
   </body>
   <script>
-    const MAP_CFG = {
-      accessToken:
-        "pk.eyJ1IjoicmVraXNoaWtva3VkbyIsImEiOiJjazRoMmF3dncwODU2M2ttdzI2aDVqYXVwIn0.8Hb9sekgjfck6Setxk5uVg",
-      style: "mapbox://styles/moritoru/ck4s6w8bd0sb51cpp9vn7ztty",
-      latLng: [36.2461984, 139.5278149],
-      zoom: 15,
-      minZoom: 5,
-      maxZoom: 21,
-    };
+    const accessToken = "pk.eyJ1IjoicmVraXNoaWtva3VkbyIsImEiOiJjazRoMmF3dncwODU2M2ttdzI2aDVqYXVwIn0.8Hb9sekgjfck6Setxk5uVg";
+    const style = "mapbox://styles/moritoru/ck4s6w8bd0sb51cpp9vn7ztty";
+    const latLng = [36.2461984, 139.5278149];
+    const zoom = 15;
+    const minZoom = 5;
+    const maxZoom = 21;
 
-    const MARKER_CFG = {
-      geoJson: "./demo.geojson",
-    };
+    const geoJsonHB = "./hb.geojson";
+    const geoJsonNJ = "./nj.geojson";
 
     const mymap = L.map("mapid", {
-      maxZoom: MAP_CFG.maxZoom,
-    }).setView(MAP_CFG.latLng, MAP_CFG.zoom);
+      maxZoom
+    }).setView(latLng, zoom);
 
     L.mapboxGL({
-      accessToken: MAP_CFG.accessToken,
-      style: MAP_CFG.style,
-      maxZoom: MAP_CFG.maxZoom,
-      minZoom: MAP_CFG.minZoom,
+      accessToken,
+      style,
+      maxZoom,
+      minZoom,
     }).addTo(mymap);
 
-    fetch(MARKER_CFG.geoJson)
+    fetch(geoJsonHB)
       .then(async (data) => data.json())
       .then((geojson) => {
         let popupHtmlTemplate = "";
 
         popupHtmlTemplate += `<div class="poi">`;
-        popupHtmlTemplate += `{{#if (gt images.length 1)}}
+        popupHtmlTemplate += `{{#if (gt images.length 0)}}
           <b>その他の画像:</b><br>
           <div class="swiper swiper-images">
             <div class="swiper-wrapper">
               {{#each images}}
-                {{#if (ne image.path path)}}
-                  <div class="swiper-slide">
-                    {{#if this.panorama_image}}
-                      <img src="{{{this.path}}}" onclick="ChuQuyuan.openPanorama('{{{this.path}}}');" class="panorama">
-                    {{else}}
-                      <a href="{{{this.path}}}" target="_blank">
-                        <img src="{{{this.path}}}">
-                      </a>
-                    {{/if}}
-                  </div>
-                {{/if}}
+                <div class="swiper-slide">
+                  {{#if this.panorama_image}}
+                    <img src="{{{this.path}}}" onclick="ChuQuyuan.openPanorama('{{{this.path}}}');" class="panorama">
+                  {{else}}
+                    <a href="{{{this.path}}}" target="_blank">
+                      <img src="{{{this.path}}}">
+                    </a>
+                  {{/if}}
+                </div>
               {{/each}}
               </div>
               <div class="swiper-button-next"></div>
@@ -126,6 +120,67 @@
           templates: {
             html: popupHtmlTemplate,
           },
+        });
+      })
+      .then((geojson) => {
+        geojson.features.forEach((feature) => {
+          if (feature.geometry) {
+            // source file coordinates are ordered by lnglat, but should be latlng.
+            const marker = L.marker(
+              feature.geometry.coordinates.reverse()
+            ).bindPopup(feature.result.html);
+            marker.on("click", (e) => {
+              const slideCount = document.querySelectorAll(
+                ":scope .swiper .swiper-slide"
+              ).length;
+
+              ChuQuyuan.createSwiper({ loop: slideCount > 1 });
+            });
+
+            marker.addTo(mymap);
+          }
+        });
+      });
+
+    fetch(geoJsonNJ)
+      .then(async (data) => data.json())
+      .then((geojson) => {
+        let popupHtmlTemplate = "";
+
+        popupHtmlTemplate += `<div class="poi">`;
+        popupHtmlTemplate += `{% if images.length > 0 %}
+          <b>その他の画像:</b><br>
+          <div class="swiper swiper-images">
+            <div class="swiper-wrapper">
+              {% for image in images %}
+                {% if image.path != path %}
+                  <div class="swiper-slide">
+                    {% if image.panorama_image %}
+                      <img src="{{ image.path }}" onclick="ChuQuyuan.openPanorama('{{ image.path }}');" class="panorama">
+                    {% else %}
+                      <a href="{{ image.path }}" target="_blank">
+                        <img src="{{ image.path }}">
+                      </a>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              {% endfor %}
+              </div>
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-pagination"></div>
+            </div>
+        {% endif %}`;
+        popupHtmlTemplate += `</div>`;
+
+        return ChuQuyuan.templateExtractor({
+          geojson,
+          templates: {
+            html: popupHtmlTemplate,
+          },
+          options: {
+            nunjucks: true,
+          }
         });
       })
       .then((geojson) => {
