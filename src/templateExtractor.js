@@ -44,8 +44,8 @@ const templateExtractor = ({ geojson, templates }) => {
   }
 
   geojson.features.forEach((feature) => {
+    feature.result = {};
     for (const key of Object.keys(templates)) {
-      feature.result = {};
       feature.result[key] = compiledTemplates[key](feature.properties);
     }
   });
