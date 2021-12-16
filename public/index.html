@@ -99,7 +99,7 @@
               {{#each images}}
                 <div class="swiper-slide">
                   {{#if this.panorama_image}}
-                    <img src="{{{this.path}}}" onclick="ChuQuyuan.openPanorama('{{{this.path}}}');" class="panorama">
+                    <img src="{{{this.path}}}" onclick="Quyuan.openPanorama('{{{this.path}}}');" class="panorama">
                   {{else}}
                     <a href="{{{this.path}}}" target="_blank">
                       <img src="{{{this.path}}}">
@@ -115,7 +115,7 @@
         {{/if}}`;
         popupHtmlTemplate += `</div>`;
 
-        return ChuQuyuan.templateExtractor({
+        return Quyuan.templateExtractor({
           geojson,
           templates: {
             html: popupHtmlTemplate,
@@ -134,7 +134,7 @@
                 ":scope .swiper .swiper-slide"
               ).length;
 
-              ChuQuyuan.createSwiper({ loop: slideCount > 1 });
+              Quyuan.createSwiper({ loop: slideCount > 1 });
             });
 
             marker.addTo(mymap);
@@ -156,7 +156,7 @@
                 {% if image.path != path %}
                   <div class="swiper-slide">
                     {% if image.panorama_image %}
-                      <img src="{{ image.path }}" onclick="ChuQuyuan.openPanorama('{{ image.path }}');" class="panorama">
+                      <img src="{{ image.path }}" onclick="Quyuan.openPanorama('{{ image.path }}');" class="panorama">
                     {% else %}
                       <a href="{{ image.path }}" target="_blank">
                         <img src="{{ image.path }}">
@@ -173,7 +173,7 @@
         {% endif %}`;
         popupHtmlTemplate += `</div>`;
 
-        return ChuQuyuan.templateExtractor({
+        return Quyuan.templateExtractor({
           geojson,
           templates: {
             html: popupHtmlTemplate,
@@ -195,7 +195,7 @@
                 ":scope .swiper .swiper-slide"
               ).length;
 
-              ChuQuyuan.createSwiper({ loop: slideCount > 1 });
+              Quyuan.createSwiper({ loop: slideCount > 1 });
             });
 
             marker.addTo(mymap);

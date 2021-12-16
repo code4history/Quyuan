@@ -22,8 +22,8 @@ module.exports = /** @type {import("webpack").Configuration} */ ({
   output: {
     clean: true,
     path: path.resolve(__dirname, "./dist"),
-    filename: `chuquyuan.min.js`,
-    library: "ChuQuyuan",
+    filename: `quyuan.min.js`,
+    library: "Quyuan",
     libraryTarget: "umd",
     globalObject: "this",
   },

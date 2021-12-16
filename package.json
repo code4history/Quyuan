@@ -1,8 +1,8 @@
 {
-  "name": "chuquyuan",
-  "version": "0.0.5",
+  "name": "quyuanjs",
+  "version": "0.0.6",
   "main": "index.js",
-  "repository": "https://github.com/code4history/ChuQuyuan.git",
+  "repository": "https://github.com/code4history/Quyuan.git",
   "author": "kobakazu0429 <kobakazu10@gmail.com>",
   "license": "MIT",
   "files": [
