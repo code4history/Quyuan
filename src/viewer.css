@@ -1,0 +1,44 @@
+.modal-for-viewer .container {
+  position: fixed;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  background: rgba(0,0,0,0.9);
+  transform: scale(0,0);
+  opacity: 0;
+}
+
+.modal-for-viewer .container.open {
+  z-index: 10000;
+  transform: scale(1,1);
+  opacity: 1;
+}
+
+.modal-for-viewer .container .close {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.modal-for-viewer .container .close > i {
+  color: #fff;
+  font-size: 30px;
+}
+
+.modal-for-viewer .container .viewer {
+  width: 100%;
+  height: 80%;
+  align-self: center;
+  background-color: #000;
+}
+
+img.viewer {
+  cursor: pointer;
+}
+
+img.img_template {
+  display: none;
+}

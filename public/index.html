@@ -52,14 +52,7 @@
   </head>
   <body>
     <div id="mapid"></div>
-
-    <div id="panorama-container">
-      <div class="close">
-        <i class="fa fa-times" aria-hidden="true"></i>
-      </div>
-      <div id="viewer"></div>
-    </div>
-
+    <div id="modalbase"></div>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet-src.js"></script>
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/mapbox-gl-leaflet/leaflet-mapbox-gl.js"></script>
@@ -89,6 +82,8 @@
     fetch(geoJsonHB)
       .then(async (data) => data.json())
       .then((geojson) => {
+        Quyuan.setUpModalForViewer("modalbase");
+
         let popupHtmlTemplate = "";
 
         popupHtmlTemplate += `<div class="poi">`;
@@ -98,20 +93,14 @@
             <div class="swiper-wrapper">
               {{#each images}}
                 <div class="swiper-slide">
-                  {{#if this.panorama_image}}
-                    <img src="{{{this.path}}}" onclick="Quyuan.openPanorama('{{{this.path}}}');" class="panorama">
-                  {{else}}
-                    <a href="{{{this.path}}}" target="_blank">
-                      <img src="{{{this.path}}}">
-                    </a>
-                  {{/if}}
+                  <img src="{{{this.path}}}" onclick="Quyuan.openViewer('{{{this.path}}}', {{{this.panorama_image}}});" class="viewer">
                 </div>
               {{/each}}
-              </div>
-              <div class="swiper-button-next"></div>
-              <div class="swiper-button-prev"></div>
-              <div class="swiper-pagination"></div>
             </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
+          </div>
         {{/if}}`;
         popupHtmlTemplate += `</div>`;
 
@@ -120,67 +109,6 @@
           templates: {
             html: popupHtmlTemplate,
           },
-        });
-      })
-      .then((geojson) => {
-        geojson.features.forEach((feature) => {
-          if (feature.geometry) {
-            // source file coordinates are ordered by lnglat, but should be latlng.
-            const marker = L.marker(
-              feature.geometry.coordinates.reverse()
-            ).bindPopup(feature.result.html);
-            marker.on("click", (e) => {
-              const slideCount = document.querySelectorAll(
-                ":scope .swiper .swiper-slide"
-              ).length;
-
-              Quyuan.createSwiper({ loop: slideCount > 1 });
-            });
-
-            marker.addTo(mymap);
-          }
-        });
-      });
-
-    fetch(geoJsonNJ)
-      .then(async (data) => data.json())
-      .then((geojson) => {
-        let popupHtmlTemplate = "";
-
-        popupHtmlTemplate += `<div class="poi">`;
-        popupHtmlTemplate += `{% if images.length > 0 %}
-          <b>その他の画像:</b><br>
-          <div class="swiper swiper-images">
-            <div class="swiper-wrapper">
-              {% for image in images %}
-                {% if image.path != path %}
-                  <div class="swiper-slide">
-                    {% if image.panorama_image %}
-                      <img src="{{ image.path }}" onclick="Quyuan.openPanorama('{{ image.path }}');" class="panorama">
-                    {% else %}
-                      <a href="{{ image.path }}" target="_blank">
-                        <img src="{{ image.path }}">
-                      </a>
-                    {% endif %}
-                  </div>
-                {% endif %}
-              {% endfor %}
-              </div>
-              <div class="swiper-button-next"></div>
-              <div class="swiper-button-prev"></div>
-              <div class="swiper-pagination"></div>
-            </div>
-        {% endif %}`;
-        popupHtmlTemplate += `</div>`;
-
-        return Quyuan.templateExtractor({
-          geojson,
-          templates: {
-            html: popupHtmlTemplate,
-          },
-          options: {
-            nunjucks: true,
-          }
         });
       })
       .then((geojson) => {

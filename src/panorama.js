@@ -1,17 +1,17 @@
-const PANOLENS = require("panolens")
-require("./panorama.css")
+const PANOLENS = require("./panolens");
+const elementsFromHtml = require("./elements_from_html");
 
-const panoramaContainerEl = document.getElementById("panorama-container");
-const viewerEl = document.getElementById("viewer");
-const closeButtonEl = panoramaContainerEl.querySelector(".close");
+let containerEl;
+let viewerEl;
+let closeButtonEl;
 
-const viewer = new PANOLENS.Viewer({ container: viewerEl });
-let panorama = null;
+let viewer;
+let panorama;
 
 const openPanorama = (imgUrl) => {
   panorama = new PANOLENS.ImagePanorama(imgUrl);
   viewer.add(panorama);
-  panoramaContainerEl.classList.add("open");
+  containerEl.classList.add("open");
 };
 
 const disposePanorama = () => {
@@ -20,13 +20,33 @@ const disposePanorama = () => {
   panorama = null;
 };
 
-closeButtonEl.addEventListener(
-  "click",
-  () => {
-    disposePanorama();
-    panoramaContainerEl.classList.remove("open");
-  },
-  false
-);
+const setUpModalForPanorama = (div) => {
+  const elements = elementsFromHtml(`<div class="panorama container">
+    <div class="close">
+      <i class="fa fa-times" aria-hidden="true"></i>
+    </div>
+    <div class="viewer"></div>
+  </div>`);
+  div.appendChild(elements);
 
-module.exports = openPanorama;
+  containerEl = document.querySelector(".modal-for-viewer .panorama.container");
+  viewerEl = containerEl.querySelector(".viewer");
+  closeButtonEl = containerEl.querySelector(".close");
+
+  viewer = new PANOLENS.Viewer({ container: viewerEl });
+  panorama = null;
+
+  closeButtonEl.addEventListener(
+    "click",
+    () => {
+      disposePanorama();
+      containerEl.classList.remove("open");
+    },
+    false
+  );
+};
+
+module.exports = {
+  openPanorama,
+  setUpModalForPanorama
+};

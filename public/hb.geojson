@@ -56,6 +56,16 @@
             "mid_thumbnail": "",
             "small_thumbnail": "/2.png",
             "panorama_image": true
+          },
+          {
+            "path": "./no7-DSC_7169.JPG",
+            "shootingDate": "2021-06-20T15:55:41",
+            "shooter": "",
+            "description": "",
+            "note": "",
+            "mid_thumbnail": "./no7-DSC_7169.JPG",
+            "small_thumbnail": "./no7-DSC_7169.JPG",
+            "panorama_image": false
           }
         ],
         "books": [

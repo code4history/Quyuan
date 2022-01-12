@@ -3602,6 +3602,11 @@
   "resolved" "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
   "version" "1.1.2"
 
+"viewerjs@^1.10.2":
+  "integrity" "sha512-v/4+OUF/71JthlvYuqfse+WGkMJO0LxvWiOLsAoxWw+RWjMdEBWn0ZQ5Mc+OhNIFd9uLhG62GzfFIplvix8odg=="
+  "resolved" "https://registry.npmjs.org/viewerjs/-/viewerjs-1.10.2.tgz"
+  "version" "1.10.2"
+
 "watchpack@^2.2.0":
   "integrity" "sha512-up4YAn/XHgZHIxFBVCdlMiWDj6WaLKpwVeGQk2I5thdYxF/KmF0aaz6TfJZ/hfl1h/XlcDr7k1KH7ThDagpFaA=="
   "resolved" "https://registry.npmjs.org/watchpack/-/watchpack-2.2.0.tgz"

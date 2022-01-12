@@ -1,9 +1,10 @@
-const templateExtractor = require("./templateExtractor.js")
-const createSwiper = require("./swiper.js")
-const openPanorama = require("./panorama")
+const templateExtractor = require("./template_extractor");
+const createSwiper = require("./swiper");
+const {openViewer, setUpModalForViewer} = require("./viewer");
 
 module.exports = {
   templateExtractor,
   createSwiper,
-  openPanorama
+  openViewer,
+  setUpModalForViewer
 };
