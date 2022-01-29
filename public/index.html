@@ -65,7 +65,6 @@
     const minZoom = 5;
     const maxZoom = 21;
 
-    const geoJsonHB = "./hb.geojson";
     const geoJsonNJ = "./nj.geojson";
 
     const mymap = L.map("mapid", {
@@ -79,7 +78,7 @@
       minZoom,
     }).addTo(mymap);
 
-    fetch(geoJsonHB)
+    fetch(geoJsonNJ)
       .then(async (data) => data.json())
       .then((geojson) => {
         Quyuan.setUpModalForViewer("modalbase");
@@ -87,21 +86,21 @@
         let popupHtmlTemplate = "";
 
         popupHtmlTemplate += `<div class="poi">`;
-        popupHtmlTemplate += `{{#if (gt images.length 0)}}
+        popupHtmlTemplate += `{% if images.length > 0 %}
           <b>その他の画像:</b><br>
           <div class="swiper swiper-images">
             <div class="swiper-wrapper">
-              {{#each images}}
+              {% for image in images %}
                 <div class="swiper-slide">
-                  <img src="{{{this.path}}}" onclick="Quyuan.openViewer('{{{this.path}}}', {{{this.panorama_image}}});" class="viewer">
+                  <img src="{{ image.path }}" onclick="Quyuan.openViewer('{{ image.path }}', {{ image.panorama_image }});" class="viewer">
                 </div>
-              {{/each}}
+              {% endfor %}
+              </div>
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+              <div class="swiper-pagination"></div>
             </div>
-            <div class="swiper-button-next"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-pagination"></div>
-          </div>
-        {{/if}}`;
+        {% endif %}`;
         popupHtmlTemplate += `</div>`;
 
         return Quyuan.templateExtractor({

@@ -1,5 +1,3 @@
-require("./handlebars_helper.js");
-const Handlebars = require("handlebars");
 const nunjucks = require("nunjucks");
 
 // param: geojson
@@ -39,20 +37,15 @@ const nunjucks = require("nunjucks");
 // }
 
 const template_extractor = ({ geojson, templates, options }) => {
-  const handlebars = !options || !options.nunjucks;
   const compiledTemplates = {};
   for (const [key, templateRaw] of Object.entries(templates)) {
-    compiledTemplates[key] = handlebars ?
-        Handlebars.compile(templateRaw) :
-        nunjucks.compile(templateRaw);
+    compiledTemplates[key] = nunjucks.compile(templateRaw);
   }
 
   geojson.features.forEach((feature) => {
     feature.result = {};
     for (const key of Object.keys(templates)) {
-      feature.result[key] = handlebars ?
-        compiledTemplates[key](feature.properties) :
-        compiledTemplates[key].render(feature.properties);
+      feature.result[key] = compiledTemplates[key].render(feature.properties);
     }
   });
   return geojson;

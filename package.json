@@ -30,7 +30,6 @@
     "yarn": "^1.22.17"
   },
   "dependencies": {
-    "handlebars": "^4.7.7",
     "nunjucks": "^3.2.3",
     "panolens": "0.12.0",
     "swiper": "^7.0.8",
