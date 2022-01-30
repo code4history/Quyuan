@@ -2,8 +2,8 @@ const {openPanorama, setUpModalForPanorama} = require("./panorama");
 const {openImage, setUpModalForImage} = require("./image");
 require('./viewer.css');
 
-const openViewer = (imgUrl, isPanorama) => {
-  if (isPanorama) openPanorama(imgUrl);
+const openViewer = (imgUrl, image_type) => {
+  if (image_type === "panorama") openPanorama(imgUrl);
   else openImage(imgUrl);
 };
 

@@ -28,14 +28,14 @@
         "small_thumbnail": "",
         "images": [
           {
-            "path": "/1.png",
+            "path": "./1.png",
             "shootingDate": "2021-06-20T15:55:32",
             "shooter": "",
             "description": "",
             "note": "",
-            "mid_thumbnail": "",
-            "small_thumbnail": "/1.png",
-            "panorama_image": true
+            "mid_thumbnail": "./1.png",
+            "small_thumbnail": "./1.png",
+            "image_type": "panorama"
           },
           {
             "path": "./no2.JPG",
@@ -45,17 +45,27 @@
             "note": "",
             "mid_thumbnail": "./no2.JPG",
             "small_thumbnail": "./no2.JPG",
-            "panorama_image": false
+            "image_type": "normal"
           },
           {
-            "path": "/2.png",
+            "path": "./2.png",
             "shootingDate": "2021-06-20T15:55:41",
             "shooter": "",
             "description": "",
             "note": "",
-            "mid_thumbnail": "",
-            "small_thumbnail": "/2.png",
-            "panorama_image": true
+            "mid_thumbnail": "./2.png",
+            "small_thumbnail": "./2.png",
+            "image_type": "panorama"
+          },
+          {
+            "path": "https://www.youtube.com/embed/kGqsNUqbRuo",
+            "shootingDate": "2021-06-20T15:55:41",
+            "shooter": "",
+            "description": "",
+            "note": "",
+            "mid_thumbnail": "https://img.youtube.com/vi/kGqsNUqbRuo/hqdefault.jpg",
+            "small_thumbnail": "https://img.youtube.com/vi/kGqsNUqbRuo/hqdefault.jpg",
+            "image_type": "youtube"
           }
         ],
         "books": [

@@ -92,7 +92,7 @@
             <div class="swiper-wrapper">
               {% for image in images %}
                 <div class="swiper-slide">
-                  <img src="{{ image.path }}" onclick="Quyuan.openViewer('{{ image.path }}', {{ image.panorama_image }});" class="viewer">
+                  <img src="{{ image.mid_thumbnail }}" onclick="Quyuan.openViewer('{{ image.path }}', '{{ image.image_type }}');" class="viewer">
                 </div>
               {% endfor %}
               </div>
