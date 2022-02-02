@@ -3,53 +3,45 @@ const Viewer = require("viewerjs");
 
 let containerEl;
 let viewerEl;
-let imgEl;
+let iframeEl;
 let closeButtonEl;
 
-let viewer;
+let initialized;
 
 const openYoutube = (imgUrl) => {
-    imgEl.src = imgUrl;
-    viewer = new Viewer(imgEl, {
-        inline: true,
-        navbar: false,
-        toolbar: false,
-        backdrop: false,
-        title: false
-    });
-    containerEl.classList.add("open");
+  if (!initialized) setUpModalForYoutube();
+
+  iframeEl.src = imgUrl;
+  containerEl.classList.add("open");
 };
 
-const setUpModalForYoutube = (div) => {
-    const elements = elementsFromHtml(`<div class="youtube container">
+const setUpModalForYoutube = () => {
+  const div = document.querySelector(".modal-for-viewer");
+  initialized = true;
+
+  const elements = elementsFromHtml(`<div class="youtube container">
     <div class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
     </div>
-    <div class="viewer"><img class="img_template"></div>
+    <div class="viewer"><iframe class="iframe"></iframe></div>
   </div>`);
-    div.appendChild(elements);
+  div.appendChild(elements);
 
-    containerEl = document.querySelector(".modal-for-viewer .image.container");
-    viewerEl = containerEl.querySelector(".viewer");
-    imgEl = viewerEl.querySelector("img");
-    closeButtonEl = containerEl.querySelector(".close");
+  containerEl = document.querySelector(".modal-for-viewer .youtube.container");
+  viewerEl = containerEl.querySelector(".viewer");
+  iframeEl = viewerEl.querySelector(".iframe");
+  closeButtonEl = containerEl.querySelector(".close");
 
-    closeButtonEl.addEventListener(
-        "click",
-        () => {
-            imgEl.src = null;
-            //viewerEl.removeChild(imgEl);
-            //imgEl = elementsFromHtml(`<img class="img_template">`);
-            //viewerEl.appendChild(imgEl);
-            viewer.destroy();
-            viewer = null;
-            containerEl.classList.remove("open");
-        },
-        false
-    );
+  closeButtonEl.addEventListener(
+    "click",
+    () => {
+      iframeEl.src = null;
+      containerEl.classList.remove("open");
+    },
+    false
+  );
 };
 
 module.exports = {
-    openYoutube,
-    setUpModalForYoutube
+  openYoutube
 };
