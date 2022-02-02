@@ -8,7 +8,11 @@ let closeButtonEl;
 let viewer;
 let panorama;
 
+let initialized;
+
 const openPanorama = (imgUrl) => {
+  if (!initialized) setUpModalForPanorama();
+
   panorama = new PANOLENS.ImagePanorama(imgUrl);
   viewer.add(panorama);
   containerEl.classList.add("open");
@@ -20,7 +24,10 @@ const disposePanorama = () => {
   panorama = null;
 };
 
-const setUpModalForPanorama = (div) => {
+const setUpModalForPanorama = () => {
+  const div = document.querySelector(".modal-for-viewer");
+  initialized = true;
+
   const elements = elementsFromHtml(`<div class="panorama container">
     <div class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -47,6 +54,5 @@ const setUpModalForPanorama = (div) => {
 };
 
 module.exports = {
-  openPanorama,
-  setUpModalForPanorama
+  openPanorama
 };

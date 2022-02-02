@@ -8,8 +8,11 @@ let imgEl;
 let closeButtonEl;
 
 let viewer;
+let initialized;
 
 const openImage = (imgUrl) => {
+  if (!initialized) setUpModalForImage();
+
   imgEl.src = imgUrl;
   viewer = new Viewer(imgEl, {
     inline: true,
@@ -21,7 +24,10 @@ const openImage = (imgUrl) => {
   containerEl.classList.add("open");
 };
 
-const setUpModalForImage = (div) => {
+const setUpModalForImage = () => {
+  const div = document.querySelector(".modal-for-viewer");
+  initialized = true;
+
   const elements = elementsFromHtml(`<div class="image container">
     <div class="close">
       <i class="fa fa-times" aria-hidden="true"></i>
@@ -51,6 +57,5 @@ const setUpModalForImage = (div) => {
 };
 
 module.exports = {
-  openImage,
-  setUpModalForImage
+  openImage
 };
