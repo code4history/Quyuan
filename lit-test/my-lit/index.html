@@ -7,34 +7,12 @@
     <title>Vite + Lit App</title>
     <script type="module" src="/src/my-element.ts"></script>
     <script type="module" src="/src/swiper.ts"></script>
-    <script type="module" src="/src/x-modal.ts"></script>
-    <script type="module" src="/src/lit-modal.ts"></script>
-    <style>
-      body {
-        background: #fafafa;
-      }
-
-      .btn-close {
-        color: var(--lit-modal-btn-color, #aaaaaa);
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-
-      .btn-close:hover,
-      .btn-close:focus {
-        color: var(--lit-modal-text-color, #000);
-        text-decoration: none;
-        cursor: pointer;
-      }
-    </style>
+    <script type="module" src="/src/qy-viewer-image.ts"></script>
+    <script type="module" src="/src/qy-viewer-youtube.ts"></script>
   </head>
   <body>
     <my-element>
-      <p>This is child content    <button class="open">Open</button></p>
-      <x-modal title="Important!">
-        <p>This is some really important stuff</p>
-      </x-modal>
+      <p>This is child content</p>
     </my-element>
 
     <my-swiper>
@@ -43,41 +21,29 @@
       <my-slide title="c"></my-slide>
     </my-swiper>
 
-    <button class="li-open">Open modal</button>
-    <!--        @click=${() => document.getElementById('modal').setModalShow(true)}
-    id="btn"-->
+    <button class="open-image-1">Open image 1</button>
+    <button class="open-image-2">Open image 2</button>
+    <button class="open-youtube">Open Youtube</button>
 
-    <lit-modal id="lit-modal" close-backdrop>
-      <span slot="modal-close" class="btn-close">&times;</span>
-      <div>
-        <h1>Title of modal</h1>
-        <p>Content of modal</p>
-      </div>
-    </lit-modal>
+    <qy-viewer-image></qy-viewer-image>
+    <qy-viewer-youtube></qy-viewer-youtube>
 
     <script>
-      modal = document.querySelector("x-modal");
-      modal.addEventListener("cancel", function() {
-        console.log("cancel event raised");
+      qyViewerImage = document.querySelector("qy-viewer-image");
+      openImage1 = document.querySelector(".open-image-1");
+      openImage2 = document.querySelector(".open-image-2");
+      openImage1.addEventListener("click", function() {
+        qyViewerImage.open("./no2.JPG");
       });
-      modal.addEventListener("ok", function() {
-        console.log("ok event raised");
-      });
-
-      open = document.querySelector(".open");
-      open.addEventListener("click", function() {
-        modal.visible = true;
+      openImage2.addEventListener("click", function() {
+        qyViewerImage.open("./no7-DSC_7169.JPG");
       });
 
-      litModal = document.querySelector("lit-modal");
-      /*modal.addEventListener("cancel", function() {
-        console.log("cancel event raised");
-      });*/
-      litOpen = document.querySelector(".li-open");
-      litOpen.addEventListener("click", function() {
-        litModal.setModalShow(true);
+      qyViewerYoutube = document.querySelector("qy-viewer-youtube");
+      openYoutube = document.querySelector(".open-youtube");
+      openYoutube.addEventListener("click", function() {
+        qyViewerYoutube.open("https://www.youtube.com/embed/kGqsNUqbRuo");
       });
-
     </script>
   </body>
 </html>
