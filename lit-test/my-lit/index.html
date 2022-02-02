@@ -7,10 +7,14 @@
     <title>Vite + Lit App</title>
     <script type="module" src="/src/my-element.ts"></script>
     <script type="module" src="/src/swiper.ts"></script>
+    <script type="module" src="/src/x-modal.ts"></script>
   </head>
   <body>
     <my-element>
-      <p>This is child content</p>
+      <p>This is child content    <button class="open">Open</button></p>
+      <x-modal title="Important!">
+        <p>This is some really important stuff</p>
+      </x-modal>
     </my-element>
 
     <my-swiper>
@@ -18,5 +22,20 @@
       <my-slide title="b"></my-slide>
       <my-slide title="c"></my-slide>
     </my-swiper>
+
+    <script>
+      modal = document.querySelector("x-modal");
+      modal.addEventListener("cancel", function() {
+        console.log("cancel event raised");
+      });
+      modal.addEventListener("ok", function() {
+        console.log("ok event raised");
+      });
+
+      open = document.querySelector(".open");
+      open.addEventListener("click", function() {
+        modal.visible = true;
+      });
+    </script>
   </body>
 </html>
