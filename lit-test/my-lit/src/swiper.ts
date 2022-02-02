@@ -1,12 +1,12 @@
 import {html, css, LitElement} from 'lit';
 import {customElement} from 'lit/decorators.js';
-import {Swiper} from "swiper";
+//import {Swiper} from "swiper";
 
 import "./slide.js"
 
 @customElement('my-swiper')
 export class MySwiper extends LitElement {
-    static styles = css`
+  static styles = css`
     div {
       display: flex;
       flex-direction: row;
@@ -14,11 +14,11 @@ export class MySwiper extends LitElement {
     }
   `;
 
-    render() {
-        return html`
+  render() {
+    return html`
       <div id="swiper">
         <slot></slot>
       </div>
     `;
-    }
+  }
 }

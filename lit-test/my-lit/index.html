@@ -8,6 +8,26 @@
     <script type="module" src="/src/my-element.ts"></script>
     <script type="module" src="/src/swiper.ts"></script>
     <script type="module" src="/src/x-modal.ts"></script>
+    <script type="module" src="/src/lit-modal.ts"></script>
+    <style>
+      body {
+        background: #fafafa;
+      }
+
+      .btn-close {
+        color: var(--lit-modal-btn-color, #aaaaaa);
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .btn-close:hover,
+      .btn-close:focus {
+        color: var(--lit-modal-text-color, #000);
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
   </head>
   <body>
     <my-element>
@@ -23,6 +43,18 @@
       <my-slide title="c"></my-slide>
     </my-swiper>
 
+    <button class="li-open">Open modal</button>
+    <!--        @click=${() => document.getElementById('modal').setModalShow(true)}
+    id="btn"-->
+
+    <lit-modal id="lit-modal" close-backdrop>
+      <span slot="modal-close" class="btn-close">&times;</span>
+      <div>
+        <h1>Title of modal</h1>
+        <p>Content of modal</p>
+      </div>
+    </lit-modal>
+
     <script>
       modal = document.querySelector("x-modal");
       modal.addEventListener("cancel", function() {
@@ -36,6 +68,16 @@
       open.addEventListener("click", function() {
         modal.visible = true;
       });
+
+      litModal = document.querySelector("lit-modal");
+      /*modal.addEventListener("cancel", function() {
+        console.log("cancel event raised");
+      });*/
+      litOpen = document.querySelector(".li-open");
+      litOpen.addEventListener("click", function() {
+        litModal.setModalShow(true);
+      });
+
     </script>
   </body>
 </html>
