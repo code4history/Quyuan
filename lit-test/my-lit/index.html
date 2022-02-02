@@ -8,13 +8,17 @@
     <script type="module" src="/src/my-element.ts"></script>
     <script type="module" src="/src/swiper.ts"></script>
     <script type="module" src="/src/x-modal.ts"></script>
+    <script type="module" src="/src/x-modal2.ts"></script>
   </head>
   <body>
     <my-element>
-      <p>This is child content    <button class="open">Open</button></p>
+      <p>This is child content </p>   <button class="open1">Open 1</button>
       <x-modal title="Important!">
         <p>This is some really important stuff</p>
-      </x-modal>
+      </x-modal><button class="open2">Open 2</button>
+      <x-modal2 title="Important!">
+        <p>This is some really important stuff</p>
+      </x-modal2>
     </my-element>
 
     <my-swiper>
@@ -24,17 +28,30 @@
     </my-swiper>
 
     <script>
-      modal = document.querySelector("x-modal");
-      modal.addEventListener("cancel", function() {
+      modal1 = document.querySelector("x-modal2");
+      modal1.addEventListener("cancel", function() {
         console.log("cancel event raised");
       });
-      modal.addEventListener("ok", function() {
+      modal1.addEventListener("ok", function() {
         console.log("ok event raised");
       });
 
-      open = document.querySelector(".open");
-      open.addEventListener("click", function() {
-        modal.visible = true;
+      open1 = document.querySelector(".open1");
+      open1.addEventListener("click", function() {
+        modal1.visible = true;
+      });
+
+      modal2 = document.querySelector("x-modal2");
+      modal2.addEventListener("cancel", function() {
+        console.log("cancel event raised");
+      });
+      modal2.addEventListener("ok", function() {
+        console.log("ok event raised");
+      });
+
+      open2 = document.querySelector(".open2");
+      open2.addEventListener("click", function() {
+        modal2.visible = true;
       });
     </script>
   </body>
