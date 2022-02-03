@@ -6,7 +6,7 @@ import * as SwiperLibrary from 'swiper'
 @customElement('qy-swiper')
 export class QySwiper extends LitElement {
   @property({ type: Boolean, reflect: true }) hasThumb = false
-  @property({ type: Boolean, reflect: true }) autoplay = true
+  @property({ type: Boolean, reflect: true }) autoplay = false
 
   @query('#divContainer') private readonly divContainer!: HTMLDivElement
   @query('#divSlides') private readonly divSlides?: HTMLDivElement
@@ -52,7 +52,7 @@ export class QySwiper extends LitElement {
         reverseDirection: false,
         stopOnLastSlide: false,
         waitForTransition: true,
-      } : {},
+      } : false,
       thumbs: this.hasThumb ? {
         swiper: new SwiperLibrary.Swiper(this.divGallery, {
           spaceBetween: 10,
