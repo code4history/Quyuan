@@ -1,8 +1,8 @@
 import { css, html, LitElement } from 'lit'
 import { customElement } from 'lit/decorators.js'
 
-@customElement('lit-slide')
-export class Slide extends LitElement {
+@customElement('qy-swiper-slide')
+export class QySwiperSlide extends LitElement {
   static get styles() {
     return css`
       :host {
@@ -27,6 +27,6 @@ export class Slide extends LitElement {
 
 declare global {
   interface HTMLElementTagNameMap {
-    'lit-slide': Slide
+    'qy-swiper-slide': QySwiperSlide
   }
 }
