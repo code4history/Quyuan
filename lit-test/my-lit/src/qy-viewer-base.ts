@@ -1,26 +1,20 @@
 import {html, css, LitElement} from 'lit';
-import {customElement,property} from 'lit/decorators.js';
+import {property} from 'lit/decorators.js';
 import "font-awesome/css/font-awesome.css"
 
-@customElement('qy-viewer-base')
 export class QyViewerBase extends LitElement {
   static styles = css`
-    :host {
-      display: flex;
-      padding: 25px;
-      color: var(--lit-modal-text-color, #000);
-    }
-
     .backdrop {
       justify-content: center;
       align-items: center;
       position: fixed;
       z-index: 1;
       left: 0;
+      right: 0;
       top: 0;
+      bottom: 0;
       width: 100%;
       height: 100%;
-      overflow: auto;
       background-color: rgba(0, 0, 0, 0.7);
     }
 
@@ -38,10 +32,11 @@ export class QyViewerBase extends LitElement {
     }
     
     .viewer {
+      position: absolute;
       width: 100%;
       height: 80%;
-      margin-top: 10%;
-      margin-bottom: 10%;
+      inset: 0px;
+      margin: auto;
       align-self: center;
       background-color: #000;
     }
@@ -78,11 +73,5 @@ export class QyViewerBase extends LitElement {
         <div class="viewer">${this.renderViewer()}</div>
       </div>
     `;
-  }
-}
-
-declare global {
-  interface HTMLElementTagNameMap {
-    'qy-viewer-base': QyViewerBase
   }
 }
