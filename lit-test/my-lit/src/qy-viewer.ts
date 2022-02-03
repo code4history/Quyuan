@@ -1,6 +1,5 @@
-import {html, render, LitElement} from 'lit';
+import {html, LitElement} from 'lit';
 import {customElement} from 'lit/decorators.js';
-import { unsafeHTML } from 'lit/directives/unsafe-html.js';
 import "./qy-viewer-image";
 import "./qy-viewer-panorama";
 import "./qy-viewer-youtube";
@@ -19,12 +18,7 @@ const typeHashes = {
 export class QyViewer extends LitElement {
   open(imgUrl: string, type: string) {
     const targetTag = typeHashes[type];
-    let handler = this.shadowRoot!.querySelector(targetTag);
-    if (!handler) {
-      const parent = this.shadowRoot! as any;
-      render(html`${unsafeHTML(`<${targetTag}/>`)}`, parent);
-      handler = this.shadowRoot!.querySelector(targetTag);
-    }
+    const handler = this.shadowRoot!.querySelector(targetTag);
     (handler as any).open(imgUrl);
   }
 
