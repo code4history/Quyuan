@@ -6,10 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Lit App</title>
     <script type="module" src="/src/my-element.ts"></script>
-    <script type="module" src="/src/swiper.ts"></script>
-    <!--script type="module" src="/src/qy-viewer-image.ts"></script>
-    <script type="module" src="/src/qy-viewer-youtube.ts"></script>
-    <script type="module" src="/src/qy-viewer-panorama.ts"></script-->
+    <script type="module" src="/src/qy-swiper.ts"></script>
     <script type="module" src="/src/qy-viewer.ts"></script>
   </head>
   <body>
@@ -17,17 +14,21 @@
       <p>This is child content</p>
     </my-element>
 
-    <my-swiper>
-      <my-slide title="a"></my-slide>
-      <my-slide title="b"></my-slide>
-      <my-slide title="c"></my-slide>
-    </my-swiper>
+    <qy-swiper>
+      <qy-slide title="a"></qy-slide>
+      <qy-slide title="b"></qy-slide>
+      <qy-slide title="c"></qy-slide>
+      <qy-slide title="d"></qy-slide>
+      <qy-slide title="e"></qy-slide>
+      <qy-slide title="f"></qy-slide>
+    </qy-swiper>
 
     <button class="open-image-1">Open image 1</button>
     <button class="open-image-2">Open image 2</button>
     <button class="open-youtube">Open Youtube</button>
     <button class="open-panorama-1">Open Panorama 1</button>
     <button class="open-panorama-2">Open Panorama 2</button>
+    <button class="swiper-check">Swiper check</button>
 
     <!--qy-viewer-image></qy-viewer-image>
     <qy-viewer-youtube></qy-viewer-youtube>
@@ -61,6 +62,15 @@
       openPanorama2.addEventListener("click", function() {
         qyViewer.open("./2.png", "panorama");
       });
+
+      swiperButton = document.querySelector(".swiper-check");
+      swiperButton.addEventListener("click", function() {
+        const swiper = document.querySelector("qy-swiper");
+        swiper.querySelectorAll("qy-slide").forEach((node) => {
+          console.log(node.shadowChldren());
+        });
+      });
+
     </script>
   </body>
 </html>
