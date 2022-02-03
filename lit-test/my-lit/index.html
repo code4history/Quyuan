@@ -6,22 +6,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Lit App</title>
     <script type="module" src="/src/my-element.ts"></script>
-    <script type="module" src="/src/swiper.ts"></script>
+    <script type="module" src="/src/index.ts"></script>
     <!--script type="module" src="/src/qy-viewer-image.ts"></script>
     <script type="module" src="/src/qy-viewer-youtube.ts"></script>
     <script type="module" src="/src/qy-viewer-panorama.ts"></script-->
     <script type="module" src="/src/qy-viewer.ts"></script>
+    <style>
+      .my-slider__slide {
+        height: 300px;
+        background: #aaa;
+        background-image: url('https://picsum.photos/600/400?');
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 30px;
+        font-weight: bold;
+      }
+    </style>
   </head>
   <body>
     <my-element>
       <p>This is child content</p>
     </my-element>
 
-    <my-swiper>
-      <my-slide title="a"></my-slide>
-      <my-slide title="b"></my-slide>
-      <my-slide title="c"></my-slide>
-    </my-swiper>
+    <div>
+      <lit-slider style='height: 200px'>
+        <lit-slide style='background: red'>Slide 1</lit-slide>
+        <lit-slide style='background: yellow'>Slide 2</lit-slide>
+      </lit-slider>
+    </div>
 
     <button class="open-image-1">Open image 1</button>
     <button class="open-image-2">Open image 2</button>
