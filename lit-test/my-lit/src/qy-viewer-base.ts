@@ -40,6 +40,8 @@ export class QyViewerBase extends LitElement {
     .viewer {
       width: 100%;
       height: 80%;
+      margin-top: 10%;
+      margin-bottom: 10%;
       align-self: center;
       background-color: #000;
     }
@@ -68,7 +70,7 @@ export class QyViewerBase extends LitElement {
       <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css">
       <div
         class="backdrop"
-        style="${this.isShow ? 'display: flex' : 'display: none'}"
+        style="${this.isShow ? 'visibility: visible' : 'visibility: hidden'}"
       >
         <div class="close" @click="${() => this.close()}">
           <i class="fa fa-times" aria-hidden="true"></i>

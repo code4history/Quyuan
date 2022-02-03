@@ -1,1 +1,3 @@
-declare function ImagePanorama(person: string): string;
+interface PANOLENS {
+    
+}

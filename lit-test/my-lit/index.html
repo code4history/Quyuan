@@ -9,6 +9,7 @@
     <script type="module" src="/src/swiper.ts"></script>
     <script type="module" src="/src/qy-viewer-image.ts"></script>
     <script type="module" src="/src/qy-viewer-youtube.ts"></script>
+    <script type="module" src="/src/qy-viewer-panorama.ts"></script>
   </head>
   <body>
     <my-element>
@@ -24,9 +25,12 @@
     <button class="open-image-1">Open image 1</button>
     <button class="open-image-2">Open image 2</button>
     <button class="open-youtube">Open Youtube</button>
+    <button class="open-panorama-1">Open Panorama 1</button>
+    <button class="open-panorama-2">Open Panorama 2</button>
 
     <qy-viewer-image></qy-viewer-image>
     <qy-viewer-youtube></qy-viewer-youtube>
+    <qy-viewer-panorama></qy-viewer-panorama>
 
     <script>
       qyViewerImage = document.querySelector("qy-viewer-image");
@@ -43,6 +47,16 @@
       openYoutube = document.querySelector(".open-youtube");
       openYoutube.addEventListener("click", function() {
         qyViewerYoutube.open("https://www.youtube.com/embed/kGqsNUqbRuo");
+      });
+
+      qyViewerPanorama = document.querySelector("qy-viewer-panorama");
+      openPanorama1 = document.querySelector(".open-panorama-1");
+      openPanorama2 = document.querySelector(".open-panorama-2");
+      openPanorama1.addEventListener("click", function() {
+        qyViewerPanorama.open("./1.png");
+      });
+      openPanorama2.addEventListener("click", function() {
+        qyViewerPanorama.open("./2.png");
       });
     </script>
   </body>

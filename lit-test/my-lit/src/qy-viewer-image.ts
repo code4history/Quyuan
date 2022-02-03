@@ -24,7 +24,8 @@ export class QyViewerImage extends QyViewerBase {
       navbar: false,
       toolbar: false,
       backdrop: false,
-      title: false
+      title: false,
+      transition: false
     });
 
     super.open(imgUrl);
