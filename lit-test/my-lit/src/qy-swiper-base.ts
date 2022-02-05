@@ -2,6 +2,8 @@ import { html, LitElement } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
 import { swiperStyles } from './qy-swiper-styles'
 import * as SwiperLibrary from 'swiper'
+import {QyViewer} from "./qy-viewer"
+import {QySwiperSlide} from "./qy-swiper-slide"
 
 @customElement('qy-swiper')
 export class QySwiper extends LitElement {
@@ -14,6 +16,7 @@ export class QySwiper extends LitElement {
   @query('#divPagination') private readonly divPagination!: HTMLDivElement
   @query('#divPrevious') private readonly divPrevious!: HTMLDivElement
   @query('#divNext') private readonly divNext!: HTMLDivElement
+  @query('qy-viewer') private readonly qyViewer!: QyViewer
 
   slider?: SwiperLibrary.Swiper
 
@@ -61,8 +64,11 @@ export class QySwiper extends LitElement {
         }),
       } : {},
       preventClicks: false,
-      preventClicksPropagation: false,
+      preventClicksPropagation: true,
+      loop: true
     })
+
+    QySwiperSlide.qyViewer = this.qyViewer
   }
 
   protected render() {
@@ -74,6 +80,8 @@ export class QySwiper extends LitElement {
           --swiper-navigation-color: var(--lit-slider-navigation-color);
           --swiper-gallery-height: 0px;
           --swiper-slider-margin-bottom: 0px;
+          --swiper-navigation-size: 30px;
+          --swiper-navigation-color: blue;
         }
 
         :host([hasThumb]) {
@@ -106,10 +114,24 @@ export class QySwiper extends LitElement {
           background-repeat: no-repeat !important;
           background-size: cover !important;
         }
+
+        .swiper-wrapper {
+          text-align: center;
+        }
+        .swiper-slide {
+          background-color: white;
+          height: 200px;
+        }
       </style>
       <div id='divContainer' class='swiper-container gallery-top'>
         <div id='divSlides' class='swiper-wrapper'>
-          ${this.slides.map(slide => html`<div class='swiper-slide'>${slide}</div>`)}
+          ${this.slides.map(slide => {
+            slide.qySwiper = this;
+            return html`
+              <div class='swiper-slide'>${slide}</div>
+              <!--div class='swiper-slide'><img src="${slide.thumbnailUrl}" onclick="console.log('hhh')" class="viewer"></div-->
+            `
+          })}
         </div>
 
         <div id='divPagination' class='swiper-pagination'></div>
@@ -125,6 +147,7 @@ export class QySwiper extends LitElement {
           `)}
         </div>
       </div>
+      <qy-viewer></qy-viewer>
     `
   }
 }

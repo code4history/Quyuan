@@ -8,9 +8,14 @@
     <script type="module" src="/src/my-element.ts"></script>
     <script type="module" src="/src/qy-swiper.ts"></script>
     <script type="module" src="/src/qy-viewer.ts"></script>
+    <script type="module" src="/src/qy-quyuan.ts"></script>
     <style>
       qy-swiper {
           --lit-slider-navigation-color: white;
+      }
+
+      qy-quyuan.hoge {
+        height: 500px;
       }
     </style>
   </head>
@@ -21,46 +26,18 @@
 
     <div>
       <qy-swiper style='height: 200px'>
-        <qy-swiper-slide style='background: red'>Slide 1</qy-swiper-slide>
-        <qy-swiper-slide style='background: yellow'>Slide 2</qy-swiper-slide>
+        <qy-swiper-slide imageUrl="./no2.JPG" thumbnailUrl="./no2.JPG" imageType="image"></qy-swiper-slide>
+        <qy-swiper-slide imageUrl="https://www.youtube.com/embed/kGqsNUqbRuo" thumbnailUrl="https://img.youtube.com/vi/kGqsNUqbRuo/hqdefault.jpg" imageType="youtube"></qy-swiper-slide>
+        <qy-swiper-slide imageUrl="./no7-DSC_7169.JPG" thumbnailUrl="./no7-DSC_7169.JPG" imageType="image"></qy-swiper-slide>
+        <qy-swiper-slide imageUrl="./1.png" thumbnailUrl="./1.png" imageType="panorama"></qy-swiper-slide>
+        <qy-swiper-slide imageUrl="./2.png" thumbnailUrl="./2.png" imageType="panorama"></qy-swiper-slide>
       </qy-swiper>
     </div>
-    <i class="fa fa-times" aria-hidden="true"></i>
-    <button class="open-image-1">Open image 1</button>
-    <button class="open-image-2">Open image 2</button>
-    <button class="open-youtube">Open Youtube</button>
-    <button class="open-panorama-1">Open Panorama 1</button>
-    <button class="open-panorama-2">Open Panorama 2</button>
 
-    <qy-viewer></qy-viewer>
+    <qy-quyuan class="hoge"></qy-quyuan>
+    <qy-quyuan autoplay></qy-quyuan>
 
     <script>
-      qyViewer = document.querySelector("qy-viewer");
-
-      openImage1 = document.querySelector(".open-image-1");
-      openImage2 = document.querySelector(".open-image-2");
-      openImage1.addEventListener("click", function() {
-        qyViewer.open("./no2.JPG", "image");
-      });
-      openImage2.addEventListener("click", function() {
-        qyViewer.open("./no7-DSC_7169.JPG", "image");
-      });
-
-      //qyViewerYoutube = document.querySelector("qy-viewer-youtube");
-      openYoutube = document.querySelector(".open-youtube");
-      openYoutube.addEventListener("click", function() {
-        qyViewer.open("https://www.youtube.com/embed/kGqsNUqbRuo", "youtube");
-      });
-
-      //qyViewerPanorama = document.querySelector("qy-viewer-panorama");
-      openPanorama1 = document.querySelector(".open-panorama-1");
-      openPanorama2 = document.querySelector(".open-panorama-2");
-      openPanorama1.addEventListener("click", function() {
-        qyViewer.open("./1.png", "panorama");
-      });
-      openPanorama2.addEventListener("click", function() {
-        qyViewer.open("./2.png", "panorama");
-      });
     </script>
   </body>
 </html>

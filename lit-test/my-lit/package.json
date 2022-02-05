@@ -12,10 +12,11 @@
   ],
   "scripts": {
     "dev": "vite",
+    "prebuild": "rimraf dist/*",
     "build": "tsc && vite build",
-    "build:swiper": "tsc && vite build --config vite.qy-swiper.config.ts",
-    "build:viewer": "tsc && vite build --config vite.qy-viewer.config.ts",
-    "build:lib": "npm run build:swiper && npm run build:viewer"
+    "build:swiper": "npm run prebuild && tsc && vite build --config vite.qy-swiper.config.ts",
+    "build:viewer": "npm run prebuild && tsc && vite build --config vite.qy-viewer.config.ts",
+    "build:lib": "npm run prebuild && tsc && vite build --config vite.qy-swiper.config.ts && vite build --config vite.qy-viewer.config.ts -- --ignoreEmpty"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "amd-to-es6": "^0.2.0",
+    "rimraf": "^3.0.2",
     "typescript": "^4.4.4",
     "vite": "^2.7.2"
   }
