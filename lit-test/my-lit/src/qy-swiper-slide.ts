@@ -6,6 +6,7 @@ export class QySwiperSlide extends LitElement {
   @property({ type: String, reflect: true }) thumbnailUrl = ""
   @property({ type: String, reflect: true }) imageUrl = ""
   @property({ type: String, reflect: true }) imageType = ""
+  @property({ type: String, reflect: true }) caption = ""
 
   static get styles() {
     return css`

@@ -119,20 +119,42 @@ export class QySwiper extends LitElement {
           height: 200px;
         }
 
-        img {
+        img.viewer {
           object-fit: contain;
           height: 100%;
           width: 100%;
           cursor: pointer;
+        }
+
+        img.viewer {
+          object-fit: contain;
+          height: 100%;
+          width: 100%;
+          cursor: pointer;
+        }
+
+        img.viewer.w-caption {
+          height: calc(100% - 10px - 1.5rem);
+        }
+
+        .slider-caption {
+          padding: 5px;
+          margin: 0;
+          line-height: 1.5em;
+          background: #000000;
+          color: #ffffff;
+          font-size: 0.6rem;
+          font-weight: 700;
         }
       </style>
       <div id='divContainer' class='swiper-container gallery-top'>
         <div id='divSlides' class='swiper-wrapper'>
           ${this.slides.map(slide => {
             return html`
-              <!--div class='swiper-slide'>${slide}</div-->
-              <div class='swiper-slide'><img src="${slide.thumbnailUrl}" 
-                onclick="this.parentNode.parentNode.parentNode.parentNode.querySelector('qy-viewer').open('${slide.imageUrl}', '${slide.imageType}')" class="viewer"></div>
+              <div class='swiper-slide'>
+                <img src="${slide.thumbnailUrl}" onclick="this.parentNode.parentNode.parentNode.parentNode.querySelector('qy-viewer').open('${slide.imageUrl}', '${slide.imageType}')" class="viewer${slide.caption !== "" ? ` w-caption` : ""}">
+                ${slide.caption !== "" ? html`<p class="slider-caption">${slide.caption}</p>` : ""}
+              </div>
             `
           })}
         </div>
