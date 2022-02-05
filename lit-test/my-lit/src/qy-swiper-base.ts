@@ -1,6 +1,6 @@
 import { html, LitElement } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
-import { swiperStyles } from './styles.min.css'
+import { swiperStyles } from './qy-swiper-styles'
 import * as SwiperLibrary from 'swiper'
 
 @customElement('qy-swiper')

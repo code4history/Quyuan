@@ -1,9 +1,11 @@
 import {html, css, LitElement} from 'lit';
 import {property} from 'lit/decorators.js';
-import "font-awesome/css/font-awesome.css"
+import { viewerStyles } from './qy-viewer-styles'
 
 export class QyViewerBase extends LitElement {
   static styles = css`
+    ${viewerStyles}
+  
     .backdrop {
       justify-content: center;
       align-items: center;
@@ -62,7 +64,6 @@ export class QyViewerBase extends LitElement {
 
   render() {
     return html`
-      <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.css">
       <div
         class="backdrop"
         style="${this.isShow ? 'visibility: visible' : 'visibility: hidden'}"

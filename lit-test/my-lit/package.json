@@ -12,7 +12,10 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build"
+    "build": "tsc && vite build",
+    "build:swiper": "tsc && vite build --config vite.qy-swiper.config.ts",
+    "build:viewer": "tsc && vite build --config vite.qy-viewer.config.ts",
+    "build:lib": "npm run build:swiper && npm run build:viewer"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
