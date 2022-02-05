@@ -6,7 +6,7 @@ import "./qy-viewer-youtube";
 
 interface HashKeyTag {
   [index: string]: string
-};
+}
 
 const typeHashes = {
   image: "qy-viewer-image",

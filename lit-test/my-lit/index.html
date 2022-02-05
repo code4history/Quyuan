@@ -5,38 +5,13 @@
     <link rel="icon" type="image/svg+xml" href="/src/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + Lit App</title>
-    <script type="module" src="/src/my-element.ts"></script>
-    <script type="module" src="/src/qy-swiper.ts"></script>
-    <script type="module" src="/src/qy-viewer.ts"></script>
-    <script type="module" src="/src/qy-quyuan.ts"></script>
+    <script type="module" src="./index.ts"></script>
     <style>
-      qy-swiper {
-          --lit-slider-navigation-color: white;
-      }
-
-      qy-quyuan.hoge {
-        height: 500px;
-      }
     </style>
   </head>
   <body>
-    <my-element>
-      <p>This is child content</p>
-    </my-element>
-
-    <div>
-      <qy-swiper style='height: 200px'>
-        <qy-swiper-slide imageUrl="./no2.JPG" thumbnailUrl="./no2.JPG" imageType="image"></qy-swiper-slide>
-        <qy-swiper-slide imageUrl="https://www.youtube.com/embed/kGqsNUqbRuo" thumbnailUrl="https://img.youtube.com/vi/kGqsNUqbRuo/hqdefault.jpg" imageType="youtube"></qy-swiper-slide>
-        <qy-swiper-slide imageUrl="./no7-DSC_7169.JPG" thumbnailUrl="./no7-DSC_7169.JPG" imageType="image"></qy-swiper-slide>
-        <qy-swiper-slide imageUrl="./1.png" thumbnailUrl="./1.png" imageType="panorama"></qy-swiper-slide>
-        <qy-swiper-slide imageUrl="./2.png" thumbnailUrl="./2.png" imageType="panorama"></qy-swiper-slide>
-      </qy-swiper>
+    <div id="swiper">
     </div>
-
-    <qy-quyuan class="hoge"></qy-quyuan>
-    <qy-quyuan autoplay></qy-quyuan>
-
     <script>
     </script>
   </body>

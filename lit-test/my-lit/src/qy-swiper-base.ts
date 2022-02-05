@@ -2,8 +2,6 @@ import { html, LitElement } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
 import { swiperStyles } from './qy-swiper-styles'
 import * as SwiperLibrary from 'swiper'
-import {QyViewer} from "./qy-viewer"
-import {QySwiperSlide} from "./qy-swiper-slide"
 
 @customElement('qy-swiper')
 export class QySwiper extends LitElement {
@@ -16,7 +14,6 @@ export class QySwiper extends LitElement {
   @query('#divPagination') private readonly divPagination!: HTMLDivElement
   @query('#divPrevious') private readonly divPrevious!: HTMLDivElement
   @query('#divNext') private readonly divNext!: HTMLDivElement
-  @query('qy-viewer') private readonly qyViewer!: QyViewer
 
   slider?: SwiperLibrary.Swiper
 
@@ -67,8 +64,6 @@ export class QySwiper extends LitElement {
       preventClicksPropagation: true,
       loop: true
     })
-
-    QySwiperSlide.qyViewer = this.qyViewer
   }
 
   protected render() {
@@ -118,18 +113,26 @@ export class QySwiper extends LitElement {
         .swiper-wrapper {
           text-align: center;
         }
+
         .swiper-slide {
           background-color: white;
           height: 200px;
+        }
+
+        img {
+          object-fit: contain;
+          height: 100%;
+          width: 100%;
+          cursor: pointer;
         }
       </style>
       <div id='divContainer' class='swiper-container gallery-top'>
         <div id='divSlides' class='swiper-wrapper'>
           ${this.slides.map(slide => {
-            slide.qySwiper = this;
             return html`
-              <div class='swiper-slide'>${slide}</div>
-              <!--div class='swiper-slide'><img src="${slide.thumbnailUrl}" onclick="console.log('hhh')" class="viewer"></div-->
+              <!--div class='swiper-slide'>${slide}</div-->
+              <div class='swiper-slide'><img src="${slide.thumbnailUrl}" 
+                onclick="this.parentNode.parentNode.parentNode.parentNode.querySelector('qy-viewer').open('${slide.imageUrl}', '${slide.imageType}')" class="viewer"></div>
             `
           })}
         </div>
@@ -147,7 +150,7 @@ export class QySwiper extends LitElement {
           `)}
         </div>
       </div>
-      <qy-viewer></qy-viewer>
+      <qy-viewer id="qyViewer"></qy-viewerid>
     `
   }
 }

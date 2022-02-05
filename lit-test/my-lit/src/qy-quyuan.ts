@@ -1,5 +1,5 @@
 import { customElement, property } from 'lit/decorators.js'
-import {html, LitElement} from "lit";
+import {html, LitElement} from "lit"
 
 @customElement('qy-quyuan')
 export class QyQuyuan extends LitElement {
