@@ -1,8 +1,12 @@
-(function (global, factory) {
+import * as THREE from "three";
+
+const exports = {};
+
+/*(function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('three')) :
 	typeof define === 'function' && define.amd ? define(['exports', 'three'], factory) :
 	(global = global || self, factory(global.PANOLENS = {}, global.THREE));
-}(this, function (exports, THREE) { 'use strict';
+}(this, function (exports, THREE) { 'use strict';*/
 
 	const version="0.12.0";const dependencies={three:"^0.105.2"};
 
@@ -9569,4 +9573,6 @@
 
 	Object.defineProperty(exports, '__esModule', { value: true });
 
-}));
+//}));
+
+export default exports;

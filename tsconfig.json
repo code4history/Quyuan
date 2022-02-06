@@ -18,6 +18,8 @@
     "useDefineForClassFields": false,
     "target": "ES2015"
   },
-  "include": ["src/**/*.ts"],
+  "include": [
+    "./src/**/*.ts"
+  ],
   "exclude": []
 }

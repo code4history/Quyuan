@@ -104,5 +104,6 @@ dist
 .tern-port
 
 .idea
-
-test_dir
+.DS_Store
+types
+*.local
