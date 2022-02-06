@@ -4,12 +4,11 @@ import dts from 'vite-dts'
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    emptyOutDir: false,
     minify: 'terser',
     sourcemap: true,
     lib: {
       entry: 'src/index.ts',
-      formats: ['es', 'umd', 'iife'],
+      formats: ['es', 'umd'],
       name: 'Quyuen',
       fileName: (format) => `quyuen.${format}.js`
     },
@@ -17,5 +16,7 @@ export default defineConfig({
       //external: /^lit/
     }
   },
-  plugins: [dts()]
+  plugins: [
+    dts()
+  ]
 })
