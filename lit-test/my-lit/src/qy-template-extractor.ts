@@ -50,17 +50,23 @@ interface TemplateType {
 }
 
 export function templateExtractor(options: TemplateExtractorOptions) {
-  const compiledTemplates = {} as CompiledTemplateType;
+  const compiledTemplates = {} as CompiledTemplateType
   for (const [key, templateRaw] of Object.entries(options.templates)) {
-    compiledTemplates[key] = nunjucks.compile(templateRaw);
+    compiledTemplates[key] = nunjucks.compile(templateRaw)
   }
 
-  options.geojson.features.forEach((feature: any) => {
-    feature.result = {};
+  const featureHandler = (feature: any) => {
+    feature.result = {}
     for (const key of Object.keys(options.templates)) {
-      feature.result[key] = (compiledTemplates[key] as any).render(feature.properties);
+      feature.result[key] = (compiledTemplates[key] as any).render(feature.properties)
     }
-  });
-  return options.geojson;
-};
+  }
 
+  if (options.geojson.features) {
+    options.geojson.features.forEach(featureHandler)
+  } else {
+    featureHandler(options.geojson)
+  }
+
+  return options.geojson;
+}
