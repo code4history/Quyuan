@@ -1,9 +1,12 @@
 import { defineConfig } from 'vite'
+import dts from 'vite-dts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
     emptyOutDir: false,
+    minify: 'terser',
+    sourcemap: true,
     lib: {
       entry: 'src/qy-swiper.ts',
       //formats: ['es'],
@@ -13,5 +16,6 @@ export default defineConfig({
     rollupOptions: {
       //external: /^lit/
     }
-  }
+  },
+  plugins: [dts()]
 })

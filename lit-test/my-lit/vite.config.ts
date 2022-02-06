@@ -1,18 +1,21 @@
 import { defineConfig } from 'vite'
+import dts from 'vite-dts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    /*lib: {
-      entry: 'src/my-element.ts',
-      formats: ['es']
-    },*/
+    emptyOutDir: false,
+    minify: 'terser',
+    sourcemap: true,
+    lib: {
+      entry: 'src/index.ts',
+      //formats: ['es'],
+      name: 'Quyuen',
+      fileName: (format) => `quyuen.${format}.js`
+    },
     rollupOptions: {
-      external: /^lit/,
-      input: {
-        "qy-viewer": 'src/qy-viewer.ts',
-        "qy-swiper": 'src/qy-swiper.ts'
-      }
+      //external: /^lit/
     }
-  }
+  },
+  plugins: [dts()]
 })

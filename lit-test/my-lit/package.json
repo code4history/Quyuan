@@ -1,11 +1,23 @@
 {
   "name": "my-lit",
   "version": "0.0.0",
-  "main": "dist/my-element.es.js",
+  "main": "./dist/quyuen.umd.js",
+  "module": "./dist/quyuen.es.js",
   "exports": {
-    ".": "./dist/my-element.es.js"
+    ".": {
+      "import": "./dist/quyuen.es.js",
+      "require": "./dist/quyuen.umd.js"
+    },
+    "./qy-swiper": {
+      "import": "./dist/qy-swiper.es.js",
+      "require": "./dist/qy-swiper.umd.js"
+    },
+    "./qy-viewer": {
+      "import": "./dist/qy-viewer.es.js",
+      "require": "./dist/qy-viewer.umd.js"
+    }
   },
-  "types": "types/my-element.d.ts",
+  "types": "./dist/quyuen.es.d.ts",
   "files": [
     "dist",
     "types"
@@ -13,7 +25,8 @@
   "scripts": {
     "dev": "vite",
     "prebuild": "rimraf dist/*",
-    "build": "tsc && vite build",
+    "build": "tsc && vite build && vite build --config vite.qy-swiper.config.ts && vite build --config vite.qy-viewer.config.ts",
+    "build:main": "npm run prebuild && tsc && vite build",
     "build:swiper": "npm run prebuild && tsc && vite build --config vite.qy-swiper.config.ts",
     "build:viewer": "npm run prebuild && tsc && vite build --config vite.qy-viewer.config.ts",
     "build:lib": "npm run prebuild && tsc && vite build --config vite.qy-swiper.config.ts && vite build --config vite.qy-viewer.config.ts -- --ignoreEmpty"
@@ -31,6 +44,8 @@
     "amd-to-es6": "^0.2.0",
     "rimraf": "^3.0.2",
     "typescript": "^4.4.4",
-    "vite": "^2.7.2"
+    "vite": "^2.7.2",
+    "vite-dts": "^1.0.4",
+    "vite-plugin-dts": "^0.9.9"
   }
 }
