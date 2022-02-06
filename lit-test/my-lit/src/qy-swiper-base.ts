@@ -28,6 +28,20 @@ export class QySwiper extends LitElement {
     ]
   }
 
+  async openViewer(imageUrl: string, imageType: string) {
+    let qyView = document.querySelector("qy-viewer")
+    if (!qyView) {
+      const viewerElement = document.createElement("qy-viewer")
+      document.body.appendChild(viewerElement)
+      qyView = await new Promise((res) => {
+        viewerElement.addEventListener("load", () => {
+          res(document.querySelector("qy-viewer"))
+        })
+      })
+    }
+    (qyView as any).open(imageUrl, imageType)
+  }
+
   protected firstUpdated() {
     // Core library features at https://swiperjs.com/api/#custom-build
     SwiperLibrary.Swiper.use([
@@ -152,7 +166,7 @@ export class QySwiper extends LitElement {
           ${this.slides.map(slide => {
             return html`
               <div class='swiper-slide'>
-                <img src="${slide.thumbnailUrl}" onclick="this.parentNode.parentNode.parentNode.parentNode.querySelector('qy-viewer').open('${slide.imageUrl}', '${slide.imageType}')" class="viewer${slide.caption !== "" ? ` w-caption` : ""}">
+                <img src="${slide.thumbnailUrl}" onclick="this.getRootNode().host.openViewer('${slide.imageUrl}', '${slide.imageType}')" class="viewer${slide.caption !== "" ? ` w-caption` : ""}">
                 ${slide.caption !== "" ? html`<p class="slider-caption">${slide.caption}</p>` : ""}
               </div>
             `

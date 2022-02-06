@@ -10,7 +10,6 @@ export class QyViewerBase extends LitElement {
       justify-content: center;
       align-items: center;
       position: fixed;
-      z-index: 1;
       left: 0;
       right: 0;
       top: 0;
@@ -64,6 +63,11 @@ export class QyViewerBase extends LitElement {
 
   render() {
     return html`
+      <style>
+        .backdrop {
+          z-index: var(--qy-viewer-z-index-each);
+        }
+      </style>
       <div
         class="backdrop"
         style="${this.isShow ? 'visibility: visible' : 'visibility: hidden'}"

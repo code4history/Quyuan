@@ -9,7 +9,7 @@ export default defineConfig({
     sourcemap: true,
     lib: {
       entry: 'src/index.ts',
-      //formats: ['es'],
+      formats: ['es', 'umd', 'iife'],
       name: 'Quyuen',
       fileName: (format) => `quyuen.${format}.js`
     },

@@ -22,8 +22,22 @@ export class QyViewer extends LitElement {
     (handler as any).open(imgUrl);
   }
 
+  protected firstUpdated() {
+    const event = new CustomEvent('load')
+    this.dispatchEvent(event)
+  }
+
   render() {
     return html`
+      <style>
+        :host {
+          --qy-viewer-z-index: 1000;
+        }
+        
+        qy-viewer-panorama, qy-viewer-image, qy-viewer-youtube {
+          --qy-viewer-z-index-each: var(--qy-viewer-z-index);
+        }
+      </style>
       <qy-viewer-image></qy-viewer-image>
       <qy-viewer-youtube></qy-viewer-youtube>
       <qy-viewer-panorama></qy-viewer-panorama>

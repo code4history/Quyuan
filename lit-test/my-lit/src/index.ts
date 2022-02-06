@@ -2,6 +2,12 @@ import "./qy-swiper"
 import "./qy-viewer"
 import {templateExtractor} from "./qy-template-extractor"
 
-export const Quyuan = {
+const Quyuan = {
   templateExtractor
 }
+
+if (window) {
+  (window as any)["Quyuan"] = Quyuan
+}
+
+export default Quyuan
