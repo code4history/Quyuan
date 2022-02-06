@@ -1,20 +1,16 @@
 {
-  "name": "my-lit",
-  "version": "0.0.0",
+  "name": "quyuanjs",
+  "version": "0.1.0",
+  "repository": "https://github.com/code4history/Quyuan.git",
+  "author": "kochizufan <kochizufan@gmail.com>",
+  "contributors": ["kobakazu0429 <kobakazu10@gmail.com>"],
+  "license": "MIT",
   "main": "./dist/quyuen.umd.js",
   "module": "./dist/quyuen.es.js",
   "exports": {
     ".": {
       "import": "./dist/quyuen.es.js",
       "require": "./dist/quyuen.umd.js"
-    },
-    "./qy-swiper": {
-      "import": "./dist/qy-swiper.es.js",
-      "require": "./dist/qy-swiper.umd.js"
-    },
-    "./qy-viewer": {
-      "import": "./dist/qy-viewer.es.js",
-      "require": "./dist/qy-viewer.umd.js"
     }
   },
   "types": "./dist/quyuen.es.d.ts",
@@ -27,7 +23,6 @@
     "build": "tsc && vite build"
   },
   "dependencies": {
-    "font-awesome": "^4.7.0",
     "lit": "^2.0.2",
     "nunjucks": "^3.2.3",
     "swiper": "^8.0.1",
@@ -37,7 +32,6 @@
   "devDependencies": {
     "@types/nunjucks": "^3.2.1",
     "amd-to-es6": "^0.2.0",
-    "rimraf": "^3.0.2",
     "typescript": "^4.4.4",
     "vite": "^2.7.2",
     "vite-dts": "^1.0.4"

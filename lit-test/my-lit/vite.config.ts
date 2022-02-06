@@ -13,7 +13,7 @@ export default defineConfig({
       fileName: (format) => `quyuen.${format}.js`
     },
     rollupOptions: {
-      //external: /^lit/
+      input: ["index.html", "leaflet.html"],
     }
   },
   plugins: [

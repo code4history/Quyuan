@@ -3,7 +3,8 @@
   "version": "0.0.7",
   "main": "index.js",
   "repository": "https://github.com/code4history/Quyuan.git",
-  "author": "kobakazu0429 <kobakazu10@gmail.com>",
+  "author": "kochizufan <kochizufan@gmail.com>",
+  "contributors": ["kobakazu0429 <kobakazu10@gmail.com>"],
   "license": "MIT",
   "files": [
     "dist",
