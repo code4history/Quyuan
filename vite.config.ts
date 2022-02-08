@@ -7,10 +7,10 @@ export default defineConfig({
     sourcemap: true,
     outDir: 'umd',
     lib: {
-      entry: 'src_umd/index.ts',
+      entry: 'src/index.ts',
       formats: ['umd'],
-      name: 'Quyuen',
-      fileName: () => 'quyuen.min.js'
+      name: 'Quyuan',
+      fileName: () => 'quyuan.min.js'
     },
     rollupOptions: {
     }
