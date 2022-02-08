@@ -5,6 +5,7 @@ export default defineConfig({
   build: {
     minify: 'terser',
     sourcemap: true,
+    outDir: 'umd',
     lib: {
       entry: 'src_umd/index.ts',
       formats: ['umd'],
