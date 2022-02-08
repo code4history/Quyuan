@@ -1,7 +1,7 @@
 import {css} from 'lit';
 import {QyViewerBase} from './qy-viewer-base.js';
 import {customElement,property} from "lit/decorators.js";
-import PANOLENS from "./panolens.js";
+import PANOLENS from "../vendor/panolens.js";
 
 @customElement('qy-viewer-panorama')
 export class QyViewerPanorama extends QyViewerBase {

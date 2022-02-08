@@ -5,22 +5,26 @@
   "author": "kochizufan <kochizufan@gmail.com>",
   "contributors": ["kobakazu0429 <kobakazu10@gmail.com>"],
   "license": "MIT",
-  "main": "dist/quyuen.umd.js",
-  "module": "dist/quyuen.es.js",
+  "main": "lib/index.js",
+  "module": "esm/index.js",
   "exports": {
     ".": {
-      "import": "./dist/quyuen.es.js",
-      "require": "./dist/quyuen.umd.js"
+      "import": "./esm/index.js",
+      "require": "./lib/index.js"
     }
   },
-  "types": "./dist/quyuen.es.d.ts",
+  "types": "./esm/index.d.ts",
   "files": [
-    "dist",
-    "../../types"
+    "lib",
+    "esm",
+    "dist"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build"
+    "dev": "vite --config=vite.config.dev.ts",
+    "build": "npm run build:cjs && npm run build:esm",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:umd": "vite build"
   },
   "dependencies": {
     "lit": "^2.0.2",
