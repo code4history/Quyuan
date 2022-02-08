@@ -44,7 +44,7 @@ export class QySwiper extends LitElement {
 
   protected firstUpdated() {
     // Core library features at https://swiperjs.com/api/#custom-build
-    console.log(`firstUpdate: ${this.slides.length}`)
+    const slidesLoop = this.slides.length >= 2
     SwiperLibrary.Swiper.use([
       SwiperLibrary.Navigation,
       SwiperLibrary.Pagination,
@@ -77,7 +77,7 @@ export class QySwiper extends LitElement {
       } : {},
       preventClicks: false,
       preventClicksPropagation: true,
-      loop: this.slides.length >= 2
+      loop: slidesLoop
     })
   }
 
