@@ -50,6 +50,7 @@ let QySwiper = class QySwiper extends LitElement {
     }
     firstUpdated() {
         // Core library features at https://swiperjs.com/api/#custom-build
+        console.log(`firstUpdate: ${this.slides.length}`);
         SwiperLibrary.Swiper.use([
             SwiperLibrary.Navigation,
             SwiperLibrary.Pagination,
@@ -82,7 +83,7 @@ let QySwiper = class QySwiper extends LitElement {
             } : {},
             preventClicks: false,
             preventClicksPropagation: true,
-            loop: true
+            loop: this.slides.length >= 2
         });
     }
     render() {
