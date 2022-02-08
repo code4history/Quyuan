@@ -6,7 +6,7 @@ export default defineConfig({
     minify: 'terser',
     sourcemap: true,
     lib: {
-      entry: 'src/index.ts',
+      entry: 'src_umd/index.ts',
       formats: ['umd'],
       name: 'Quyuen',
       fileName: () => 'quyuen.min.js'

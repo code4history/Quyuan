@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <link
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    />
+    <link
+      href="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.css"
+      rel="stylesheet"
+    />
+    <style>
+      html,
+      body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+
+      #mapid {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+
+      .leaflet-popup-content {
+        margin: 9px;
+      }
+
+      .leaflet-popup-content-wrapper {
+        border-radius: 6px;
+        min-width: auto;
+      }
+
+      .leaflet-popup-content {
+        border-radius: 6px;
+        min-width: 400px !important;
+        max-width: 500px !important;
+        max-height: 300px;
+        overflow: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="mapid"></div>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet-src.js"></script>
+    <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js"></script>
+    <script src="https://unpkg.com/mapbox-gl-leaflet/leaflet-mapbox-gl.js"></script>
+    <script type="module" src="./dist/quyuen.min.js"></script>
+  </body>
+  <script>
+    const main = async () => {
+      const accessToken = "pk.eyJ1IjoicmVraXNoaWtva3VkbyIsImEiOiJjazRoMmF3dncwODU2M2ttdzI2aDVqYXVwIn0.8Hb9sekgjfck6Setxk5uVg"
+      const style = "mapbox://styles/moritoru/ck4s6w8bd0sb51cpp9vn7ztty"
+      const latLng = [36.2461984, 139.5278149]
+      const zoom = 15
+      const minZoom = 5
+      const maxZoom = 21
+
+      const geoJsonNJ = "./nj.geojson"
+
+      const mymap = L.map("mapid", {
+        maxZoom
+      }).setView(latLng, zoom)
+
+      L.mapboxGL({
+        accessToken,
+        style,
+        maxZoom,
+        minZoom,
+      }).addTo(mymap)
+
+      const data = await fetch(geoJsonNJ)
+      let geojson = await data.json()
+
+      let popupHtmlTemplate = ""
+
+      popupHtmlTemplate += `<div class="poi">`
+      popupHtmlTemplate += `{% if images.length > 0 %}
+        <b>その他の画像:</b><br>
+        <qy-swiper style="height:200px;">
+          {% for image in images %}
+            <qy-swiper-slide imageUrl="{{ image.path }}" thumbnailUrl="{{ image.mid_thumbnail }}" imageType="{{ image.image_type }}" caption="{{ image.description }}"></qy-swiper-slide>
+          {% endfor %}
+        </qy-swiper>
+      {% endif %}`;
+      popupHtmlTemplate += `</div>`;
+
+      geojson = Quyuan.templateExtractor({
+        geojson,
+        templates: {
+          html: popupHtmlTemplate,
+        },
+      })
+
+      geojson.features.forEach((feature) => {
+        if (feature.geometry) {
+          // source file coordinates are ordered by lnglat, but should be latlng.
+          const marker = L.marker(
+            feature.geometry.coordinates.reverse()
+          ).bindPopup(feature.result.html);
+          marker.addTo(mymap);
+        }
+      })
+    }
+
+    main();
+  </script>
+</html>
