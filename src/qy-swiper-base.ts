@@ -76,7 +76,7 @@ export class QySwiper extends LitElement {
       } : {},
       preventClicks: false,
       preventClicksPropagation: true,
-      loop: true
+      loop: this.slides.length >= 2
     })
   }
 
