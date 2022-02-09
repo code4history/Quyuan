@@ -1,4 +1,4 @@
-import {Quyuan} from "../src"
+import Quyuan from "./src"
 
 const geojson = {
   features: [

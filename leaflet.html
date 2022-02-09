@@ -56,10 +56,9 @@
     <script src="https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.0/mapbox-gl.js"></script>
     <script src="https://unpkg.com/mapbox-gl-leaflet/leaflet-mapbox-gl.js"></script>
   </body>
-  <script>
+  <script type="module">
+    import Quyuan from './src'
     const main = async () => {
-      const {Quyuan} = await import('./src')
-
       const accessToken = "pk.eyJ1IjoicmVraXNoaWtva3VkbyIsImEiOiJjazRoMmF3dncwODU2M2ttdzI2aDVqYXVwIn0.8Hb9sekgjfck6Setxk5uVg"
       const style = "mapbox://styles/moritoru/ck4s6w8bd0sb51cpp9vn7ztty"
       const latLng = [36.2461984, 139.5278149]
