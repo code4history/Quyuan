@@ -1,6 +1,6 @@
 import "./qy-swiper"
-import "./qy-viewer"
-import {templateExtractor} from "./qy-template-extractor"
+import "./components/viewer/qy-viewer"
+import {templateExtractor} from "./utils/qy-template-extractor"
 
 const Quyuan = {
   templateExtractor

@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.viewerStyles = void 0;
-const lit_1 = require("lit");
-const qy_utils_1 = require("./qy-utils");
-const viewerIconCss = (0, lit_1.css) `
+import { css } from 'lit'
+import { injectCSS } from "../../utils/qy-utils";
+
+const viewerIconCss = css`
   /*!
    *  Font Awesome 4.7.0 by @davegandy - http://fontawesome.io - @fontawesome
    *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
@@ -14,6 +12,7 @@ const viewerIconCss = (0, lit_1.css) `
     font-weight: normal;
     font-style: normal;
   }
-`;
-(0, qy_utils_1.injectCSS)(viewerIconCss);
-exports.viewerStyles = (0, lit_1.css) `.fa {display: inline-block;font: normal normal normal 14px/1 qy-viewer-fontawesome-subset;font-size: inherit;text-rendering: auto;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}.fa-times:before {content: "\\f00d";}`;
+`
+injectCSS(viewerIconCss)
+
+export const viewerStyles = css`.fa {display: inline-block;font: normal normal normal 14px/1 qy-viewer-fontawesome-subset;font-size: inherit;text-rendering: auto;-webkit-font-smoothing: antialiased;-moz-osx-font-smoothing: grayscale;}.fa-times:before {content: "\\f00d";}`
