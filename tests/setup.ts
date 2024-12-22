@@ -1,5 +1,4 @@
 import '@testing-library/jest-dom';
-import { cleanup } from '@testing-library/dom';
 import { beforeEach, afterEach } from 'vitest';
 
 beforeEach(() => {
@@ -7,5 +6,5 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  cleanup();
+  document.body.innerHTML = '';
 });

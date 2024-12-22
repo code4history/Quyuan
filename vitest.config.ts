@@ -4,7 +4,13 @@ import { resolve } from 'path';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'happy-dom',
+    environment: 'jsdom',
+    environmentOptions: {
+      jsdom: {
+        url: 'http://localhost'
+      }
+    },
+    setupFiles: ['./tests/setup.ts'],
     include: ['src/**/*.test.ts'],
     coverage: {
       provider: 'v8',

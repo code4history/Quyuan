@@ -1,6 +1,6 @@
 {
   "name": "quyuan",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "GeoJSON template extractor and multimedia viewer",
   "type": "module",
   "private": false,
@@ -23,9 +23,10 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest",
+    "build": "tsc && cross-env BUILD_MODE=package vite build",
+    "deploy": "cp public/index.html index.html && tsc && vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "coverage": "vitest run --coverage"
   },
   "dependencies": {
@@ -33,14 +34,31 @@
     "swiper": "^11.0.5"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.7",
-    "@types/node": "^22.10.2",
-    "@vitest/coverage-v8": "^1.6.0",
+    "@testing-library/dom": "^10.4.0",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@types/jsdom": "^21.1.6",
+    "@vitest/coverage-v8": "^1.0.0",
     "cross-env": "^7.0.3",
-    "jsdom": "^25.0.1",
+    "jsdom": "^23.0.1",
     "typescript": "^5.3.0",
     "vite": "^5.0.0",
-    "vite-plugin-dts": "^3.9.1",
+    "vite-plugin-dts": "^3.0.0",
     "vitest": "^1.0.0"
-  }
+  },
+  "keywords": [
+    "geojson",
+    "template",
+    "viewer",
+    "webcomponents"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code4history/Quyuan.git"
+  },
+  "bugs": {
+    "url": "https://github.com/code4history/Quyuan/issues"
+  },
+  "homepage": "https://github.com/code4history/Quyuan#readme"
 }
