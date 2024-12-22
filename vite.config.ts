@@ -1,19 +1,22 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
+import dts from 'vite-plugin-dts';
+import { resolve } from 'path';
 
-// https://vitejs.dev/config/
 export default defineConfig({
   build: {
-    minify: 'terser',
-    sourcemap: true,
-    outDir: 'umd',
     lib: {
-      entry: 'src/index.ts',
-      formats: ['umd'],
-      name: 'Quyuan',
-      fileName: () => 'quyuan.min.js'
+      entry: resolve(__dirname, 'src/index.ts'),
+      formats: ['es', 'cjs', 'umd'],
+      name: 'quyuan'
     },
     rollupOptions: {
+      external: ['lit']
     }
   },
-  plugins: []
-})
+  plugins: [dts()],
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src')
+    }
+  }
+});
