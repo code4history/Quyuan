@@ -1,4 +1,4 @@
-import "./qy-swiper"
+import "./components/swiper/qy-swiper"
 import "./components/viewer/qy-viewer"
 import {templateExtractor} from "./utils/qy-template-extractor"
 

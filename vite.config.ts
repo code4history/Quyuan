@@ -7,6 +7,7 @@ const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
 const isPackageBuild = process.env.BUILD_MODE === 'package';
 
 export default defineConfig({
+  base: './',
   build: isPackageBuild ? {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -18,10 +19,7 @@ export default defineConfig({
     }
   } : {
     outDir: 'dist',
-    emptyOutDir: true,
-    rollupOptions: {
-      input: { main: resolve(__dirname, 'index.html') }
-    }
+    emptyOutDir: true
   },
   plugins: [dts()],
   resolve: {

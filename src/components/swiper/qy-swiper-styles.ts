@@ -1,5 +1,5 @@
 import { css } from 'lit'
-import { injectCSS } from "./qy-utils";
+import { injectCSS } from "../../utils/qy-utils"
 
 const swiperIconCss = css`
   @font-face {

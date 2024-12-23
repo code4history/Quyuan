@@ -1,47 +1,62 @@
-import {css} from 'lit';
-import {QyViewerBase} from './qy-viewer-base.js';
-import {customElement,property} from "lit/decorators.js";
-import PANOLENS from "../../../vendor/panolens.js";
+import { css, html } from 'lit';
+import { QyViewerBase } from './qy-viewer-base.js';
+import { customElement, property } from 'lit/decorators.js';
+
 
 @customElement('qy-viewer-panorama')
 export class QyViewerPanorama extends QyViewerBase {
   static styles = css`
     ${super.styles}
 
-    .img_template {
-      display: none;
+    .iframe{
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: 0;
     }
-  `
-  @property()
-  viewer = null as any
+  `;
 
-  @property()
-  panorama = null as any
+  @property({ type: String })
+  imgUrl = '';
 
-  open(imgUrl:string) {
-    if (!this.viewer) {
-      const viewerEl = this.shadowRoot!.querySelector(".viewer");
-      this.viewer = new PANOLENS.Viewer({ container: viewerEl });
-    }
+  open(imgUrl: string) {
 
-    this.panorama = new PANOLENS.ImagePanorama(imgUrl);
-    this.viewer.add(this.panorama);
-    this.viewer.setPanorama(this.panorama);
+    const iframeHtml = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>A-Frame Panorama</title>
+          <style>
+          html,body {
+            width:100%;
+            height:100vh;
+            overflow: hidden;
+          }
+          </style>
+          <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
+        </head>
+        <body>
+          <a-scene embedded>
+            <a-sky src="${imgUrl}" rotation="0 -90 0"></a-sky>
+          </a-scene>
+        </body>
+      </html>
+    `;
 
+    const iframeEl = this.shadowRoot!.querySelector(".iframe") as HTMLIFrameElement;
+    iframeEl.srcdoc = iframeHtml;
+  
     super.open(imgUrl);
   }
 
   close() {
-    this.panorama.dispose();
-    this.viewer.remove(this.panorama);
-    this.panorama = null;
+    const iframeEl = this.shadowRoot!.querySelector(".iframe") as HTMLIFrameElement;
+    iframeEl.srcdoc = "";
 
     super.close();
   }
-}
 
-declare global {
-  interface HTMLElementTagNameMap {
-    'qy-viewer-panorama': QyViewerPanorama
+  renderViewer() {
+    return html`<iframe class="iframe">`;
   }
 }

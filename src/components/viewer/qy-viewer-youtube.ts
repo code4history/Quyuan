@@ -13,7 +13,7 @@ export class QyViewerYoutube extends QyViewerBase {
       height: 100%;
       border: 0;
     }
-  `
+  `;
 
   open(imgUrl:string) {
     const iframeEl = this.shadowRoot!.querySelector(".iframe") as HTMLIFrameElement;
