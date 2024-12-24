@@ -32,12 +32,16 @@ export class QyViewerPanorama extends QyViewerBase {
             height:100vh;
             overflow: hidden;
           }
+          .a-enter-vr, .a-enter-ar {
+            display: none;
+          }
           </style>
           <script src="https://aframe.io/releases/1.4.0/aframe.min.js"></script>
         </head>
         <body>
-          <a-scene embedded>
+          <a-scene embedded xr-mode-ui="enabled: false; XRMode: false;">
             <a-sky src="${imgUrl}" rotation="0 -90 0"></a-sky>
+            <a-entity camera look-controls="reverseMouseDrag: true"></a-entity>
           </a-scene>
         </body>
       </html>
