@@ -1,7 +1,7 @@
 import Quyuan from '../index';
 
 const result = async () => {
-  const geoJsonNJ = "/assets/nj.geojson";
+  const geoJsonNJ = "./assets/nj.geojson";
 
   const data = await fetch(geoJsonNJ);
   let geojson = await data.json();
