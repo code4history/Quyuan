@@ -7,9 +7,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const demos = [
-    { name: 'Leaflet', path: '/leaflet.html', description: 'シンプルで軽い地図ライブラリ' },
-    { name: 'OpenLayers', path: '/openlayers.html', description: '多機能な地図フレームワーク' },
-    { name: 'MapLibre GL', path: '/maplibre.html', description: 'ベクタタイルの描画エンジン' }
+    { name: 'Leaflet', path: './leaflet.html', description: 'シンプルで軽い地図ライブラリ' },
+    { name: 'OpenLayers', path: './openlayers.html', description: '多機能な地図フレームワーク' },
+    { name: 'MapLibre GL', path: './maplibre.html', description: 'ベクタタイルの描画エンジン' }
   ];
 
   const demoList = document.querySelector('#demo-list');
