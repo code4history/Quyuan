@@ -12,7 +12,17 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       formats: ['es', 'cjs', 'umd'],
-      name: 'quyuan'
+      name: 'quyuan',
+      fileName: (format) => {
+        switch(format) {
+          case 'es':
+            return 'quyuan.js';
+          case 'cjs':
+            return 'quyuan.cjs';
+          case 'umd':
+            return 'quyuan.umd.cjs';
+        }
+      }
     },
     rollupOptions: {
       external: ['lit']
@@ -23,7 +33,9 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        map: resolve(__dirname, 'map.html')
+        leaflet: resolve(__dirname, 'leaflet.html'),
+        openlayers: resolve(__dirname, 'openlayers.html'),
+        maplibre: resolve(__dirname, 'maplibre.html')
       },
       output: {
         entryFileNames: 'assets/[name].[hash].js',

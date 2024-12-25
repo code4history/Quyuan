@@ -1,7 +1,12 @@
 import { html, LitElement } from 'lit'
 import { customElement, property, query } from 'lit/decorators.js'
 import { swiperStyles } from './qy-swiper-styles'
-import * as SwiperLibrary from 'swiper'
+import Swiper from 'swiper'
+import { Navigation, Pagination, Scrollbar, Autoplay, Thumbs, Keyboard } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
 
 @customElement('qy-swiper')
 export class QySwiper extends LitElement {
@@ -15,7 +20,7 @@ export class QySwiper extends LitElement {
   @query('#divPrevious') private readonly divPrevious!: HTMLDivElement
   @query('#divNext') private readonly divNext!: HTMLDivElement
 
-  slider?: SwiperLibrary.Swiper
+  slider?: Swiper
 
   static get styles() {
     return swiperStyles
@@ -45,15 +50,8 @@ export class QySwiper extends LitElement {
   protected firstUpdated() {
     // Core library features at https://swiperjs.com/api/#custom-build
     const slidesLoop = this.slides.length >= 2
-    SwiperLibrary.Swiper.use([
-      SwiperLibrary.Navigation,
-      SwiperLibrary.Pagination,
-      SwiperLibrary.Scrollbar,
-      SwiperLibrary.Autoplay,
-      SwiperLibrary.Thumbs,
-      SwiperLibrary.Keyboard
-    ])
-    this.slider = new SwiperLibrary.Swiper(this.divContainer, {
+    this.slider = new Swiper(this.divContainer, {
+      modules: [Navigation, Pagination, Scrollbar, Autoplay, Thumbs, Keyboard],
       navigation: {
         prevEl: this.divPrevious,
         nextEl: this.divNext,
@@ -69,7 +67,7 @@ export class QySwiper extends LitElement {
         waitForTransition: true,
       } : false,
       thumbs: this.hasThumb ? {
-        swiper: new SwiperLibrary.Swiper(this.divGallery, {
+        swiper: new Swiper(this.divGallery, {
           spaceBetween: 10,
           slidesPerView: Math.min(Math.max(4, this.slides.length), 8),
           watchSlidesProgress: true,

@@ -1,5 +1,5 @@
 {
-  "name": "quyuan",
+  "name": "quyuanjs",
   "version": "0.2.0",
   "description": "GeoJSON template extractor and multimedia viewer",
   "type": "module",
@@ -24,7 +24,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && cross-env BUILD_MODE=package vite build",
-    "deploy": "cp public/index.html index.html && tsc && vite build",
+    "deploy": "cp public/*.html ./ && tsc && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
     "coverage": "vitest run --coverage"
@@ -62,7 +62,8 @@
     "viewer",
     "webcomponents"
   ],
-  "author": "Your Name",
+  "author": "Code for History",
+  "contributors": ["kobakazu0429 <kobakazu10@gmail.com>"],
   "license": "MIT",
   "repository": {
     "type": "git",

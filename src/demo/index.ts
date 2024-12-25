@@ -1,55 +1,28 @@
-import Quyuan from "../index"
+import { version } from '../../package.json';
 
-interface ProcessedFeature {
-    properties: {
-      images: Array<{
-        imageUrl: string;
-        thumbnailUrl: string;
-        imageType: string;
-        caption?: string;
-      }>;
-    };
-    result?: {
-      main: string;
-    };
-  }
-  
-  interface ProcessedGeoJSON {
-    features: ProcessedFeature[];
+document.addEventListener('DOMContentLoaded', () => {
+  const versionElement = document.querySelector('#version');
+  if (versionElement) {
+    versionElement.textContent = `v${version}`;
   }
 
+  const demos = [
+    { name: 'Leaflet', path: '/leaflet.html', description: 'シンプルで軽い地図ライブラリ' },
+    { name: 'OpenLayers', path: '/openlayers.html', description: '多機能な地図フレームワーク' },
+    { name: 'MapLibre GL', path: '/maplibre.html', description: 'ベクタタイルの描画エンジン' }
+  ];
 
-const geojson: ProcessedGeoJSON = {
-  features: [
-    {
-      properties: {
-        images: [
-          { imageUrl: "/assets/no2.JPG", thumbnailUrl: "/assets/no2.JPG", imageType: "image" },
-          { imageUrl: "https://www.youtube.com/embed/kGqsNUqbRuo", thumbnailUrl: "https://img.youtube.com/vi/kGqsNUqbRuo/hqdefault.jpg", imageType: "youtube" },
-          { imageUrl: "/assets/1.png", thumbnailUrl: "/assets/1.png", imageType: "panorama", caption: "パノラマ" },
-          { imageUrl: "/assets/2.png", thumbnailUrl: "/assets/2.png", imageType: "panorama" }
-        ]
-      }
-    }
-  ]
-};
-
-const templates = {
-  main: `
-    <qy-swiper style='height: 300px'>
-      {% for image in images %}
-        <qy-swiper-slide imageUrl="{{ image.imageUrl }}" thumbnailUrl="{{ image.thumbnailUrl }}" imageType="{{ image.imageType }}" caption="{{ image.caption }}"></qy-swiper-slide>
-      {% endfor %}
-    </qy-swiper>
-  `
-};
-
-const result = Quyuan.templateExtractor({
-  geojson,
-  templates
-}) as ProcessedGeoJSON;
-
-const swiperElement = document.querySelector("#swiper");
-if (swiperElement && result.features[0].result) {
-  swiperElement.innerHTML = result.features[0].result.main;
-}
+  const demoList = document.querySelector('#demo-list');
+  if (demoList) {
+    demos.forEach(demo => {
+      const card = document.createElement('div');
+      card.className = 'demo-card';
+      card.innerHTML = `
+        <h2>${demo.name}</h2>
+        <p>${demo.description}</p>
+        <a href="${demo.path}" class="demo-link">デモを見る</a>
+      `;
+      demoList.appendChild(card);
+    });
+  }
+});

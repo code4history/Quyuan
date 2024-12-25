@@ -37,4 +37,6 @@ const main = async () => {
   });
 };
 
-main();
+main().catch(error => {
+  console.error('Failed to initialize map:', error);
+});
