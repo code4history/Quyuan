@@ -1,96 +1,112 @@
 {
   "type": "FeatureCollection",
-  "name": "demo",
   "features": [
     {
       "type": "Feature",
       "properties": {
-        "fid": 0,
-        "area_no": "1",
-        "name": "demo name",
-        "type": "demo type",
-        "era": "不明",
-        "year": "",
-        "place_1": "",
-        "place_2": "",
-        "detail": "",
-        "note_1": "",
-        "note_2": "",
-        "note_3": "",
-        "area": "館林",
-        "surveyed": "",
-        "description": "",
-        "photo": "",
-        "public_relations": "",
-        "confirmed": false,
-        "path": "",
-        "mid_thumbnail": "",
-        "small_thumbnail": "",
+        "name": "竹生島神社",
+        "type": "神社",
+        "cho": "本町三丁目",
         "images": [
           {
-            "path": "./1.png",
-            "shootingDate": "2021-06-20T15:55:32",
-            "shooter": "",
-            "description": "1",
-            "note": "",
-            "mid_thumbnail": "./1.png",
-            "small_thumbnail": "./1.png",
-            "image_type": "panorama"
-          },
-          {
-            "path": "./no2.JPG",
-            "shootingDate": "2021-06-20T15:55:41",
-            "shooter": "",
-            "description": "2",
-            "note": "",
-            "mid_thumbnail": "./no2.JPG",
-            "small_thumbnail": "./no2.JPG",
+            "path": "./assets/chikubushima.jpg",
+            "shootingDate": "2009-12-12T15:00:00",
+            "description": "竹生島神社建営碑",
+            "mid_thumbnail": "./assets/chikubushima.jpg",
+            "small_thumbnail": "./assets/chikubushima.jpg",
             "image_type": "image"
-          },
-          {
-            "path": "./2.png",
-            "shootingDate": "2021-06-20T15:55:41",
-            "shooter": "",
-            "description": "3",
-            "note": "",
-            "mid_thumbnail": "./2.png",
-            "small_thumbnail": "./2.png",
-            "image_type": "panorama"
-          },
-          {
-            "path": "https://www.youtube.com/embed/kGqsNUqbRuo",
-            "shootingDate": "2021-06-20T15:55:41",
-            "shooter": "",
-            "description": "4",
-            "note": "",
-            "mid_thumbnail": "https://img.youtube.com/vi/kGqsNUqbRuo/hqdefault.jpg",
-            "small_thumbnail": "https://img.youtube.com/vi/kGqsNUqbRuo/hqdefault.jpg",
-            "image_type": "youtube"
           }
-        ],
-        "books": [
-          {
-            "description": "",
-            "note": "",
-            "name": "demo book name",
-            "editor": "demo book editor",
-            "publishedAt": 2021
-          }
-        ],
-        "status": "",
-        "shape": "",
-        "material": "",
-        "inscription": "",
-        "need_action": "",
-        "contradiction": "",
-        "height": null,
-        "statue_height": null,
-        "width": null,
-        "depth": null
+        ]
       },
       "geometry": {
-        "type": "Point",
-        "coordinates": [139.5490675549848, 36.26334989331191]
+        "coordinates": [
+          139.53803008674043,
+          36.24511353877283
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "茂林寺",
+        "type": "寺院",
+        "cho": "堀工町",
+        "images": [
+          {
+            "path": "https://www.youtube.com/embed/fmWTtrnb0CA",
+            "shootingDate": "2024-01-01T00:00:00",
+            "description": "茂林寺・分福茶釜ゆかりの寺",
+            "mid_thumbnail": "https://img.youtube.com/vi/fmWTtrnb0CA/hqdefault.jpg",
+            "small_thumbnail": "https://img.youtube.com/vi/fmWTtrnb0CA/hqdefault.jpg",
+            "image_type": "youtube"
+          }
+        ]
+      },
+      "geometry": {
+        "coordinates": [
+          139.53111215487735,
+          36.22443895798811
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "東武館林駅",
+        "type": "駅",
+        "cho": "目車町",
+        "images": [
+          {
+            "path": "./assets/TatebayashiStation.jpg",
+            "shootingDate": "2009-12-12T15:00:00",
+            "description": "新館林駅舎",
+            "mid_thumbnail": "./assets/TatebayashiStation.jpg",
+            "small_thumbnail": "./assets/TatebayashiStation.jpg",
+            "image_type": "image"
+          }
+        ]
+      },
+      "geometry": {
+        "coordinates": [
+          139.52787067818514,
+          36.24605672535823
+        ],
+        "type": "Point"
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "つつじが丘公園 東屋",
+        "type": "公園",
+        "cho": "つつじ町",
+        "images": [
+          {
+            "path": "./assets/azumaya_panorama1.png",
+            "shootingDate": "2009-12-12T15:00:00",
+            "description": "つつじが丘公園 東屋 外部",
+            "mid_thumbnail": "./assets/azumaya_panorama1.png",
+            "small_thumbnail": "./assets/azumaya_panorama1.png",
+            "image_type": "panorama"
+          },
+          {
+            "path": "./assets/azumaya_panorama2.png",
+            "shootingDate": "2009-12-12T15:00:00",
+            "description": "つつじが丘公園 東屋 内部",
+            "mid_thumbnail": "./assets/azumaya_panorama2.png",
+            "small_thumbnail": "./assets/azumaya_panorama2.png",
+            "image_type": "panorama"
+          }
+        ]
+      },
+      "geometry": {
+        "coordinates": [
+          139.55070232804496,
+          36.24205501234353
+        ],
+        "type": "Point"
       }
     }
   ]

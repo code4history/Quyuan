@@ -16,9 +16,18 @@
     "experimentalDecorators": true,
     "outDir": "dist",
     "declaration": true,
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "*": ["./src/types/*"]
     }
   },
-  "include": ["src/**/*", "tests/**/*"]
+  "include": [
+    "src/**/*", 
+    "src/types/**/*",
+    "tests/**/*"
+  ]
 }
