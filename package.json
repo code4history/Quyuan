@@ -10,10 +10,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/quyuan.js",
-      "require": "./dist/quyuan.cjs",
-      "browser": "./dist/quyuan.umd.cjs",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/quyuan.cjs"
     }
   },
   "files": [
@@ -53,8 +52,8 @@
     "jsdom": "^25.0.1",
     "leaflet": "^1.9.4",
     "typescript": "^5.7.0",
-    "vite": "^6.0.0",
-    "vite-plugin-dts": "^4.0.0",
+    "vite": "^5.4.0",
+    "vite-plugin-dts": "^3.9.0",
     "vitest": "^2.0.0"
   },
   "keywords": [
