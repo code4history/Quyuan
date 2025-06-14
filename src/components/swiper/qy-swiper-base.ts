@@ -33,7 +33,7 @@ export class QySwiper extends LitElement {
     ]
   }
 
-  async openViewer(imageUrl: string, imageType: string) {
+  async openViewer(imageUrl: string, imageType: string, slideIndex?: number) {
     let qyView = document.querySelector("qy-viewer")
     if (!qyView) {
       const viewerElement = document.createElement("qy-viewer")
@@ -44,6 +44,10 @@ export class QySwiper extends LitElement {
         })
       })
     }
+    
+    // Store current swiper reference and slide index in viewer
+    (qyView as any).swiper = this;
+    (qyView as any).currentSlideIndex = slideIndex ?? this.slider?.activeIndex ?? 0;
     (qyView as any).open(imageUrl, imageType)
   }
 
@@ -165,7 +169,7 @@ export class QySwiper extends LitElement {
           ${this.slides.map(slide => {
             return html`
               <div class='swiper-slide'>
-                <img src="${slide.thumbnailUrl}" onclick="this.getRootNode().host.openViewer('${slide.imageUrl}', '${slide.imageType}')" class="viewer${slide.caption !== "" ? ` w-caption` : ""}">
+                <img src="${slide.thumbnailUrl}" onclick="this.getRootNode().host.openViewer('${slide.imageUrl}', '${slide.imageType}', ${this.slides.indexOf(slide)})" class="viewer${slide.caption !== "" ? ` w-caption` : ""}">
                 ${slide.caption !== "" ? html`<p class="slider-caption">${slide.caption}</p>` : ""}
               </div>
             `
