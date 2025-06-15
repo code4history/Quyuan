@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@photo-sphere-viewer/core": "^5.11.4",
-    "gsplat": "^1.0.0",
+    "gsplat": "^1.2.4",
     "lit": "^3.2.1",
     "maplibre-gl": "^5.0.0",
     "nunjucks": "^3.2.4",
