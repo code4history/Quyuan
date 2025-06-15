@@ -116,13 +116,21 @@ export class QyViewerGaussian extends QyViewerBase {
   private getCameraDebugInfo(): string {
     if (!this.camera || !this.camera.position) return "Position: unavailable";
     const pos = this.camera.position;
-    return `X: ${pos.x.toFixed(3)}, Y: ${pos.y.toFixed(3)}, Z: ${pos.z.toFixed(3)}`;
+    try {
+      return `X: ${pos.x.toFixed(3)}, Y: ${pos.y.toFixed(3)}, Z: ${pos.z.toFixed(3)}`;
+    } catch (error) {
+      return `Position: ${JSON.stringify(pos)}`;
+    }
   }
 
   private getTargetDebugInfo(): string {
     if (!this.controls || !this.controls.target) return "Target: unavailable";
     const target = this.controls.target;
-    return `X: ${target.x.toFixed(3)}, Y: ${target.y.toFixed(3)}, Z: ${target.z.toFixed(3)}`;
+    try {
+      return `X: ${target.x.toFixed(3)}, Y: ${target.y.toFixed(3)}, Z: ${target.z.toFixed(3)}`;
+    } catch (error) {
+      return `Target: ${JSON.stringify(target)}`;
+    }
   }
 
   private updateDebugInfo() {
@@ -147,27 +155,45 @@ export class QyViewerGaussian extends QyViewerBase {
       this.renderer = new SPLAT.WebGLRenderer(this.canvas);
       this.controls = new SPLAT.OrbitControls(this.camera, this.canvas);
 
-      // Set default position if not specified
+      // Debug camera object structure
+      console.log('Camera object:', this.camera);
+      console.log('Camera position:', this.camera.position);
+      console.log('Controls object:', this.controls);
+      console.log('Controls target:', this.controls.target);
+
+      // Set default position if not specified - using direct property assignment
       if (!this.cameraPosition) {
-        this.camera.position.set(3, 3, 3);
+        this.camera.position.x = 3;
+        this.camera.position.y = 3;
+        this.camera.position.z = 3;
       } else {
         const [x, y, z] = this.cameraPosition.split(',').map(Number);
         if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
-          this.camera.position.set(x, y, z);
+          this.camera.position.x = x;
+          this.camera.position.y = y;
+          this.camera.position.z = z;
         } else {
-          this.camera.position.set(3, 3, 3);
+          this.camera.position.x = 3;
+          this.camera.position.y = 3;
+          this.camera.position.z = 3;
         }
       }
 
-      // Set default target if not specified
+      // Set default target if not specified - using direct property assignment
       if (!this.cameraTarget) {
-        this.controls.target.set(0, 0, 0);
+        this.controls.target.x = 0;
+        this.controls.target.y = 0;
+        this.controls.target.z = 0;
       } else {
         const [x, y, z] = this.cameraTarget.split(',').map(Number);
         if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
-          this.controls.target.set(x, y, z);
+          this.controls.target.x = x;
+          this.controls.target.y = y;
+          this.controls.target.z = z;
         } else {
-          this.controls.target.set(0, 0, 0);
+          this.controls.target.x = 0;
+          this.controls.target.y = 0;
+          this.controls.target.z = 0;
         }
       }
       
