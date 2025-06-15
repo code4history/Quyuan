@@ -66,13 +66,17 @@ export class QyViewerGaussian extends QyViewerBase {
       position: absolute;
       top: 10px;
       left: 10px;
-      background: rgba(0, 0, 0, 0.8);
-      color: white;
-      padding: 10px;
-      font-family: monospace;
-      font-size: 12px;
-      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.85);
+      color: #00ff00;
+      padding: 12px;
+      font-family: 'Courier New', monospace;
+      font-size: 11px;
+      line-height: 1.4;
+      border-radius: 6px;
+      border: 1px solid rgba(0, 255, 0, 0.3);
       pointer-events: none;
+      white-space: pre-line;
+      min-width: 200px;
     }
   `;
 
@@ -110,15 +114,15 @@ export class QyViewerGaussian extends QyViewerBase {
   }
 
   private getCameraDebugInfo(): string {
-    if (!this.camera || !this.camera.position) return "Camera info unavailable";
+    if (!this.camera || !this.camera.position) return "Position: unavailable";
     const pos = this.camera.position;
-    return `${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)}`;
+    return `X: ${pos.x.toFixed(3)}, Y: ${pos.y.toFixed(3)}, Z: ${pos.z.toFixed(3)}`;
   }
 
   private getTargetDebugInfo(): string {
-    if (!this.controls || !this.controls.target) return "Target info unavailable";
+    if (!this.controls || !this.controls.target) return "Target: unavailable";
     const target = this.controls.target;
-    return `${target.x.toFixed(2)}, ${target.y.toFixed(2)}, ${target.z.toFixed(2)}`;
+    return `X: ${target.x.toFixed(3)}, Y: ${target.y.toFixed(3)}, Z: ${target.z.toFixed(3)}`;
   }
 
   private updateDebugInfo() {
@@ -143,21 +147,31 @@ export class QyViewerGaussian extends QyViewerBase {
       this.renderer = new SPLAT.WebGLRenderer(this.canvas);
       this.controls = new SPLAT.OrbitControls(this.camera, this.canvas);
 
-      // Parse camera position and target if provided
-      if (this.cameraPosition) {
+      // Set default position if not specified
+      if (!this.cameraPosition) {
+        this.camera.position.set(3, 3, 3);
+      } else {
         const [x, y, z] = this.cameraPosition.split(',').map(Number);
         if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
           this.camera.position.set(x, y, z);
+        } else {
+          this.camera.position.set(3, 3, 3);
         }
       }
 
-      if (this.cameraTarget) {
+      // Set default target if not specified
+      if (!this.cameraTarget) {
+        this.controls.target.set(0, 0, 0);
+      } else {
         const [x, y, z] = this.cameraTarget.split(',').map(Number);
         if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
           this.controls.target.set(x, y, z);
+        } else {
+          this.controls.target.set(0, 0, 0);
         }
       }
       
+      // Update controls to apply initial position and target
       this.controls.update();
 
       // Load the splat file
@@ -224,9 +238,18 @@ export class QyViewerGaussian extends QyViewerBase {
         ${this.isLoading ? html`<div class="loading">読み込み中...</div>` : ""}
         ${!this.isLoading && this.debugMode ? html`
           <div class="debug-info">
-            Camera Position: ${this.getCameraDebugInfo()}<br>
-            Camera Target: ${this.getTargetDebugInfo()}<br>
-            Controls: Rotate (drag), Zoom (scroll), Pan (right-drag)
+📍 Camera Position:
+${this.getCameraDebugInfo()}
+
+🎯 Camera Target:
+${this.getTargetDebugInfo()}
+
+🎮 Controls:
+• Rotate: Left-drag
+• Zoom: Scroll wheel
+• Pan: Right-drag or Shift+Left-drag
+
+📊 Status: ${this.scene ? 'Splat loaded' : 'Loading...'}
           </div>
         ` : ""}
       </div>
