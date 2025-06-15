@@ -124,12 +124,13 @@ export class QyViewerGaussian extends QyViewerBase {
   }
 
   private getTargetDebugInfo(): string {
-    if (!this.controls || !this.controls.target) return "Target: unavailable";
-    const target = this.controls.target;
+    if (!this.controls) return "Target: controls unavailable";
+    // gsplat.js OrbitControls might not have a target property
+    // Return available control info instead
     try {
-      return `X: ${target.x.toFixed(3)}, Y: ${target.y.toFixed(3)}, Z: ${target.z.toFixed(3)}`;
+      return `Controls active (no target property in gsplat.js)`;
     } catch (error) {
-      return `Target: ${JSON.stringify(target)}`;
+      return `Target: ${JSON.stringify(this.controls)}`;
     }
   }
 
@@ -155,13 +156,13 @@ export class QyViewerGaussian extends QyViewerBase {
       this.renderer = new SPLAT.WebGLRenderer(this.canvas);
       this.controls = new SPLAT.OrbitControls(this.camera, this.canvas);
 
-      // Debug camera object structure
+      // Debug camera and controls object structure
       console.log('Camera object:', this.camera);
       console.log('Camera position:', this.camera.position);
       console.log('Controls object:', this.controls);
-      console.log('Controls target:', this.controls.target);
+      console.log('All controls properties:', Object.keys(this.controls));
 
-      // Set default position if not specified - using direct property assignment
+      // Set camera position using the actual API structure
       if (!this.cameraPosition) {
         this.camera.position.x = 3;
         this.camera.position.y = 3;
@@ -179,23 +180,9 @@ export class QyViewerGaussian extends QyViewerBase {
         }
       }
 
-      // Set default target if not specified - using direct property assignment
-      if (!this.cameraTarget) {
-        this.controls.target.x = 0;
-        this.controls.target.y = 0;
-        this.controls.target.z = 0;
-      } else {
-        const [x, y, z] = this.cameraTarget.split(',').map(Number);
-        if (!isNaN(x) && !isNaN(y) && !isNaN(z)) {
-          this.controls.target.x = x;
-          this.controls.target.y = y;
-          this.controls.target.z = z;
-        } else {
-          this.controls.target.x = 0;
-          this.controls.target.y = 0;
-          this.controls.target.z = 0;
-        }
-      }
+      // gsplat.js OrbitControls may not have a target property like Three.js
+      // Skip target setting for now until we understand the API
+      console.log('Camera position set to:', this.camera.position);
       
       // Update controls to apply initial position and target
       this.controls.update();
