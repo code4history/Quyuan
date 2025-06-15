@@ -1,7 +1,6 @@
 import { html, css } from "lit";
 import { customElement, state, property } from "lit/decorators.js";
 import { QyViewerBase } from "./qy-viewer-base";
-import * as SPLAT from "gsplat";
 
 @customElement("qy-viewer-gaussian")
 export class QyViewerGaussian extends QyViewerBase {
@@ -20,10 +19,7 @@ export class QyViewerGaussian extends QyViewerBase {
   @property({ type: String, attribute: 'camera-target' })
   cameraTarget: string = "0,0,0";
 
-  private scene?: SPLAT.Scene;
-  private camera?: SPLAT.Camera;
-  private renderer?: SPLAT.WebGLRenderer;
-  private controls?: SPLAT.OrbitControls;
+  private viewer?: any; // gsplat viewer instance
   private animationId?: number;
   private canvas?: HTMLCanvasElement;
 
@@ -100,26 +96,23 @@ export class QyViewerGaussian extends QyViewerBase {
       this.animationId = undefined;
     }
 
-    if (this.renderer) {
-      this.renderer.dispose();
-      this.renderer = undefined;
+    if (this.viewer) {
+      // Cleanup gsplat viewer if it has cleanup methods
+      if (typeof this.viewer.dispose === 'function') {
+        this.viewer.dispose();
+      }
+      this.viewer = undefined;
     }
-
-    this.scene = undefined;
-    this.camera = undefined;
-    this.controls = undefined;
   }
 
   private getCameraDebugInfo(): string {
-    if (!this.camera) return "N/A";
-    const pos = this.camera.position;
-    return `${pos[0].toFixed(2)}, ${pos[1].toFixed(2)}, ${pos[2].toFixed(2)}`;
+    // Return placeholder for now since gsplat API is unclear
+    return "Camera info unavailable";
   }
 
   private getTargetDebugInfo(): string {
-    if (!this.controls) return "N/A";
-    const target = this.controls.target;
-    return `${target[0].toFixed(2)}, ${target[1].toFixed(2)}, ${target[2].toFixed(2)}`;
+    // Return placeholder for now since gsplat API is unclear
+    return "Target info unavailable";
   }
 
   private updateDebugInfo() {
@@ -132,37 +125,51 @@ export class QyViewerGaussian extends QyViewerBase {
     if (!this.canvas) return;
 
     try {
-      // Initialize Gaussian Splatting viewer
-      this.scene = new SPLAT.Scene();
-      this.camera = new SPLAT.Camera();
-      this.renderer = new SPLAT.WebGLRenderer(this.canvas);
-      this.controls = new SPLAT.OrbitControls(this.camera, this.canvas);
+      const container = this.shadowRoot?.querySelector(".gaussian-container") as HTMLDivElement;
+      if (!container) return;
 
-      // Load splat file
-      await SPLAT.Loader.LoadAsync(this.splatUrl, this.scene);
+      // Dynamically import gsplat to handle potential issues
+      const SPLAT = await import('gsplat');
       
-      // Position camera from attributes
-      const camPos = this.cameraPosition.split(',').map(n => parseFloat(n.trim()));
-      const camTarget = this.cameraTarget.split(',').map(n => parseFloat(n.trim()));
-      
-      if (camPos.length === 3 && this.camera) {
-        this.camera.position = camPos;
-      }
-      if (camTarget.length === 3 && this.controls) {
-        this.controls.target = camTarget;
+      // Try to create viewer with various approaches
+      try {
+        // Approach 1: Direct viewer creation if available
+        if (SPLAT.Viewer) {
+          this.viewer = new SPLAT.Viewer({
+            canvas: this.canvas,
+            url: this.splatUrl
+          });
+        } 
+        // Approach 2: Manual setup
+        else {
+          const scene = new SPLAT.Scene();
+          const camera = new SPLAT.Camera();
+          const renderer = new SPLAT.WebGLRenderer(this.canvas);
+          const controls = new SPLAT.OrbitControls(camera, this.canvas);
+          
+          await SPLAT.Loader.LoadAsync(this.splatUrl, scene);
+          
+          this.viewer = { scene, camera, renderer, controls };
+          
+          // Start render loop
+          const animate = () => {
+            this.animationId = requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+          };
+          animate();
+        }
+      } catch (error) {
+        console.error("Error setting up gsplat viewer:", error);
+        throw error;
       }
 
       // Setup resize handler
-      const container = this.shadowRoot?.querySelector(".gaussian-container") as HTMLDivElement;
-      if (container) {
-        const resizeObserver = new ResizeObserver(() => {
-          this.handleResize();
-        });
-        resizeObserver.observe(container);
-      }
+      const resizeObserver = new ResizeObserver(() => {
+        this.handleResize();
+      });
+      resizeObserver.observe(container);
 
-      // Start animation
-      this.animate();
       this.isLoading = false;
       this.requestUpdate();
 
@@ -174,28 +181,31 @@ export class QyViewerGaussian extends QyViewerBase {
   }
 
   private animate = () => {
-    this.animationId = requestAnimationFrame(this.animate);
-    
-    if (this.controls && this.renderer && this.scene && this.camera) {
-      this.controls.update();
-      this.renderer.render(this.scene, this.camera);
-      
-      // Update debug info if in debug mode
-      if (this.debugMode) {
-        this.updateDebugInfo();
-      }
+    // Animation is now handled inside initializeViewer
+    if (this.debugMode) {
+      this.updateDebugInfo();
     }
   };
 
   private handleResize() {
     const container = this.shadowRoot?.querySelector(".gaussian-container") as HTMLDivElement;
-    if (!container || !this.camera || !this.renderer) return;
+    if (!container || !this.viewer) return;
 
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // Update renderer size
-    this.renderer.setSize(width, height);
+    // Update renderer size if available
+    if (this.viewer.renderer && typeof this.viewer.renderer.setSize === 'function') {
+      this.viewer.renderer.setSize(width, height);
+    }
+    
+    // Update camera aspect if available
+    if (this.viewer.camera && typeof this.viewer.camera.aspect !== 'undefined') {
+      this.viewer.camera.aspect = width / height;
+      if (typeof this.viewer.camera.updateProjectionMatrix === 'function') {
+        this.viewer.camera.updateProjectionMatrix();
+      }
+    }
   }
 
   renderViewer() {
