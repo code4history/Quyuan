@@ -1,5 +1,5 @@
 import { html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, state, property } from "lit/decorators.js";
 import { QyViewerBase } from "./qy-viewer-base";
 import * as SPLAT from "gsplat";
 
@@ -10,6 +10,15 @@ export class QyViewerGaussian extends QyViewerBase {
 
   @state()
   private isLoading: boolean = true;
+
+  @property({ type: Boolean, attribute: 'debug-mode' })
+  debugMode: boolean = false;
+
+  @property({ type: String, attribute: 'camera-position' })
+  cameraPosition: string = "3,3,3";
+
+  @property({ type: String, attribute: 'camera-target' })
+  cameraTarget: string = "0,0,0";
 
   private scene?: SPLAT.Scene;
   private camera?: SPLAT.Camera;
@@ -53,6 +62,19 @@ export class QyViewerGaussian extends QyViewerBase {
       height: 100%;
       touch-action: none;
     }
+
+    .debug-info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
   `;
 
   open(url: string) {
@@ -88,6 +110,23 @@ export class QyViewerGaussian extends QyViewerBase {
     this.controls = undefined;
   }
 
+  private getCameraDebugInfo(): string {
+    if (!this.camera) return "N/A";
+    const pos = this.camera.position;
+    return `${pos[0].toFixed(2)}, ${pos[1].toFixed(2)}, ${pos[2].toFixed(2)}`;
+  }
+
+  private getTargetDebugInfo(): string {
+    if (!this.controls) return "N/A";
+    const target = this.controls.target;
+    return `${target[0].toFixed(2)}, ${target[1].toFixed(2)}, ${target[2].toFixed(2)}`;
+  }
+
+  private updateDebugInfo() {
+    // Force update to refresh debug display
+    this.requestUpdate();
+  }
+
   private async initializeViewer() {
     this.canvas = this.shadowRoot?.querySelector("canvas") as HTMLCanvasElement;
     if (!this.canvas) return;
@@ -101,6 +140,17 @@ export class QyViewerGaussian extends QyViewerBase {
 
       // Load splat file
       await SPLAT.Loader.LoadAsync(this.splatUrl, this.scene);
+      
+      // Position camera from attributes
+      const camPos = this.cameraPosition.split(',').map(n => parseFloat(n.trim()));
+      const camTarget = this.cameraTarget.split(',').map(n => parseFloat(n.trim()));
+      
+      if (camPos.length === 3 && this.camera) {
+        this.camera.position = camPos;
+      }
+      if (camTarget.length === 3 && this.controls) {
+        this.controls.target = camTarget;
+      }
 
       // Setup resize handler
       const container = this.shadowRoot?.querySelector(".gaussian-container") as HTMLDivElement;
@@ -129,6 +179,11 @@ export class QyViewerGaussian extends QyViewerBase {
     if (this.controls && this.renderer && this.scene && this.camera) {
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
+      
+      // Update debug info if in debug mode
+      if (this.debugMode) {
+        this.updateDebugInfo();
+      }
     }
   };
 
@@ -152,6 +207,13 @@ export class QyViewerGaussian extends QyViewerBase {
       <div class="gaussian-container">
         <canvas></canvas>
         ${this.isLoading ? html`<div class="loading">読み込み中...</div>` : ""}
+        ${!this.isLoading && this.debugMode ? html`
+          <div class="debug-info">
+            Camera Position: ${this.getCameraDebugInfo()}<br>
+            Camera Target: ${this.getTargetDebugInfo()}<br>
+            Controls: Rotate (drag), Zoom (scroll), Pan (right-drag)
+          </div>
+        ` : ""}
       </div>
     `;
   }

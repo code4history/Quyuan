@@ -70,37 +70,44 @@
 
     <div class="test-section">
       <h2>2. 新しいメディアタイプ（動画ファイル）</h2>
+      <p style="color: #666; margin-bottom: 10px;">fit-to-container属性でコンテナサイズに合わせて表示</p>
       <qy-swiper>
         <qy-swiper-slide 
           imageUrl="https://www.w3schools.com/html/mov_bbb.mp4" 
           thumbnailUrl="https://images.unsplash.com/photo-1536240478700-b869070f9279?w=400" 
           imageType="video" 
-          caption="MP4動画ファイル">
+          caption="MP4動画ファイル（デフォルト表示）">
         </qy-swiper-slide>
         <qy-swiper-slide 
           imageUrl="https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4" 
           thumbnailUrl="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400" 
           imageType="video" 
-          caption="別のMP4動画">
+          caption="別のMP4動画（fit-to-container有効）"
+          fit-to-container>
         </qy-swiper-slide>
       </qy-swiper>
     </div>
 
     <div class="test-section">
       <h2>3. 3Dモデルテスト</h2>
-      <p style="color: #999; margin-bottom: 10px;">※ 3DモデルとGaussian Splattingは実際のファイルURLが必要です</p>
+      <p style="color: #999; margin-bottom: 10px;">※ debug-mode属性でカメラ位置表示、camera-position/target属性で初期視点設定</p>
       <qy-swiper>
         <qy-swiper-slide 
           imageUrl="https://t.tilemap.jp/3ddata/okuman.obj|https://t.tilemap.jp/3ddata/okuman.mtl" 
           thumbnailUrl="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400" 
           imageType="3dmodel" 
-          caption="3D OBJ/MTLモデル">
+          caption="3D OBJ/MTLモデル（デバッグモード有効）"
+          debug-mode
+          camera-position="5,5,5"
+          camera-target="0,0,0">
         </qy-swiper-slide>
         <qy-swiper-slide 
           imageUrl="https://t.tilemap.jp/3ddata/okuman.splat" 
           thumbnailUrl="https://images.unsplash.com/photo-1633613286991-611fe299c4be?w=400" 
           imageType="gaussian" 
-          caption="Gaussian Splattingモデル">
+          caption="Gaussian Splattingモデル（カスタム視点）"
+          camera-position="2,2,2"
+          camera-target="0,0,0">
         </qy-swiper-slide>
       </qy-swiper>
     </div>

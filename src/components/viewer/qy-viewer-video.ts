@@ -1,11 +1,14 @@
 import { html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, state, property } from "lit/decorators.js";
 import { QyViewerBase } from "./qy-viewer-base";
 
 @customElement("qy-viewer-video")
 export class QyViewerVideo extends QyViewerBase {
   @state()
   private videoUrl: string = "";
+
+  @property({ type: Boolean, attribute: 'fit-to-container' })
+  fitToContainer: boolean = false;
 
   static styles = css`
     ${super.styles}
@@ -25,6 +28,12 @@ export class QyViewerVideo extends QyViewerBase {
       width: auto;
       height: auto;
       outline: none;
+    }
+
+    video.fit-to-container {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
 
     .video-controls {
@@ -72,6 +81,7 @@ export class QyViewerVideo extends QyViewerBase {
           src="${this.videoUrl}"
           controls
           controlsList="nodownload"
+          class="${this.fitToContainer ? 'fit-to-container' : ''}"
           @error="${this._handleVideoError}"
         >
           Your browser does not support the video tag.

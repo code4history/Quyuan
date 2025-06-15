@@ -48,7 +48,29 @@ export class QySwiper extends LitElement {
     // Store current swiper reference and slide index in viewer
     (qyView as any).swiper = this;
     (qyView as any).currentSlideIndex = slideIndex ?? this.slider?.activeIndex ?? 0;
-    (qyView as any).open(imageUrl, imageType)
+    
+    // Get the slide element to extract attributes
+    const slide = this.slides[slideIndex ?? this.slider?.activeIndex ?? 0];
+    const attributes: Record<string, any> = {};
+    
+    // Check for viewer-specific attributes
+    if (slide?.hasAttribute('fit-to-container')) {
+      attributes.fitToContainer = true;
+    }
+    if (slide?.hasAttribute('debug-mode')) {
+      attributes.debugMode = true;
+    }
+    if (slide?.hasAttribute('camera-position')) {
+      attributes.cameraPosition = slide.getAttribute('camera-position');
+    }
+    if (slide?.hasAttribute('camera-target')) {
+      attributes.cameraTarget = slide.getAttribute('camera-target');
+    }
+    if (slide?.hasAttribute('show-texture')) {
+      attributes.showTexture = slide.getAttribute('show-texture') === 'true';
+    }
+    
+    (qyView as any).open(imageUrl, imageType, attributes)
   }
 
   protected firstUpdated() {

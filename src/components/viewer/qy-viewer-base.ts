@@ -1,5 +1,5 @@
 import {html, css, LitElement} from 'lit';
-import {property} from 'lit/decorators.js';
+import {property, state} from 'lit/decorators.js';
 import { viewerStyles } from './qy-viewer-styles'
 
 export class QyViewerBase extends LitElement {
@@ -75,9 +75,11 @@ export class QyViewerBase extends LitElement {
       background-color: rgba(255, 255, 255, 0.3);
     }
 
-    .nav-button:disabled {
+    .nav-button:disabled,
+    .nav-button.hidden {
       opacity: 0.3;
       cursor: not-allowed;
+      pointer-events: none;
     }
 
     .nav-button.prev {
@@ -113,6 +115,12 @@ export class QyViewerBase extends LitElement {
 
   @property({ type: Boolean, attribute: 'show' })
   isShow = false
+
+  @state()
+  showPrevButton = true
+
+  @state()
+  showNextButton = true
 
   open(_imgUrl: string) {
     this.isShow = true;
@@ -157,14 +165,16 @@ export class QyViewerBase extends LitElement {
           <i class="fa fa-times" aria-hidden="true"></i>
         </div>
         <button 
-          class="nav-button prev" 
+          class="nav-button prev ${!this.showPrevButton ? 'hidden' : ''}" 
           @click="${this.handlePrev}"
-          aria-label="Previous">
+          aria-label="Previous"
+          ?disabled="${!this.showPrevButton}">
         </button>
         <button 
-          class="nav-button next" 
+          class="nav-button next ${!this.showNextButton ? 'hidden' : ''}" 
           @click="${this.handleNext}"
-          aria-label="Next">
+          aria-label="Next"
+          ?disabled="${!this.showNextButton}">
         </button>
         <div class="viewer">${this.renderViewer()}</div>
       </div>

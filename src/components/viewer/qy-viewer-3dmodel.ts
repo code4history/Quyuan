@@ -1,5 +1,5 @@
 import { html, css } from "lit";
-import { customElement, state } from "lit/decorators.js";
+import { customElement, state, property } from "lit/decorators.js";
 import { QyViewerBase } from "./qy-viewer-base";
 import * as THREE from "three";
 import { OBJLoader } from "three/examples/jsm/loaders/OBJLoader";
@@ -17,12 +17,26 @@ export class QyViewer3DModel extends QyViewerBase {
   @state()
   private isLoading: boolean = true;
 
+  @property({ type: Boolean, attribute: 'debug-mode' })
+  debugMode: boolean = false;
+
+  @property({ type: String, attribute: 'camera-position' })
+  cameraPosition: string = "3,3,3";
+
+  @property({ type: String, attribute: 'camera-target' })
+  cameraTarget: string = "0,0,0";
+
+  @property({ type: Boolean, attribute: 'show-texture' })
+  showTexture: boolean = true;
+
   private scene?: THREE.Scene;
   private camera?: THREE.PerspectiveCamera;
   private renderer?: THREE.WebGLRenderer;
   private controls?: OrbitControls;
   private animationId?: number;
   private container?: HTMLDivElement;
+  private currentModel?: THREE.Group;
+  private originalMaterials: Map<THREE.Mesh, THREE.Material | THREE.Material[]> = new Map();
 
   static styles = css`
     ${super.styles}
@@ -58,6 +72,36 @@ export class QyViewer3DModel extends QyViewerBase {
       width: 100%;
       height: 100%;
     }
+
+    .debug-info {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 10px;
+      font-family: monospace;
+      font-size: 12px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .texture-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      border: 1px solid #666;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background 0.3s;
+    }
+
+    .texture-toggle:hover {
+      background: rgba(0, 0, 0, 0.9);
+    }
   `;
 
   open(url: string) {
@@ -66,6 +110,8 @@ export class QyViewer3DModel extends QyViewerBase {
     this.modelUrl = parts[0];
     this.materialUrl = parts[1] || "";
     this.isLoading = true;
+    // Reset showTexture to true when opening new model
+    this.showTexture = true;
     super.open(url);
     
     // Wait for render to complete before initializing Three.js
@@ -100,6 +146,55 @@ export class QyViewer3DModel extends QyViewerBase {
 
     this.scene = undefined;
     this.camera = undefined;
+    this.currentModel = undefined;
+    this.originalMaterials.clear();
+  }
+
+  private storeOriginalMaterials(object: THREE.Group) {
+    object.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        this.originalMaterials.set(child, child.material);
+      }
+    });
+  }
+
+  private toggleTexture() {
+    this.showTexture = !this.showTexture;
+    
+    if (!this.currentModel) return;
+    
+    this.currentModel.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        if (this.showTexture) {
+          // Restore original materials
+          const original = this.originalMaterials.get(child);
+          if (original) {
+            child.material = original;
+          }
+        } else {
+          // Apply simple color material
+          const color = new THREE.Color(0xcccccc);
+          child.material = new THREE.MeshPhongMaterial({ color });
+        }
+      }
+    });
+  }
+
+  private getCameraDebugInfo(): string {
+    if (!this.camera) return "N/A";
+    const pos = this.camera.position;
+    return `${pos.x.toFixed(2)}, ${pos.y.toFixed(2)}, ${pos.z.toFixed(2)}`;
+  }
+
+  private getTargetDebugInfo(): string {
+    if (!this.controls) return "N/A";
+    const target = this.controls.target;
+    return `${target.x.toFixed(2)}, ${target.y.toFixed(2)}, ${target.z.toFixed(2)}`;
+  }
+
+  private updateDebugInfo() {
+    // Force update to refresh debug display
+    this.requestUpdate();
   }
 
   private async initializeViewer() {
@@ -192,10 +287,22 @@ export class QyViewer3DModel extends QyViewerBase {
       object.position.sub(center.multiplyScalar(object.scale.x));
 
       this.scene!.add(object);
+      this.currentModel = object;
+      
+      // Store original materials for texture toggling
+      this.storeOriginalMaterials(object);
 
-      // Position camera
-      this.camera!.position.set(3, 3, 3);
-      this.camera!.lookAt(0, 0, 0);
+      // Position camera from attributes
+      const camPos = this.cameraPosition.split(',').map(n => parseFloat(n.trim()));
+      const camTarget = this.cameraTarget.split(',').map(n => parseFloat(n.trim()));
+      
+      if (camPos.length === 3) {
+        this.camera!.position.set(camPos[0], camPos[1], camPos[2]);
+      }
+      if (camTarget.length === 3) {
+        this.camera!.lookAt(camTarget[0], camTarget[1], camTarget[2]);
+        this.controls!.target.set(camTarget[0], camTarget[1], camTarget[2]);
+      }
       this.controls!.update();
 
       this.isLoading = false;
@@ -215,6 +322,11 @@ export class QyViewer3DModel extends QyViewerBase {
     if (this.controls && this.renderer && this.scene && this.camera) {
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
+      
+      // Update debug info if in debug mode
+      if (this.debugMode) {
+        this.updateDebugInfo();
+      }
     }
   };
 
@@ -237,6 +349,18 @@ export class QyViewer3DModel extends QyViewerBase {
     return html`
       <div class="model-container">
         ${this.isLoading ? html`<div class="loading">読み込み中...</div>` : ""}
+        ${!this.isLoading && this.debugMode ? html`
+          <div class="debug-info">
+            Camera Position: ${this.getCameraDebugInfo()}<br>
+            Camera Target: ${this.getTargetDebugInfo()}<br>
+            Controls: Rotate (drag), Zoom (scroll), Pan (right-drag)
+          </div>
+        ` : ""}
+        ${!this.isLoading ? html`
+          <button class="texture-toggle" @click="${this.toggleTexture}">
+            Texture: ${this.showTexture ? 'ON' : 'OFF'}
+          </button>
+        ` : ""}
       </div>
     `;
   }
