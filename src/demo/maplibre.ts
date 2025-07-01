@@ -55,7 +55,7 @@ const main = async () => {
 
   // 使用されているアイコンのパスを収集
   const iconPaths = new Set<string>();
-  simplifiedData.features.forEach(feature => {
+  simplifiedData.features.forEach((feature) => {
     if (feature.properties.icon) {
       iconPaths.add(feature.properties.icon);
     }

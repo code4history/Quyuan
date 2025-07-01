@@ -21,3 +21,8 @@ html, body {
 .leaflet-popup-content-wrapper {
   border-radius: 6px;
 }
+
+/* Styles for qy-swiper */
+qy-swiper {
+  display: block;
+}

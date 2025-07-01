@@ -108,6 +108,31 @@
         ],
         "type": "Point"
       }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "おくまん地蔵尊",
+        "type": "地蔵",
+        "cho": "堀工町",
+        "images": [
+          {
+            "path": "https://www.youtube.com/embed/fmWTtrnb0CA",
+            "shootingDate": "2024-01-01T00:00:00",
+            "description": "茂林寺・分福茶釜ゆかりの寺",
+            "mid_thumbnail": "https://img.youtube.com/vi/fmWTtrnb0CA/hqdefault.jpg",
+            "small_thumbnail": "https://img.youtube.com/vi/fmWTtrnb0CA/hqdefault.jpg",
+            "image_type": "youtube"
+          }
+        ]
+      },
+      "geometry": {
+        "coordinates": [
+          139.53769753044503,
+          36.22654177027737
+        ],
+        "type": "Point"
+      }
     }
   ]
 }

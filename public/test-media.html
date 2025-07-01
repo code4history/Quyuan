@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メディアビューアテスト</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 30px;
+    }
+    .test-section {
+      margin-bottom: 40px;
+      padding: 20px;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+    }
+    h2 {
+      color: #666;
+      font-size: 1.2em;
+      margin-bottom: 15px;
+    }
+    qy-swiper {
+      display: block;
+      height: 400px;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Quyuan メディアビューアテスト</h1>
+    
+    <div class="test-section">
+      <h2>1. 基本的なメディアタイプ（画像、パノラマ、YouTube）</h2>
+      <qy-swiper hasThumb>
+        <qy-swiper-slide 
+          imageUrl="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=1600" 
+          thumbnailUrl="https://images.unsplash.com/photo-1542281286-9e0a16bb7366?w=400" 
+          imageType="image" 
+          caption="通常の画像">
+        </qy-swiper-slide>
+        <qy-swiper-slide 
+          imageUrl="./assets/azumaya_panorama1.png" 
+          thumbnailUrl="./assets/azumaya_panorama1.png" 
+          imageType="panorama" 
+          caption="360度パノラマ画像">
+        </qy-swiper-slide>
+        <qy-swiper-slide 
+          imageUrl="https://www.youtube.com/watch?v=dQw4w9WgXcQ" 
+          thumbnailUrl="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" 
+          imageType="youtube" 
+          caption="YouTube動画">
+        </qy-swiper-slide>
+      </qy-swiper>
+    </div>
+
+    <div class="test-section">
+      <h2>2. 新しいメディアタイプ（動画ファイル）</h2>
+      <p style="color: #666; margin-bottom: 10px;">fit-to-container属性でコンテナサイズに合わせて表示</p>
+      <qy-swiper>
+        <qy-swiper-slide 
+          imageUrl="https://www.w3schools.com/html/mov_bbb.mp4" 
+          thumbnailUrl="https://images.unsplash.com/photo-1536240478700-b869070f9279?w=400" 
+          imageType="video" 
+          caption="MP4動画ファイル（デフォルト表示）">
+        </qy-swiper-slide>
+        <qy-swiper-slide 
+          imageUrl="https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/360/Big_Buck_Bunny_360_10s_1MB.mp4" 
+          thumbnailUrl="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=400" 
+          imageType="video" 
+          caption="別のMP4動画（fit-to-container有効）"
+          fit-to-container>
+        </qy-swiper-slide>
+      </qy-swiper>
+    </div>
+
+    <div class="test-section">
+      <h2>3. 3Dモデルテスト</h2>
+      <p style="color: #999; margin-bottom: 10px;">※ debug-mode属性でカメラ位置表示、camera-position/target属性で初期視点設定</p>
+      <qy-swiper>
+        <qy-swiper-slide 
+          imageUrl="https://t.tilemap.jp/3ddata/okuman.obj|https://t.tilemap.jp/3ddata/okuman.mtl" 
+          thumbnailUrl="https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=400" 
+          imageType="3dmodel" 
+          caption="3D OBJ/MTLモデル（デバッグモード有効）"
+          debug-mode
+          camera-position="5,5,5"
+          camera-target="0,0,0">
+        </qy-swiper-slide>
+        <qy-swiper-slide 
+          imageUrl="https://t.tilemap.jp/3ddata/okuman.splat" 
+          thumbnailUrl="https://images.unsplash.com/photo-1633613286991-611fe299c4be?w=400" 
+          imageType="gaussian" 
+          caption="Gaussian Splattingモデル（カスタム視点）"
+          camera-position="2,2,2"
+          camera-target="0,0,0">
+        </qy-swiper-slide>
+      </qy-swiper>
+    </div>
+
+    <div class="test-section">
+      <h2>4. ナビゲーションテスト</h2>
+      <p style="color: #666; margin-bottom: 10px;">全画面表示で左右の＜＞ボタンが表示されることを確認</p>
+      <qy-swiper autoplay>
+        <qy-swiper-slide 
+          imageUrl="https://images.unsplash.com/photo-1494253109108-2e30c049369b?w=1600" 
+          thumbnailUrl="https://images.unsplash.com/photo-1494253109108-2e30c049369b?w=400" 
+          imageType="image" 
+          caption="スライド 1">
+        </qy-swiper-slide>
+        <qy-swiper-slide 
+          imageUrl="https://images.unsplash.com/photo-1550439062-609e1531270e?w=1600" 
+          thumbnailUrl="https://images.unsplash.com/photo-1550439062-609e1531270e?w=400" 
+          imageType="image" 
+          caption="スライド 2">
+        </qy-swiper-slide>
+        <qy-swiper-slide 
+          imageUrl="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=1600" 
+          thumbnailUrl="https://images.unsplash.com/photo-1493246507139-91e8fad9978e?w=400" 
+          imageType="image" 
+          caption="スライド 3">
+        </qy-swiper-slide>
+      </qy-swiper>
+    </div>
+  </div>
+
+  <script type="module">
+    import '../src/index.ts';
+  </script>
+</body>
+</html>
