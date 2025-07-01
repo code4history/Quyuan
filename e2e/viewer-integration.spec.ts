@@ -153,6 +153,10 @@ test.describe('Viewer Integration', () => {
       
       expect(mediaType).toBe('youtube');
       console.log('Media type for 茂林寺:', mediaType);
+      
+      // Close popup
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
     }
     
     // Test image (東武館林駅)

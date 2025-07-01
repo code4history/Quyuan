@@ -55,7 +55,9 @@ export default defineConfig({
         main: resolve(__dirname, 'index.html'),
         leaflet: resolve(__dirname, 'leaflet.html'),
         openlayers: resolve(__dirname, 'openlayers.html'),
-        maplibre: resolve(__dirname, 'maplibre.html')
+        maplibre: resolve(__dirname, 'maplibre.html'),
+        'test-media': resolve(__dirname, 'test-media.html'),
+        'e2e-test': resolve(__dirname, 'e2e-test.html')
       },
       output: {
         entryFileNames: 'assets/[name].[hash].js',
