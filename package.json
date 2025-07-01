@@ -84,5 +84,6 @@
   "bugs": {
     "url": "https://github.com/code4history/Quyuan/issues"
   },
-  "homepage": "https://github.com/code4history/Quyuan#readme"
+  "homepage": "https://github.com/code4history/Quyuan#readme",
+  "packageManager": "pnpm@10.12.4"
 }
