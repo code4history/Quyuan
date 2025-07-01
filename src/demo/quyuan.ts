@@ -1,10 +1,14 @@
 import Quyuan from '../index';
 
+console.log('[quyuan.ts] Quyuan imported:', Quyuan);
+
 const result = async () => {
+  console.log('[quyuan.ts] result function called');
   const geoJsonNJ = "./assets/nj.geojson";
 
   const data = await fetch(geoJsonNJ);
   let geojson = await data.json();
+  console.log('[quyuan.ts] GeoJSON loaded:', geojson);
 
   const popupHtmlTemplate = `
     <div class="poi">
@@ -13,9 +17,9 @@ const result = async () => {
         <qy-swiper style="height:200px;">
           {% for image in images %}
             <qy-swiper-slide 
-              imageUrl="{{ image.path }}" 
-              thumbnailUrl="{{ image.mid_thumbnail }}" 
-              imageType="{{ image.image_type }}" 
+              image-url="{{ image.path }}" 
+              thumbnail-url="{{ image.mid_thumbnail }}" 
+              image-type="{{ image.image_type }}" 
               caption="{{ image.description }}">
             </qy-swiper-slide>
           {% endfor %}
@@ -26,8 +30,9 @@ const result = async () => {
     </div>
   `;
 
-  const iconTemplate = './assets/{% if type == "神社" %}shrine{% elif type == "寺院" %}temple{% elif type == "駅" %}station{% else %}park{% endif %}.png';
+  const iconTemplate = './assets/{% if type == "神社" %}shrine{% elif type == "寺院" %}temple{% elif type == "駅" %}station{% elif type == "地蔵" %}jizo{% else %}park{% endif %}.png';
 
+  console.log('[quyuan.ts] Before templateExtractor call');
   geojson = Quyuan.templateExtractor({
     geojson,
     templates: {
@@ -35,6 +40,7 @@ const result = async () => {
       icon: iconTemplate
     },
   });
+  console.log('[quyuan.ts] After templateExtractor, result:', geojson);
 
   return geojson;
 };

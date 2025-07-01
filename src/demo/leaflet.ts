@@ -2,7 +2,10 @@ import 'leaflet/dist/leaflet.css';
 import L, { LatLngTuple } from 'leaflet';
 import result from './quyuan';
 
+console.log('[leaflet.ts] Script loaded');
+
 const main = async () => {
+  console.log('[leaflet.ts] main function called');
   const latLng:LatLngTuple = [36.23569, 139.53341];
   const zoom = 14;
   const minZoom = 5;
@@ -18,11 +21,21 @@ const main = async () => {
     minZoom
   }).addTo(mymap);
 
+  console.log('[leaflet.ts] Calling result function');
   const data = await result();
-  data.features.forEach((feature:any) => {
+  console.log('[leaflet.ts] Data received:', data);
+  
+  data.features.forEach((feature:any, index: number) => {
+    console.log(`[leaflet.ts] Feature ${index}:`, {
+      name: feature.properties.name,
+      type: feature.properties.type,
+      icon: feature.result.icon,
+      geometry: feature.geometry
+    });
+    
     if (feature.geometry) {
       const marker = L.marker(
-        feature.geometry.coordinates.reverse(),
+        [...feature.geometry.coordinates].reverse() as LatLngTuple,
         {
           icon: L.icon({
             iconUrl: feature.result.icon,

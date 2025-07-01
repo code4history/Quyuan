@@ -1,190 +1,136 @@
 import {html, LitElement} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
-import "./qy-viewer-image";
-import "./qy-viewer-panorama";
-import "./qy-viewer-youtube";
-import "./qy-viewer-video";
-import "./qy-viewer-3dmodel";
-import "./qy-viewer-gaussian";
+import '@c4h/chuci';
 
-interface HashKeyTag {
-  [index: string]: string
-}
-
-const typeHashes = {
-  image: "qy-viewer-image",
-  panorama: "qy-viewer-panorama",
-  youtube: "qy-viewer-youtube",
-  video: "qy-viewer-video",
-  "3dmodel": "qy-viewer-3dmodel",
-  gaussian: "qy-viewer-gaussian"
-} as HashKeyTag;
-
+/**
+ * Wrapper component that delegates to Chuci's cc-viewer
+ * while maintaining the qy-viewer interface
+ */
 @customElement('qy-viewer')
 export class QyViewer extends LitElement {
+  private _swiper?: any;
+  private _currentSlideIndex: number = 0;
+  private _currentType: string = "";
+  private ccViewer?: any;
+
   @property({ type: Object })
-  swiper: any;
+  get swiper() {
+    return this._swiper;
+  }
+  set swiper(value: any) {
+    const oldValue = this._swiper;
+    this._swiper = value;
+    this.requestUpdate('swiper', oldValue);
+  }
 
   @property({ type: Number })
-  currentSlideIndex: number = 0;
+  get currentSlideIndex() {
+    return this._currentSlideIndex;
+  }
+  set currentSlideIndex(value: number | undefined) {
+    const oldValue = this._currentSlideIndex;
+    this._currentSlideIndex = value ?? 0;
+    this.requestUpdate('currentSlideIndex', oldValue);
+  }
 
   @property({ type: String })
-  currentType: string = "";
+  get currentType() {
+    return this._currentType;
+  }
+  set currentType(value: string | undefined) {
+    const oldValue = this._currentType;
+    this._currentType = value ?? "";
+    this.requestUpdate('currentType', oldValue);
+  }
 
-  open(imgUrl: string, type: string, attributes?: Record<string, any>) {
+  async open(imgUrl: string, type: string, attributes?: Record<string, any>) {
+    console.log('[qy-viewer] open called with:', { imgUrl, type, attributes });
     this.currentType = type;
-    const targetTag = typeHashes[type];
-    const handler = this.shadowRoot!.querySelector(targetTag);
     
-    // Pass attributes to the viewer if available
-    if (handler && attributes) {
-      Object.entries(attributes).forEach(([key, value]) => {
-        (handler as any)[key] = value;
-      });
+    // If cc-viewer not ready yet, wait for it
+    if (!this.ccViewer) {
+      console.log('[qy-viewer] cc-viewer not ready, waiting...');
+      await this.updateComplete;
+      this.ccViewer = this.shadowRoot!.querySelector('cc-viewer');
     }
     
-    // Update navigation button visibility
-    this.updateNavigationButtons();
-    
-    (handler as any).open(imgUrl);
-  }
-
-  protected firstUpdated() {
-    const event = new CustomEvent('load')
-    this.dispatchEvent(event)
-    
-    // Listen for navigation events
-    this.addEventListener('navigate-prev', this.handleNavigatePrev.bind(this));
-    this.addEventListener('navigate-next', this.handleNavigateNext.bind(this));
-  }
-
-  private handleNavigatePrev() {
-    if (!this.swiper) return;
-    
-    const totalSlides = this.swiper.slides.length;
-    if (totalSlides <= 1) return; // No navigation for single slide
-    
-    // Check if loop is enabled in swiper
-    const hasLoop = this.swiper.slider?.params?.loop === true;
-    
-    if (this.currentSlideIndex <= 0) {
-      if (hasLoop) {
-        this.currentSlideIndex = totalSlides - 1; // Go to last slide
-      } else {
-        return; // Can't go previous
-      }
+    if (this.ccViewer) {
+      console.log('[qy-viewer] Calling cc-viewer.open');
+      this.ccViewer.open(imgUrl, type, attributes);
     } else {
-      this.currentSlideIndex--;
+      console.warn('[qy-viewer] cc-viewer still not found');
     }
-    
-    this.navigateToSlide(this.currentSlideIndex);
   }
 
-  private handleNavigateNext() {
-    if (!this.swiper) return;
-    
-    const totalSlides = this.swiper.slides.length;
-    if (totalSlides <= 1) return; // No navigation for single slide
-    
-    // Check if loop is enabled in swiper
-    const hasLoop = this.swiper.slider?.params?.loop === true;
-    
-    if (this.currentSlideIndex >= totalSlides - 1) {
-      if (hasLoop) {
-        this.currentSlideIndex = 0; // Go to first slide
-      } else {
-        return; // Can't go next
-      }
-    } else {
-      this.currentSlideIndex++;
+  setSwiper(swiper: any) {
+    console.log('[qy-viewer] setSwiper called');
+    this.swiper = swiper;
+    if (this.ccViewer && this.ccViewer.setSwiper) {
+      console.log('[qy-viewer] Calling cc-viewer.setSwiper');
+      this.ccViewer.setSwiper(swiper);
     }
-    
-    this.navigateToSlide(this.currentSlideIndex);
   }
 
-  private navigateToSlide(index: number) {
-    if (!this.swiper || !this.swiper.slides[index]) return;
-    
-    // Close current viewer
-    const currentTag = typeHashes[this.currentType];
-    const currentHandler = this.shadowRoot!.querySelector(currentTag);
-    if (currentHandler) {
-      (currentHandler as any).close();
-    }
-    
-    // Open new viewer
-    const slide = this.swiper.slides[index];
-    const imageUrl = slide.imageUrl;
-    const imageType = slide.imageType;
-    
-    // Gather viewer-specific attributes
-    const attributes: Record<string, any> = {};
-    if (slide.hasAttribute('fit-to-container')) {
-      attributes.fitToContainer = true;
-    }
-    if (slide.hasAttribute('debug-mode')) {
-      attributes.debugMode = true;
-    }
-    if (slide.hasAttribute('camera-position')) {
-      attributes.cameraPosition = slide.getAttribute('camera-position');
-    }
-    if (slide.hasAttribute('camera-target')) {
-      attributes.cameraTarget = slide.getAttribute('camera-target');
-    }
-    if (slide.hasAttribute('show-texture')) {
-      attributes.showTexture = slide.getAttribute('show-texture') === 'true';
-    }
-    
+  setCurrentSlideIndex(index: number) {
+    console.log('[qy-viewer] setCurrentSlideIndex called with:', index);
     this.currentSlideIndex = index;
-    this.open(imageUrl, imageType, attributes);
-    
-    // Update swiper position
-    if (this.swiper.slider) {
-      this.swiper.slider.slideTo(index);
+    if (this.ccViewer && this.ccViewer.setCurrentSlideIndex) {
+      console.log('[qy-viewer] Calling cc-viewer.setCurrentSlideIndex');
+      this.ccViewer.setCurrentSlideIndex(index);
     }
   }
 
-  private updateNavigationButtons() {
-    if (!this.swiper) return;
+  protected async firstUpdated() {
+    console.log('[qy-viewer] firstUpdated called');
+    console.log('[qy-viewer] Initial Shadow DOM content:', this.shadowRoot?.innerHTML);
     
-    const totalSlides = this.swiper.slides.length;
-    const hasLoop = this.swiper.slider?.params?.loop === true;
+    // Force render to ensure shadow DOM is populated
+    this.requestUpdate();
+    await this.updateComplete;
     
-    // For single slide, hide both buttons
-    if (totalSlides <= 1) {
-      this.setNavigationVisibility(false, false);
-      return;
-    }
+    console.log('[qy-viewer] Shadow DOM after requestUpdate:', this.shadowRoot?.innerHTML);
     
-    // For multiple slides with loop, show both
-    if (hasLoop) {
-      this.setNavigationVisibility(true, true);
-      return;
-    }
+    const event = new CustomEvent('load');
+    this.dispatchEvent(event);
     
-    // For multiple slides without loop, check boundaries
-    const showPrev = this.currentSlideIndex > 0;
-    const showNext = this.currentSlideIndex < totalSlides - 1;
-    this.setNavigationVisibility(showPrev, showNext);
-  }
-
-  private setNavigationVisibility(showPrev: boolean, showNext: boolean) {
-    // Update all viewer instances
-    const viewers = [
-      this.shadowRoot!.querySelector('qy-viewer-image'),
-      this.shadowRoot!.querySelector('qy-viewer-youtube'),
-      this.shadowRoot!.querySelector('qy-viewer-panorama'),
-      this.shadowRoot!.querySelector('qy-viewer-video'),
-      this.shadowRoot!.querySelector('qy-viewer-3dmodel'),
-      this.shadowRoot!.querySelector('qy-viewer-gaussian')
-    ];
+    // Wait for cc-viewer to be defined
+    console.log('[qy-viewer] Waiting for cc-viewer to be defined...');
+    console.log('[qy-viewer] cc-viewer already defined?', !!customElements.get('cc-viewer'));
     
-    viewers.forEach(viewer => {
-      if (viewer) {
-        (viewer as any).showPrevButton = showPrev;
-        (viewer as any).showNextButton = showNext;
+    await customElements.whenDefined('cc-viewer');
+    console.log('[qy-viewer] cc-viewer is defined');
+    
+    // Get reference to cc-viewer with a small delay to ensure it's fully initialized
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
+    this.ccViewer = this.shadowRoot!.querySelector('cc-viewer');
+    console.log('[qy-viewer] cc-viewer element found:', !!this.ccViewer);
+    console.log('[qy-viewer] Final Shadow DOM:', this.shadowRoot?.innerHTML);
+    
+    if (this.ccViewer) {
+      if (this.swiper && this.ccViewer.setSwiper) {
+        console.log('[qy-viewer] Setting swiper on cc-viewer');
+        this.ccViewer.setSwiper(this.swiper);
       }
-    });
+      if (this.currentSlideIndex !== undefined && this.ccViewer.setCurrentSlideIndex) {
+        console.log('[qy-viewer] Setting currentSlideIndex on cc-viewer:', this.currentSlideIndex);
+        this.ccViewer.setCurrentSlideIndex(this.currentSlideIndex);
+      }
+    }
+  }
+
+  protected updated(changedProperties: Map<string | number | symbol, unknown>) {
+    super.updated(changedProperties);
+    
+    // Update cc-viewer when properties change
+    if (this.ccViewer) {
+      if (changedProperties.has('swiper') && this.ccViewer.setSwiper) {
+        this.ccViewer.setSwiper(this.swiper);
+      }
+      if (changedProperties.has('currentSlideIndex') && this.ccViewer.setCurrentSlideIndex) {
+        this.ccViewer.setCurrentSlideIndex(this.currentSlideIndex);
+      }
+    }
   }
 
   render() {
@@ -194,17 +140,11 @@ export class QyViewer extends LitElement {
           --qy-viewer-z-index: 1000;
         }
         
-        qy-viewer-panorama, qy-viewer-image, qy-viewer-youtube, qy-viewer-video,
-        qy-viewer-3dmodel, qy-viewer-gaussian {
-          --qy-viewer-z-index-each: var(--qy-viewer-z-index);
+        cc-viewer {
+          --cc-viewer-z-index: var(--qy-viewer-z-index);
         }
       </style>
-      <qy-viewer-image></qy-viewer-image>
-      <qy-viewer-youtube></qy-viewer-youtube>
-      <qy-viewer-panorama></qy-viewer-panorama>
-      <qy-viewer-video></qy-viewer-video>
-      <qy-viewer-3dmodel></qy-viewer-3dmodel>
-      <qy-viewer-gaussian></qy-viewer-gaussian>
+      <cc-viewer></cc-viewer>
     `;
   }
 }

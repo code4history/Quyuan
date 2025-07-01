@@ -57,8 +57,13 @@
     <script src="https://unpkg.com/mapbox-gl-leaflet/leaflet-mapbox-gl.js"></script>
   </body>
   <script type="module">
-    import Quyuan from './src'
-    const main = async () => {
+    try {
+      console.log('Starting import...');
+      const { default: Quyuan } = await import('./src/index.ts');
+      console.log('Quyuan imported:', Quyuan);
+      console.log('Quyuan.templateExtractor:', Quyuan.templateExtractor);
+      
+      const main = async () => {
       const accessToken = "pk.eyJ1IjoicmVraXNoaWtva3VkbyIsImEiOiJjazRoMmF3dncwODU2M2ttdzI2aDVqYXVwIn0.8Hb9sekgjfck6Setxk5uVg"
       const style = "mapbox://styles/moritoru/ck4s6w8bd0sb51cpp9vn7ztty"
       const latLng = [36.2461984, 139.5278149]
@@ -66,7 +71,7 @@
       const minZoom = 5
       const maxZoom = 21
 
-      const geoJsonNJ = "./nj.geojson"
+      const geoJsonNJ = "./assets/nj.geojson"
 
       const mymap = L.map("mapid", {
         maxZoom
@@ -102,6 +107,13 @@
         },
       })
 
+      // デバッグ: テンプレート展開結果を確認
+      console.log('Template extraction result:', geojson);
+      if (geojson.features.length > 0) {
+        console.log('First feature result:', geojson.features[0].result);
+        console.log('First feature HTML:', geojson.features[0].result?.html);
+      }
+
       geojson.features.forEach((feature) => {
         if (feature.geometry) {
           // source file coordinates are ordered by lnglat, but should be latlng.
@@ -113,6 +125,9 @@
       })
     }
 
-    main();
+    await main();
+    } catch (error) {
+      console.error('Error during initialization:', error);
+    }
   </script>
 </html>

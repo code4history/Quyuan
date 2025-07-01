@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import './qy-viewer';
 import { QyViewer } from './qy-viewer';
-import { QySwiper } from '../swiper/qy-swiper-base';
+// import { QySwiper } from '../swiper/qy-swiper-base';
 
 describe('QyViewer Navigation', () => {
   let viewer: QyViewer;
