@@ -107,3 +107,7 @@ dist
 .DS_Store
 types
 *.local
+
+# Playwright test results
+test-results
+playwright-report
