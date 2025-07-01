@@ -1,165 +1,267 @@
 # Quyuan (屈原)
 
-GeoJSONテンプレートエンジンと統合マルチメディアビューアー
+GeoJSON template engine with integrated multimedia viewer
 
-プロジェクト名は、紀元前4世紀の中国の詩人・政治家である[屈原 (Quyuan)](https://zh.wikipedia.org/wiki/%E5%B1%88%E5%8E%9F)から名付けられています。
+English | [日本語](README.ja.md)
 
-## 目的
+The project is named after [Qu Yuan (屈原)](https://en.wikipedia.org/wiki/Qu_Yuan), a Chinese poet and politician from the 4th century BC.
 
-GeoJSONのマーカー、そしてそれをクリックした際のポップアップ内に表示するHTMLなどを、GeoJSONのproperties中の属性から生成するテンプレートライブラリです。
+## Purpose
 
-またポップアップ内でのマルチメディアコンテンツ（画像、パノラマ、動画）の表示を行うスライダービューアも、よくあるユースケースとして提供しています。
+A template library that generates markers for GeoJSON and HTML to display in popups when clicked, based on attributes in the GeoJSON properties.
 
-## 特徴
+It also provides a slider viewer for displaying multimedia content (images, panoramas, videos) within popups as a common use case.
 
-### テンプレートエンジン機能
-- [Nunjucks](https://mozilla.github.io/nunjucks/)文法によるテンプレート記述
-- GeoJSONのfeatureごとにpropertiesをルートとしてテンプレート処理
-- 複数キーでのテンプレート定義（マーカーアイコン、ポップアップHTML等）
-- 処理結果は各featureのresultオブジェクトに格納
+## Features
 
-### マルチメディアビューア機能
-- Web Componentsベースのビューア実装
-- スワイパーによるサムネイル表示と各種ビューアの連携
-- 対応フォーマット：
-  - 画像
-  - 360度全球画像
-  - YouTube動画
-- 開発中の対応フォーマット：
-  - テクスチャ付き3Dポリゴンモデル
-  - 3Dガウシアンスプラッティング
+### Template Engine Functionality
+- Template syntax using [Nunjucks](https://mozilla.github.io/nunjucks/)
+- Template processing for each GeoJSON feature with properties as root
+- Multiple template key definitions (marker icons, popup HTML, etc.)
+- Processing results stored in each feature's result object
 
-## インストール
+### Multimedia Viewer Functionality
+- Web Components-based viewer implementation
+- Thumbnail display with swiper and integration with various viewers
+- Supported formats:
+  - Images
+  - 360-degree panoramic images
+  - YouTube videos
+- Formats in development:
+  - Textured 3D polygon models
+  - 3D Gaussian Splatting
+
+## Installation
 
 ```bash
-npm install quyuanjs
+npm install @c4h/quyuan
 ```
 
-## 使用方法
+or
 
-### デモ
+```bash
+pnpm add @c4h/quyuan
+```
+
+## Usage
+
+### Demo
 
 - https://code4history.dev/Quyuan/
 
-### テンプレート処理の基本
+### Basic Template Processing
 
-```
-import Quyuan from 'quyuan';
+```javascript
+import { Quyuan } from '@c4h/quyuan';
 
 const geojson = {
+  type: "FeatureCollection",
   features: [{
+    type: "Feature",
     properties: {
+      name: "Sample Location",
       type: "cultural",
       images: [
-        { path: "image1.jpg", type: "image" },
-        { path: "pano1.jpg", type: "panorama" }
+        { path: "image1.jpg", type: "image", description: "Sample image" },
+        { path: "pano1.jpg", type: "panorama", description: "360-degree image" }
       ]
+    },
+    geometry: {
+      type: "Point",
+      coordinates: [139.7, 35.6]
     }
   }]
 };
 
 const templates = {
-  // アイコン選択用テンプレート
+  // Template for icon selection
   icon: "{% if type == 'cultural' %}cultural.png{% else %}default.png{% endif %}",
   
-  // ポップアップHTML生成用テンプレート
+  // Template for popup HTML generation
   html: `
-    <qy-swiper style="height:200px;">
-      {% for image in images %}
-        <qy-swiper-slide 
-          imageUrl="{{ image.path }}"
-          imageType="{{ image.type }}">
-        </qy-swiper-slide>
-      {% endfor %}
-    </qy-swiper>
+    <div class="popup-content">
+      <h3>{{ name }}</h3>
+      <qy-swiper style="height:200px;">
+        {% for image in images %}
+          <qy-swiper-slide 
+            image-url="{{ image.path }}"
+            image-type="{{ image.type }}"
+            caption="{{ image.description }}">
+          </qy-swiper-slide>
+        {% endfor %}
+      </qy-swiper>
+    </div>
   `
 };
 
 const result = Quyuan.templateExtractor({ geojson, templates });
+// Processing results are stored in each feature's result object
 ```
 
-### 地図ライブラリとの統合
+### Integration with Map Libraries
 
 #### Leaflet
 
-```
+```javascript
 import L from 'leaflet';
 
-data.features.forEach(feature => {
-  L.marker(feature.geometry.coordinates.reverse(), {
-    icon: L.icon({
-      iconUrl: feature.result.icon,
-      iconSize: [32, 32],
-      iconAnchor: [16, 32],
-      popupAnchor: [0, -32]
+const map = L.map('map').setView([35.6, 139.7], 13);
+
+result.features.forEach(feature => {
+  if (feature.geometry) {
+    L.marker(feature.geometry.coordinates.slice().reverse(), {
+      icon: L.icon({
+        iconUrl: feature.result.icon,
+        iconSize: [32, 32],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      })
     })
-  })
-  .bindPopup(feature.result.html)
-  .addTo(map);
+    .bindPopup(feature.result.html)
+    .addTo(map);
+  }
 });
 ```
 
 #### OpenLayers
 
-```
+```javascript
 import { Feature } from 'ol';
 import { Point } from 'ol/geom';
 import { Style, Icon } from 'ol/style';
+import { fromLonLat } from 'ol/proj';
+import Overlay from 'ol/Overlay';
 
-data.features.forEach(feature => {
-  const point = new Feature({
-    geometry: new Point(fromLonLat(feature.geometry.coordinates))
-  });
+result.features.forEach(feature => {
+  if (feature.geometry) {
+    const point = new Feature({
+      geometry: new Point(fromLonLat(feature.geometry.coordinates))
+    });
 
-  point.setStyle(new Style({
-    image: new Icon({
-      src: feature.result.icon,
-      scale: 0.5
-    })
-  }));
+    point.setStyle(new Style({
+      image: new Icon({
+        src: feature.result.icon,
+        scale: 0.5
+      })
+    }));
 
-  const element = createPopupContent(feature.result.html);
-  const overlay = new Overlay({
-    element: element,
-    positioning: 'bottom-center',
-    offset: [0, -20]
-  });
+    vectorSource.addFeature(point);
 
-  map.addOverlay(overlay);
+    // Popup configuration
+    point.set('popupContent', feature.result.html);
+  }
 });
 ```
 
 #### MapLibre GL
 
-※divを用いたマーカーの作り方の例を示しています。マーカー画像を使った方法はデモで提供しています。
-```
+```javascript
 import maplibregl from 'maplibre-gl';
 
-data.features.forEach(feature => {
-  const popup = new maplibregl.Popup()
-    .setHTML(feature.result.html);
+const map = new maplibregl.Map({
+  container: 'map',
+  style: 'https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json',
+  center: [139.7, 35.6],
+  zoom: 13
+});
 
-  const el = document.createElement('div');
-  el.style.backgroundImage = `url(${feature.result.icon})`;
-  el.style.width = '32px';
-  el.style.height = '32px';
-  el.style.backgroundSize = 'contain';
+result.features.forEach(feature => {
+  if (feature.geometry) {
+    const popup = new maplibregl.Popup()
+      .setHTML(feature.result.html);
 
-  new maplibregl.Marker(el)
-    .setLngLat(feature.geometry.coordinates)
-    .setPopup(popup)
-    .addTo(map);
+    const el = document.createElement('div');
+    el.style.backgroundImage = `url(${feature.result.icon})`;
+    el.style.width = '32px';
+    el.style.height = '32px';
+    el.style.backgroundSize = 'contain';
+    el.style.cursor = 'pointer';
+
+    new maplibregl.Marker(el)
+      .setLngLat(feature.geometry.coordinates)
+      .setPopup(popup)
+      .addTo(map);
+  }
 });
 ```
 
-## ライセンス
+## Web Components
+
+Quyuan provides the following Web Components:
+
+### `<qy-swiper>`
+Component for displaying multimedia content in a slider
+
+Attributes:
+- `style`: CSS style (height specification recommended)
+
+### `<qy-swiper-slide>`
+Component defining each slide within the slider
+
+Attributes:
+- `image-url`: Image/video URL
+- `image-type`: Media type ("image", "panorama", "youtube")
+- `caption`: Caption string
+- `thumbnail-url`: Thumbnail image URL (uses image-url if omitted)
+
+### `<qy-viewer>`
+Fullscreen viewer component (automatically called from qy-swiper)
+
+## Browser Support
+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+
+Works on modern browsers that support Web Components.
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Start development server
+pnpm run dev
+
+# Build
+pnpm run build
+
+# Run tests
+pnpm test
+
+# Run E2E tests
+pnpm run test:e2e
+```
+
+## License
+
 MIT License
 
 Copyright (c) 2024 Code for History
 
-## 開発者
+## Developers
 
-- Kohei Otsuka
+- Kohei Otsuka ([@kochizufan](https://github.com/kochizufan))
 - Code for History
 
-あなたの貢献をお待ちしています！イシューやプルリクエストは大歓迎です。
+## Contributing
+
+We welcome your contributions!
+
+- Report bugs or request features in [Issues](https://github.com/code4history/Quyuan/issues)
+- Pull requests are welcome
+- Questions and discussions in [Discussions](https://github.com/code4history/Quyuan/discussions)
+
+### How to Contribute
+
+1. Fork this repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Create a Pull Request
+
+## Related Projects
+
+- [Chuci (楚辞)](https://github.com/code4history/Chuci) - Multimedia viewer components separated from Quyuan
+- [Maplat](https://github.com/code4history/Maplat) - Historical map platform
