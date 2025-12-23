@@ -4,15 +4,14 @@
   "description": "GeoJSON template extractor and multimedia viewer",
   "type": "module",
   "private": false,
-  "main": "./dist/quyuan.cjs",
+  "main": "./dist/quyuan.umd.js",
   "module": "./dist/quyuan.js",
-  "browser": "./dist/quyuan.umd.cjs",
+  "browser": "./dist/quyuan.umd.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/quyuan.js",
-      "require": "./dist/quyuan.cjs"
+      "import": "./dist/quyuan.js"
     }
   },
   "files": [
@@ -21,9 +20,10 @@
     "README.md"
   ],
   "scripts": {
-    "dev": "vite --host='0.0.0.0'",
+    "dev": "vite --host",
     "build": "npm run typecheck && cross-env BUILD_MODE=package vite build",
-    "deploy": "cp public/*.html ./ && npm run typecheck && vite build",
+    "build:demo": "vite build",
+    "deploy": "npm run typecheck && vite build",
     "typecheck": "tsc --noEmit --allowImportingTsExtensions",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -35,37 +35,37 @@
     "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
-    "@c4h/chuci": "^0.1.0",
-    "lit": "^3.2.1",
-    "maplibre-gl": "^5.0.0",
+    "@c4h/chuci": "github:code4history/Chuci#5befb907bd9f79e4d03a4f3a036cbe630d4c36f7",
+    "lit": "^3.3.1",
     "nunjucks": "^3.2.4",
-    "ol": "^10.3.1",
     "uevent": "^2.2.0"
   },
   "devDependencies": {
-    "@eslint/js": "^9.30.0",
-    "@playwright/test": "^1.53.2",
-    "@testing-library/dom": "^10.4.0",
-    "@testing-library/jest-dom": "^6.6.3",
+    "@eslint/js": "^9.39.2",
+    "@playwright/test": "^1.57.0",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
     "@types/geojson": "^7946.0.16",
-    "@types/jsdom": "^21.1.6",
-    "@types/leaflet": "^1.9.15",
+    "@types/jsdom": "^21.1.7",
+    "@types/leaflet": "^1.9.21",
     "@types/nunjucks": "^3.2.6",
     "@types/three": "^0.171.0",
-    "@typescript-eslint/eslint-plugin": "^8.35.1",
-    "@typescript-eslint/parser": "^8.35.1",
-    "@vitest/coverage-v8": "^2.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.50.1",
+    "@typescript-eslint/parser": "^8.50.1",
+    "@vitest/coverage-v8": "^3.2.4",
     "cross-env": "^7.0.3",
-    "eslint": "^9.30.0",
-    "eslint-config-prettier": "^9.1.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^9.1.2",
     "jsdom": "^25.0.1",
     "leaflet": "^1.9.4",
-    "prettier": "^3.6.2",
-    "typescript": "^5.7.0",
-    "typescript-eslint": "^8.35.1",
-    "vite": "^5.4.0",
-    "vite-plugin-dts": "^3.9.0",
-    "vitest": "^2.0.0"
+    "maplibre-gl": "^5.15.0",
+    "ol": "^10.7.0",
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.50.1",
+    "vite": "^6.4.1",
+    "vite-plugin-dts": "^3.9.1",
+    "vitest": "^3.2.4"
   },
   "keywords": [
     "geojson",

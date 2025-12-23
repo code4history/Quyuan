@@ -1,4 +1,5 @@
 import nunjucks from "nunjucks"
+import { Feature, FeatureCollection } from 'geojson';
 
 // param: geojson
 // {
@@ -37,7 +38,7 @@ import nunjucks from "nunjucks"
 // }
 
 export interface TemplateExtractorOptions {
-  geojson: any,
+  geojson: FeatureCollection | Feature,
   templates: TemplateType
 }
 
@@ -55,17 +56,19 @@ export function templateExtractor(options: TemplateExtractorOptions) {
     compiledTemplates[key] = nunjucks.compile(templateRaw)
   }
 
-  const featureHandler = (feature: any) => {
-    feature.result = {}
+  const featureHandler = (feature: Feature) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (feature as any).result = {}
     for (const key of Object.keys(options.templates)) {
-      feature.result[key] = (compiledTemplates[key] as any).render(feature.properties)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (feature as any).result[key] = compiledTemplates[key].render(feature.properties || {})
     }
   }
 
-  if (options.geojson.features) {
+  if ('features' in options.geojson) {
     options.geojson.features.forEach(featureHandler)
   } else {
-    featureHandler(options.geojson)
+    featureHandler(options.geojson as Feature)
   }
 
   return options.geojson;

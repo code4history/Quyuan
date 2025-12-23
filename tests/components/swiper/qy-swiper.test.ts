@@ -1,5 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import '@/components/swiper/qy-swiper'
+import { QySwiper } from '@/components/swiper/qy-swiper'
+import '@/components/swiper/qy-swiper' // Force side-effects for registration
+import '@/components/viewer/qy-viewer'
 
 describe('qy-swiper', () => {
   let container: HTMLDivElement
@@ -33,7 +35,7 @@ describe('qy-swiper', () => {
 
     await customElements.whenDefined('qy-swiper')
     await customElements.whenDefined('qy-swiper-slide')
-    
+
     const swiper = container.querySelector('qy-swiper')
     expect(swiper).toBeDefined()
     expect(swiper?.shadowRoot).toBeDefined()
@@ -57,12 +59,12 @@ describe('qy-swiper', () => {
 
     await customElements.whenDefined('qy-swiper')
     await customElements.whenDefined('qy-swiper-slide')
-    
-    const swiper = container.querySelector('qy-swiper') as any
-    
+
+    const swiper = container.querySelector('qy-swiper') as QySwiper
+
     // Wait for potential re-render
     await new Promise(resolve => setTimeout(resolve, 100))
-    
+
     expect(swiper.slides).toBeDefined()
     expect(swiper.slides.length).toBe(2)
     expect(swiper.slides[0].tagName).toBe('QY-SWIPER-SLIDE')
@@ -82,18 +84,18 @@ describe('qy-swiper', () => {
 
     await customElements.whenDefined('qy-swiper')
     await customElements.whenDefined('qy-swiper-slide')
-    
+
     const swiper = container.querySelector('qy-swiper')
-    
+
     // Wait for re-render
     await new Promise(resolve => setTimeout(resolve, 100))
-    
+
     const shadowRoot = swiper?.shadowRoot
     expect(shadowRoot).toBeDefined()
-    
+
     const swiperSlides = shadowRoot?.querySelectorAll('.swiper-slide')
     expect(swiperSlides?.length).toBeGreaterThan(0)
-    
+
     const caption = shadowRoot?.querySelector('.slider-caption')
     expect(caption?.textContent).toBe('Test caption')
   })
@@ -111,16 +113,16 @@ describe('qy-swiper', () => {
 
     await customElements.whenDefined('qy-swiper')
     await customElements.whenDefined('qy-swiper-slide')
-    
-    const swiper = container.querySelector('qy-swiper') as any
-    
+
+    const swiper = container.querySelector('qy-swiper') as QySwiper
+
     // Mock qy-viewer creation
     const mockViewer = {
       setSwiper: vi.fn(),
       setCurrentSlideIndex: vi.fn(),
       open: vi.fn()
     }
-    
+
     // Override createElement for qy-viewer
     const originalCreateElement = document.createElement
     document.createElement = vi.fn((tagName: string) => {
@@ -130,22 +132,22 @@ describe('qy-swiper', () => {
         return el
       }
       return originalCreateElement.call(document, tagName)
-    }) as any
-    
+    }) as unknown as typeof document.createElement
+
     // Define qy-viewer custom element
     if (!customElements.get('qy-viewer')) {
-      customElements.define('qy-viewer', class extends HTMLElement {})
+      customElements.define('qy-viewer', class extends HTMLElement { })
     }
-    
+
     await swiper.openViewer('image1.jpg', 'image', 0)
-    
+
     // Wait for async operations
     await new Promise(resolve => setTimeout(resolve, 150))
-    
+
     expect(mockViewer.setSwiper).toHaveBeenCalledWith(swiper)
     expect(mockViewer.setCurrentSlideIndex).toHaveBeenCalledWith(0)
     expect(mockViewer.open).toHaveBeenCalledWith('image1.jpg', 'image', expect.any(Object))
-    
+
     // Restore createElement
     document.createElement = originalCreateElement
   })
@@ -154,23 +156,23 @@ describe('qy-swiper', () => {
     container.innerHTML = `<qy-swiper></qy-swiper>`
 
     await customElements.whenDefined('qy-swiper')
-    const swiper = container.querySelector('qy-swiper') as any
-    
+    const swiper = container.querySelector('qy-swiper') as QySwiper
+
     // Initially no slides
     expect(swiper.slides.length).toBe(0)
-    
+
     // Add a slide dynamically
     const slide = document.createElement('qy-swiper-slide')
     slide.setAttribute('thumbnail-url', 'thumb1.jpg')
     slide.setAttribute('image-url', 'image1.jpg')
     slide.setAttribute('image-type', 'image')
     swiper.appendChild(slide)
-    
+
     // Wait for mutation observer to trigger
     await new Promise(resolve => setTimeout(resolve, 100))
-    
+
     expect(swiper.slides.length).toBe(1)
-    
+
     // Check if slide is rendered in shadow DOM
     const shadowSlides = swiper.shadowRoot?.querySelectorAll('.swiper-slide')
     expect(shadowSlides?.length).toBeGreaterThan(0)

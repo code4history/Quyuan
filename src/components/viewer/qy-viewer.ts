@@ -1,6 +1,8 @@
-import {html, LitElement} from 'lit';
-import {customElement, property} from 'lit/decorators.js';
+import { html, LitElement } from 'lit';
+import { customElement, property } from 'lit/decorators.js';
 import '@c4h/chuci';
+import { CcViewer } from '@c4h/chuci';
+import type { QySwiper } from '../swiper/qy-swiper';
 
 /**
  * Wrapper component that delegates to Chuci's cc-viewer
@@ -8,16 +10,16 @@ import '@c4h/chuci';
  */
 @customElement('qy-viewer')
 export class QyViewer extends LitElement {
-  private _swiper?: any;
+  private _swiper?: QySwiper;
   private _currentSlideIndex: number = 0;
   private _currentType: string = "";
-  private ccViewer?: any;
+  private ccViewer?: CcViewer;
 
   @property({ type: Object })
   get swiper() {
     return this._swiper;
   }
-  set swiper(value: any) {
+  set swiper(value: QySwiper | undefined) {
     const oldValue = this._swiper;
     this._swiper = value;
     this.requestUpdate('swiper', oldValue);
@@ -43,17 +45,17 @@ export class QyViewer extends LitElement {
     this.requestUpdate('currentType', oldValue);
   }
 
-  async open(imgUrl: string, type: string, attributes?: Record<string, any>) {
+  async open(imgUrl: string, type: string, attributes?: Record<string, unknown>) {
     console.log('[qy-viewer] open called with:', { imgUrl, type, attributes });
     this.currentType = type;
-    
+
     // If cc-viewer not ready yet, wait for it
     if (!this.ccViewer) {
       console.log('[qy-viewer] cc-viewer not ready, waiting...');
       await this.updateComplete;
-      this.ccViewer = this.shadowRoot!.querySelector('cc-viewer');
+      this.ccViewer = (this.shadowRoot!.querySelector('cc-viewer') as unknown as CcViewer) || undefined;
     }
-    
+
     if (this.ccViewer) {
       console.log('[qy-viewer] Calling cc-viewer.open');
       this.ccViewer.open(imgUrl, type, attributes);
@@ -62,7 +64,7 @@ export class QyViewer extends LitElement {
     }
   }
 
-  setSwiper(swiper: any) {
+  setSwiper(swiper: QySwiper) {
     console.log('[qy-viewer] setSwiper called');
     this.swiper = swiper;
     if (this.ccViewer && this.ccViewer.setSwiper) {
@@ -83,30 +85,30 @@ export class QyViewer extends LitElement {
   protected async firstUpdated() {
     console.log('[qy-viewer] firstUpdated called');
     console.log('[qy-viewer] Initial Shadow DOM content:', this.shadowRoot?.innerHTML);
-    
+
     // Force render to ensure shadow DOM is populated
     this.requestUpdate();
     await this.updateComplete;
-    
+
     console.log('[qy-viewer] Shadow DOM after requestUpdate:', this.shadowRoot?.innerHTML);
-    
+
     const event = new CustomEvent('load');
     this.dispatchEvent(event);
-    
+
     // Wait for cc-viewer to be defined
     console.log('[qy-viewer] Waiting for cc-viewer to be defined...');
     console.log('[qy-viewer] cc-viewer already defined?', !!customElements.get('cc-viewer'));
-    
+
     await customElements.whenDefined('cc-viewer');
     console.log('[qy-viewer] cc-viewer is defined');
-    
+
     // Get reference to cc-viewer with a small delay to ensure it's fully initialized
     await new Promise(resolve => setTimeout(resolve, 100));
-    
-    this.ccViewer = this.shadowRoot!.querySelector('cc-viewer');
+
+    this.ccViewer = (this.shadowRoot!.querySelector('cc-viewer') as unknown as CcViewer) || undefined;
     console.log('[qy-viewer] cc-viewer element found:', !!this.ccViewer);
     console.log('[qy-viewer] Final Shadow DOM:', this.shadowRoot?.innerHTML);
-    
+
     if (this.ccViewer) {
       if (this.swiper && this.ccViewer.setSwiper) {
         console.log('[qy-viewer] Setting swiper on cc-viewer');
@@ -121,14 +123,14 @@ export class QyViewer extends LitElement {
 
   protected updated(changedProperties: Map<string | number | symbol, unknown>) {
     super.updated(changedProperties);
-    
+
     // Update cc-viewer when properties change
     if (this.ccViewer) {
       if (changedProperties.has('swiper') && this.ccViewer.setSwiper) {
         this.ccViewer.setSwiper(this.swiper);
       }
       if (changedProperties.has('currentSlideIndex') && this.ccViewer.setCurrentSlideIndex) {
-        this.ccViewer.setCurrentSlideIndex(this.currentSlideIndex);
+        this.ccViewer.setCurrentSlideIndex(this.currentSlideIndex || 0);
       }
     }
   }
