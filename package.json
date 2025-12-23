@@ -39,7 +39,7 @@
     "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
-    "@c4h/chuci": "github:code4history/Chuci#5befb907bd9f79e4d03a4f3a036cbe630d4c36f7",
+    "@c4h/chuci": "github:code4history/Chuci#c2839bdbee2cee555f1866147b240766ed03f194",
     "lit": "^3.3.1",
     "nunjucks": "^3.2.4",
     "uevent": "^2.2.0"
