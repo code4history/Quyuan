@@ -1,3 +1,1 @@
-import { CSSResult } from 'lit';
-
-export declare function injectCSS(styles: CSSResult, styleElement?: HTMLStyleElement): HTMLStyleElement;
+export declare function injectCSS(styles: string, styleElement?: HTMLStyleElement): HTMLStyleElement;

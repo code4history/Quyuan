@@ -20,7 +20,12 @@ const result = async () => {
               image-url="{{ image.path }}" 
               thumbnail-url="{{ image.mid_thumbnail }}" 
               image-type="{{ image.image_type }}" 
-              caption="{{ image.description }}">
+              caption="{{ image.description }}"
+              {% if image.material_url %}material-url="{{ image.material_url }}"{% endif %}
+              {% if image.fit_to_container %}fit-to-container{% endif %}
+              {% if image.debug_mode %}debug-mode{% endif %}
+              {% if image.camera_position %}camera-position="{{ image.camera_position }}"{% endif %}
+              {% if image.camera_target %}camera-target="{{ image.camera_target }}"{% endif %}>
             </qy-swiper-slide>
           {% endfor %}
         </qy-swiper>

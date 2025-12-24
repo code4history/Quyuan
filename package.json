@@ -23,6 +23,11 @@
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
   },
+  "pnpm": {
+    "overrides": {
+      "vue-template-compiler": "^2.7.16"
+    }
+  },
   "scripts": {
     "dev": "vite --host",
     "build": "npm run typecheck && cross-env BUILD_MODE=package vite build",
@@ -40,7 +45,6 @@
   },
   "dependencies": {
     "@c4h/chuci": "github:code4history/Chuci#15897bb",
-    "lit": "^3.3.1",
     "nunjucks": "^3.2.4",
     "uevent": "^2.2.0"
   },
