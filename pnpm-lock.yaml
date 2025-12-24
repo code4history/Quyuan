@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@c4h/chuci':
-        specifier: github:code4history/Chuci#5befb907bd9f79e4d03a4f3a036cbe630d4c36f7
-        version: https://codeload.github.com/code4history/Chuci/tar.gz/5befb907bd9f79e4d03a4f3a036cbe630d4c36f7
+        specifier: github:code4history/Chuci#15897bb
+        version: https://codeload.github.com/code4history/Chuci/tar.gz/15897bb
       lit:
         specifier: ^3.3.1
         version: 3.3.1
@@ -138,9 +138,10 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@c4h/chuci@https://codeload.github.com/code4history/Chuci/tar.gz/5befb907bd9f79e4d03a4f3a036cbe630d4c36f7':
-    resolution: {tarball: https://codeload.github.com/code4history/Chuci/tar.gz/5befb907bd9f79e4d03a4f3a036cbe630d4c36f7}
+  '@c4h/chuci@https://codeload.github.com/code4history/Chuci/tar.gz/15897bb':
+    resolution: {tarball: https://codeload.github.com/code4history/Chuci/tar.gz/15897bb}
     version: 0.1.0
+    engines: {pnpm: '>=9.0.0'}
 
   '@csstools/color-helpers@5.1.0':
     resolution: {integrity: sha512-S11EXWJyy0Mz5SYvRmY8nJYTFFd1LCNV+7cXyAgQtOOuzb4EsgfqDufL+9esx72/eLhsRdGZwaldu/h+E4t4BA==}
@@ -2043,7 +2044,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@c4h/chuci@https://codeload.github.com/code4history/Chuci/tar.gz/5befb907bd9f79e4d03a4f3a036cbe630d4c36f7':
+  '@c4h/chuci@https://codeload.github.com/code4history/Chuci/tar.gz/15897bb':
     dependencies:
       '@photo-sphere-viewer/core': 5.14.0
       gsplat: 1.2.9
