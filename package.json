@@ -1,6 +1,6 @@
 {
   "name": "@c4h/quyuan",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "GeoJSON template extractor and multimedia viewer",
   "type": "module",
   "private": false,
