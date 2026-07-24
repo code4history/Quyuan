@@ -30,13 +30,13 @@ Quyuan is open-source under the MIT License.
 - GeoJSON template engine using Nunjucks syntax (per-feature processing)
 - Multiple template keys (marker icons, popup HTML, etc.) with results stored in each feature
 - Web Components-based multimedia viewer (`qy-swiper` / `qy-swiper-slide` / `qy-viewer`)
-- Supported media: images, 360-degree panoramas, YouTube videos
+- Supported media: images, 360-degree panoramas, YouTube videos, MP4 videos, 3D models (MTL), Gaussian Splatting
 - Works with Leaflet, OpenLayers, and MapLibre GL (integration examples in `docs/api/`)
 
 <!-- SECTION 5: Quick Start -->
 ## Quick Start
 
-> Release-dependent information (ADR-0012). The version `0.4.0` below is the
+> Release-dependent information (ADR-0012). The version `0.4.1` below is the
 > current release; update it on each new release.
 
 ### Install
@@ -95,7 +95,7 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 ### CDN (jsDelivr)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@0.4.0/dist/quyuan.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@0.4.1/dist/quyuan.umd.js"></script>
 ```
 
 ### API reference

@@ -19,7 +19,7 @@ Component defining each slide within the slider.
 
 Attributes:
 - `image-url`: Image/video URL
-- `image-type`: Media type ("image", "panorama", "youtube")
+- `image-type`: Media type ("image", "panorama", "youtube", "video", "3dmodel", "gaussian")
 - `caption`: Caption string
 - `thumbnail-url`: Thumbnail image URL (uses image-url if omitted)
 

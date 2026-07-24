@@ -26,13 +26,13 @@ Quyuan は MIT License のオープンソースソフトウェアです。
 - Nunjucks 文法による GeoJSON テンプレートエンジン（feature ごとに処理）
 - 複数キーのテンプレート定義（マーカーアイコン・ポップアップ HTML 等）・結果は各 feature に格納
 - Web Components ベースのマルチメディアビューア（`qy-swiper` / `qy-swiper-slide` / `qy-viewer`）
-- 対応メディア: 画像・360度全球画像・YouTube 動画
+- 対応メディア: 画像・360度全球画像・YouTube 動画・MP4 動画・3D モデル (MTL)・Gaussian Splatting
 - Leaflet・OpenLayers・MapLibre GL と連携（統合例は `docs/api/` を参照）
 
 <!-- SECTION 5: Quick Start -->
 ## クイックスタート
 
-> 特定リリースに紐づく情報（ADR-0012）。下記のバージョン `0.4.0` は現在の
+> 特定リリースに紐づく情報（ADR-0012）。下記のバージョン `0.4.1` は現在の
 > リリース値です。リリースごとに更新してください。
 
 ### インストール
@@ -91,7 +91,7 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 ### CDN（jsDelivr）
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@0.4.0/dist/quyuan.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@0.4.1/dist/quyuan.umd.js"></script>
 ```
 
 ### API リファレンス

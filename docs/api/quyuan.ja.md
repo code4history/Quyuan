@@ -19,7 +19,7 @@ Quyuan は以下の Web Components を提供しています:
 
 属性:
 - `image-url`: 画像/動画の URL
-- `image-type`: メディアタイプ（"image", "panorama", "youtube"）
+- `image-type`: メディアタイプ（"image", "panorama", "youtube", "video", "3dmodel", "gaussian"）
 - `caption`: キャプション文字列
 - `thumbnail-url`: サムネイル画像 URL（省略時は image-url を使用）
 
