@@ -1,55 +1,51 @@
-# Quyuan (屈原)
+<!-- SECTION 1: Header (badges, title) -->
+<h1 align="center">Quyuan</h1>
 
-GeoJSONテンプレートエンジンと統合マルチメディアビューアー
+<p align="center">
+  [![CI](https://github.com/code4history/Quyuan/actions/workflows/ci.yml/badge.svg)](https://github.com/code4history/Quyuan/actions/workflows/ci.yml)
+  [![npm version](https://img.shields.io/npm/v/@c4h/quyuan)](https://www.npmjs.com/package/@c4h/quyuan)
+  [![License](https://img.shields.io/npm/l/@c4h/quyuan)](LICENSE)
+</p>
 
-[English](README.md) | 日本語
+<!-- SECTION 2: Elevator Pitch -->
+## Quyuan について
 
-プロジェクト名は、紀元前4世紀の中国の詩人・政治家である[屈原 (Quyuan)](https://zh.wikipedia.org/wiki/%E5%B1%88%E5%8E%9F)から名付けられています。
+Quyuan は GeoJSON テンプレートエンジンと統合マルチメディアビューアです。
+GeoJSON の feature を Nunjucks テンプレートで処理し、マーカーアイコンとポップアップ HTML を生成します。また、画像・パノラマ・動画をポップアップ内で表示する Web Components（`qy-swiper` / `qy-swiper-slide` / `qy-viewer`）を提供します。
+プロジェクト名は、紀元前4世紀の中国の詩人・政治家である
+[屈原 (Qu Yuan)](https://en.wikipedia.org/wiki/Qu_Yuan) に由来しています。
 
-## 目的
+Quyuan は MIT License のオープンソースソフトウェアです。
 
-GeoJSONのマーカー、そしてそれをクリックした際のポップアップ内に表示するHTMLなどを、GeoJSONのproperties中の属性から生成するテンプレートライブラリです。
+<!-- SECTION 3: Language switch link -->
+**[英語版はこちら / Read this document in English](README.md)**
 
-またポップアップ内でのマルチメディアコンテンツ（画像、パノラマ、動画）の表示を行うスライダービューアも、よくあるユースケースとして提供しています。
+<!-- SECTION 4: Key Features -->
+## 主な特徴
 
-## 特徴
+- Nunjucks 文法による GeoJSON テンプレートエンジン（feature ごとに処理）
+- 複数キーのテンプレート定義（マーカーアイコン・ポップアップ HTML 等）・結果は各 feature に格納
+- Web Components ベースのマルチメディアビューア（`qy-swiper` / `qy-swiper-slide` / `qy-viewer`）
+- 対応メディア: 画像・360度全球画像・YouTube 動画
+- Leaflet・OpenLayers・MapLibre GL と連携（統合例は `docs/api/` を参照）
 
-### テンプレートエンジン機能
-- [Nunjucks](https://mozilla.github.io/nunjucks/)文法によるテンプレート記述
-- GeoJSONのfeatureごとにpropertiesをルートとしてテンプレート処理
-- 複数キーでのテンプレート定義（マーカーアイコン、ポップアップHTML等）
-- 処理結果は各featureのresultオブジェクトに格納
+<!-- SECTION 5: Quick Start -->
+## クイックスタート
 
-### マルチメディアビューア機能
-- Web Componentsベースのビューア実装
-- スワイパーによるサムネイル表示と各種ビューアの連携
-- 対応フォーマット：
-  - 画像
-  - 360度全球画像
-  - YouTube動画
-- 開発中の対応フォーマット：
-  - テクスチャ付き3Dポリゴンモデル
-  - 3Dガウシアンスプラッティング
+> 特定リリースに紐づく情報（ADR-0012）。下記のバージョン `0.4.0` は現在の
+> リリース値です。リリースごとに更新してください。
 
-## インストール
+### インストール
 
 ```bash
+# pnpm（推奨）
+pnpm add @c4h/quyuan
+
+# npm
 npm install @c4h/quyuan
 ```
 
-または
-
-```bash
-pnpm add @c4h/quyuan
-```
-
-## 使用方法
-
-### デモ
-
-- https://code4history.dev/Quyuan/
-
-### テンプレート処理の基本
+### 最小利用例
 
 ```javascript
 import { Quyuan } from '@c4h/quyuan';
@@ -66,24 +62,18 @@ const geojson = {
         { path: "pano1.jpg", type: "panorama", description: "360度画像" }
       ]
     },
-    geometry: {
-      type: "Point",
-      coordinates: [139.7, 35.6]
-    }
+    geometry: { type: "Point", coordinates: [139.7, 35.6] }
   }]
 };
 
 const templates = {
-  // アイコン選択用テンプレート
   icon: "{% if type == 'cultural' %}cultural.png{% else %}default.png{% endif %}",
-  
-  // ポップアップHTML生成用テンプレート
   html: `
     <div class="popup-content">
       <h3>{{ name }}</h3>
       <qy-swiper style="height:200px;">
         {% for image in images %}
-          <qy-swiper-slide 
+          <qy-swiper-slide
             image-url="{{ image.path }}"
             image-type="{{ image.type }}"
             caption="{{ image.description }}">
@@ -95,163 +85,126 @@ const templates = {
 };
 
 const result = Quyuan.templateExtractor({ geojson, templates });
-// 各featureのresultオブジェクトに処理結果が格納されます
+// 各 feature の result オブジェクトに処理結果が格納されます
 ```
 
-### 地図ライブラリとの統合
+### CDN（jsDelivr）
 
-#### Leaflet
-
-```javascript
-import L from 'leaflet';
-
-const map = L.map('map').setView([35.6, 139.7], 13);
-
-result.features.forEach(feature => {
-  if (feature.geometry) {
-    L.marker(feature.geometry.coordinates.slice().reverse(), {
-      icon: L.icon({
-        iconUrl: feature.result.icon,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-      })
-    })
-    .bindPopup(feature.result.html)
-    .addTo(map);
-  }
-});
+```html
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@0.4.0/dist/quyuan.umd.js"></script>
 ```
 
-#### OpenLayers
+### API リファレンス
 
-```javascript
-import { Feature } from 'ol';
-import { Point } from 'ol/geom';
-import { Style, Icon } from 'ol/style';
-import { fromLonLat } from 'ol/proj';
-import Overlay from 'ol/Overlay';
+- **API シグネチャ**（リリース依存）: [`docs/api/`](docs/api/) を参照
 
-result.features.forEach(feature => {
-  if (feature.geometry) {
-    const point = new Feature({
-      geometry: new Point(fromLonLat(feature.geometry.coordinates))
-    });
+### 開発
 
-    point.setStyle(new Style({
-      image: new Icon({
-        src: feature.result.icon,
-        scale: 0.5
-      })
-    }));
-
-    vectorSource.addFeature(point);
-
-    // ポップアップの設定
-    point.set('popupContent', feature.result.html);
-  }
-});
-```
-
-#### MapLibre GL
-
-```javascript
-import maplibregl from 'maplibre-gl';
-
-const map = new maplibregl.Map({
-  container: 'map',
-  style: 'https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json',
-  center: [139.7, 35.6],
-  zoom: 13
-});
-
-result.features.forEach(feature => {
-  if (feature.geometry) {
-    const popup = new maplibregl.Popup()
-      .setHTML(feature.result.html);
-
-    const el = document.createElement('div');
-    el.style.backgroundImage = `url(${feature.result.icon})`;
-    el.style.width = '32px';
-    el.style.height = '32px';
-    el.style.backgroundSize = 'contain';
-    el.style.cursor = 'pointer';
-
-    new maplibregl.Marker(el)
-      .setLngLat(feature.geometry.coordinates)
-      .setPopup(popup)
-      .addTo(map);
-  }
-});
-```
-
-## Web Components
-
-Quyuanは以下のWeb Componentsを提供しています：
-
-### `<qy-swiper>`
-マルチメディアコンテンツのスライダー表示を行うコンポーネント
-
-属性：
-- `style`: CSSスタイル（高さ指定推奨）
-
-### `<qy-swiper-slide>`
-スライダー内の各スライドを定義するコンポーネント
-
-属性：
-- `image-url`: 画像/動画のURL
-- `image-type`: メディアタイプ（"image", "panorama", "youtube"）
-- `caption`: キャプション文字列
-- `thumbnail-url`: サムネイル画像URL（省略時はimage-urlを使用）
-
-### `<qy-viewer>`
-フルスクリーンビューアーコンポーネント（qy-swiperから自動的に呼び出される）
-
-## ブラウザサポート
-
-- Chrome/Edge 最新版
-- Firefox 最新版
-- Safari 最新版
-
-Web Componentsをサポートする現代的なブラウザで動作します。
-
-## 開発
+#### 準備
+リポジトリをクローンし、依存関係をインストールします。
 
 ```bash
-# 依存関係のインストール
+git clone https://github.com/code4history/Quyuan.git
+cd Quyuan
 pnpm install
-
-# 開発サーバーの起動
-pnpm run dev
-
-# ビルド
-pnpm run build
-
-# テストの実行
-pnpm test
-
-# E2Eテストの実行
-pnpm run test:e2e
 ```
 
-## ライセンス
+#### 開発サーバー
 
-MIT License
+```bash
+pnpm run dev
+```
 
-Copyright (c) 2024 Code for History
+デモ: <https://code4history.dev/Quyuan/>
 
-## 開発者
+#### ビルド
+
+```bash
+pnpm run build
+```
+
+#### テスト
+
+```bash
+pnpm test           # テストの実行
+pnpm run test:e2e   # E2E テストの実行
+```
+
+<!-- SECTION 6: Prerequisites -->
+## 動作環境
+
+> ランタイム要件（ADR-0012: 特定リリースに紐づく）。
+
+- Node.js と pnpm（開発時）
+- ブラウザ: Chrome / Edge / Firefox / Safari（最新版）・Web Components サポート必須
+
+<!-- SECTION 7: Peer Dependencies -->
+<!-- Quyuan には peer dependency はありません。本節は省略します。 -->
+
+<!-- SECTION 8: Ecosystem / Related Repositories -->
+## エコシステム
+
+Quyuan は [Code for History](https://github.com/code4history) が運営する
+Maplat エコシステムの一部です。全容は下記エコシステム図を参照してください。
+
+📖 **エコシステム図** — *（図は現在外部非公開の計画リポジトリにあります。
+公開ビューアからは下記の姉妹リポジトリ表で代替します）*
+
+### 姉妹リポジトリ
+
+| リポジトリ | ライセンス | npm | 役割 |
+|---|---|---|---|
+| [Maplat](https://github.com/code4history/Maplat) | Apache 2.0 | `@maplat/ui` | メインビューア |
+| [MaplatCore](https://github.com/code4history/MaplatCore) | Apache 2.0 | `@maplat/core` | コアライブラリ |
+| [MaplatTin](https://github.com/code4history/MaplatTin) | Apache 2.0 | `@maplat/tin` | TIN 変換 |
+| [MaplatTransform](https://github.com/code4history/MaplatTransform) | Apache 2.0 | `@maplat/transform` | 座標変換 |
+| [MaplatEditor](https://github.com/code4history/MaplatEditor) | Apache 2.0 | — | データ作成ツール（デスクトップ） |
+
+> MaplatEditor は上記ビューアライブラリが描画する地図・POI を作成する
+> データ作成ツールです。Maplat エコシステムはエンドツーエンド:
+> MaplatEditor で作成し、いずれかのビューアライブラリで公開、という流れになります。
+
+<!-- SECTION 9: Nayuta links -->
+<!-- MIT ライセンスのリポジトリ（Weiwudi / Quyuan / Chuci）へは那由多社リンクを置きません（ADR-0012）。 -->
+
+<!-- SECTION 10: License -->
+## License
+
+MIT License — 詳細は [LICENSE](LICENSE) を参照。
+
+```
+Copyright (c) 2021-2026 Code for History
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+```
+
+<!-- SECTION 11: Contributors / Sponsors (optional) -->
+## Contributors
 
 - Kohei Otsuka ([@kochizufan](https://github.com/kochizufan))
 - Code for History
 
-## 貢献
+## Contributing
 
-あなたの貢献をお待ちしています！
-
-- バグ報告や機能リクエストは[Issues](https://github.com/code4history/Quyuan/issues)へ
-- プルリクエストは大歓迎です
-- 質問や議論は[Discussions](https://github.com/code4history/Quyuan/discussions)へ
+- バグ報告や機能リクエストは [Issues](https://github.com/code4history/Quyuan/issues) へ
+- プルリクエストを歓迎します
+- 質問や議論は [Discussions](https://github.com/code4history/Quyuan/discussions) へ
 
 ### 開発に参加する
 
@@ -260,8 +213,3 @@ Copyright (c) 2024 Code for History
 3. 変更をコミット (`git commit -m 'Add some amazing feature'`)
 4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
 5. プルリクエストを作成
-
-## 関連プロジェクト
-
-- [Chuci (楚辞)](https://github.com/code4history/Chuci) - Quyuanから分離されたマルチメディアビューアコンポーネント
-- [Maplat](https://github.com/code4history/Maplat) - 歴史地図プラットフォーム
