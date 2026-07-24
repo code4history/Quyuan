@@ -2,9 +2,9 @@
 <h1 align="center">Quyuan</h1>
 
 <p align="center">
-  [![CI](https://github.com/code4history/Quyuan/actions/workflows/ci.yml/badge.svg)](https://github.com/code4history/Quyuan/actions/workflows/ci.yml)
-  [![npm version](https://img.shields.io/npm/v/@c4h/quyuan)](https://www.npmjs.com/package/@c4h/quyuan)
-  [![License](https://img.shields.io/npm/l/@c4h/quyuan)](LICENSE)
+  <a href="https://github.com/code4history/Quyuan/actions/workflows/ci.yml"><img src="https://github.com/code4history/Quyuan/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="https://www.npmjs.com/package/@c4h/quyuan"><img src="https://img.shields.io/npm/v/@c4h/quyuan" alt="npm version" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/npm/l/@c4h/quyuan" alt="License" /></a>
 </p>
 
 <!-- SECTION 2: Elevator Pitch -->
