@@ -28,15 +28,13 @@ export default defineConfig({
   build: isPackageBuild ? {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      formats: ['es', 'cjs', 'umd'],
+      formats: ['es', 'umd'],
       name: 'Quyuan',  // UMD global variable name
       fileName: (format) => {
         const baseName = 'quyuan';  // C4H naming convention (no prefix)
-        switch(format) {
+        switch (format) {
           case 'es':
             return `${baseName}.js`;
-          case 'cjs':
-            return `${baseName}.cjs`;
           case 'umd':
             return `${baseName}.umd.js`;
           default:
@@ -45,10 +43,17 @@ export default defineConfig({
       }
     },
     rollupOptions: {
-      external: ['lit']
-    }
+      external: ['lit'],
+      output: {
+        exports: 'named',
+        globals: {
+          lit: 'lit'
+        }
+      }
+    },
+    copyPublicDir: false  // Prevent public assets from contaminating dist
   } : {
-    outDir: 'dist',
+    outDir: 'dist-demo',
     emptyOutDir: true,
     rollupOptions: {
       input: {
@@ -68,9 +73,9 @@ export default defineConfig({
   },
   plugins: [
     removeTsExtensions(),
-    dts({
+    ...(isPackageBuild ? [dts({
       outDir: 'dist',
-      exclude: ['tests', 'node_modules'],
+      exclude: ['tests', 'node_modules', 'demo'],
       rollupTypes: false,  // Avoid type definition merging errors
       skipDiagnostics: true,
       tsconfigPath: './tsconfig.json',
@@ -87,7 +92,7 @@ export default defineConfig({
           content: fixedContent
         };
       }
-    })
+    })] : [])
   ],
   resolve: {
     alias: {

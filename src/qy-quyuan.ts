@@ -1,22 +1,59 @@
-import { customElement, property } from 'lit/decorators.js'
-import {html, LitElement} from "lit"
+import { QyElement } from './base/qy-element.js'
 
-@customElement('qy-quyuan')
-export class QyQuyuan extends LitElement {
-  @property({ type: Boolean, reflect: true }) hasThumb = false
-  @property({ type: Boolean, reflect: true }) autoplay = false
+export class QyQuyuan extends QyElement {
+  private _hasThumb = false
+  private _autoplay = false
 
-  render() {
-    return html`
+  static get observedAttributes() {
+    return ['hasthumb', 'autoplay']
+  }
+
+  get hasThumb(): boolean {
+    return this._hasThumb
+  }
+
+  set hasThumb(val: boolean) {
+    if (this._hasThumb !== val) {
+      this._hasThumb = val
+      this.toggleAttribute('hasthumb', val)
+      this.render()
+    }
+  }
+
+  get autoplay(): boolean {
+    return this._autoplay
+  }
+
+  set autoplay(val: boolean) {
+    if (this._autoplay !== val) {
+      this._autoplay = val
+      this.toggleAttribute('autoplay', val)
+      this.render()
+    }
+  }
+
+  attributeChangedCallback(name: string, _oldVal: string | null, newVal: string | null) {
+    if (name === 'hasthumb') {
+      this._hasThumb = newVal !== null
+    } else if (name === 'autoplay') {
+      this._autoplay = newVal !== null
+    }
+    super.attributeChangedCallback(name, _oldVal, newVal)
+  }
+
+  protected render() {
+    this.updateShadowRoot(this.html`
       <style>
         :host {
-          display: block;  /* or display: block; */
+          display: block;
         }
       </style>
       <div style="border: 1px solid black" class="wrapper">
-        <div>HasThumb: ${ this.hasThumb ? "true" : "false" }</div><br>
-        <div>AutoPlay: ${ this.autoplay ? "true" : "false" }</div>
+        <div>HasThumb: ${this._hasThumb ? "true" : "false"}</div><br>
+        <div>AutoPlay: ${this._autoplay ? "true" : "false"}</div>
       </div>
-    `
+    `)
   }
 }
+
+customElements.define('qy-quyuan', QyQuyuan)
