@@ -1,0 +1,14 @@
+- [x] Update `vite` and `vitest` versions in `package.json`
+- [x] Run `pnpm install` and verify deduplication
+- [x] Verify `eslint.config.mjs` validity and run `pnpm lint`
+- [x] Run `pnpm test` to ensure Vitest 3 compatibility
+- [x] Move `index.html` and other HTML files from `public/` to root
+- [x] Move `src/demo/` to `demo/` and update script references in HTMLs
+- [x] Move `maplibre-gl` and `ol` to `devDependencies`
+- [x] Update `vite.config.ts` (remove CJS, verify inputs)
+- [x] Run `pnpm build` and verify `dist/` contents (no CJS, `d.ts` present)
+- [x] Update `package.json` `main`/`module`/`exports` to remove CJS
+- [x] Run `pnpm build` to ensure Vite 6 compatibility
+- [x] Update `ci.yml`, `deploy.yml`, `release.yml` (branches, node versions)
+- [x] Rename local branch `main` to `master` (if applicable) and update git config
+- [x] Update `openspec/project.md` to reflect the initialized stack
