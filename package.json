@@ -30,9 +30,9 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "build": "npm run typecheck && cross-env BUILD_MODE=package vite build",
+    "build": "pnpm run typecheck && cross-env BUILD_MODE=package vite build",
     "build:demo": "vite build",
-    "deploy": "npm run typecheck && vite build",
+    "deploy": "pnpm run typecheck && vite build",
     "typecheck": "tsc --noEmit --allowImportingTsExtensions",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -41,7 +41,7 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:ci": "playwright test --config=playwright-ci.config.ts",
     "lint": "eslint src tests",
-    "prepublishOnly": "npm run lint && npm run typecheck && npm run test && npm run build"
+    "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
   },
   "dependencies": {
     "@c4h/chuci": "^0.2.0",
