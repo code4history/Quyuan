@@ -60,7 +60,7 @@
     "jsdom": "^27.4.0",
     "leaflet": "^1.9.4",
     "maplibre-gl": "^5.15.0",
-    "ol": "^10.7.0",
+    "ol": "^10.8.0",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.58.0",
