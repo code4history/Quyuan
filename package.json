@@ -23,11 +23,6 @@
     "node": ">=20.0.0",
     "pnpm": ">=9.0.0"
   },
-  "pnpm": {
-    "overrides": {
-      "vue-template-compiler": "^2.7.16"
-    }
-  },
   "scripts": {
     "dev": "vite --host",
     "build": "pnpm run typecheck && cross-env BUILD_MODE=package vite build",
