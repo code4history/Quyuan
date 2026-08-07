@@ -4,16 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  swiper: ^12.1.2
-
 importers:
 
   .:
     dependencies:
       '@c4h/chuci':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^1.0.0-rc1
+        version: 1.0.0-rc1
       nunjucks:
         specifier: ^3.2.4
         version: 3.2.4
@@ -141,8 +138,8 @@ packages:
     resolution: {integrity: sha512-6zABk/ECA/QYSCQ1NGiVwwbQerUCZ+TQbp64Q3AgmfNvurHH0j8TtXa1qbShXA6qqkpAj4V5W8pP6mLe1mcMqA==}
     engines: {node: '>=18'}
 
-  '@c4h/chuci@0.2.0':
-    resolution: {integrity: sha512-xB14N+x+6pD7l6FXkyypREbKUHS0rgvS08mPir/2kbq/sQM+DNzDqKmGe3DDDyPGBXctFmSpbHiHlDF2VM1bLw==}
+  '@c4h/chuci@1.0.0-rc1':
+    resolution: {integrity: sha512-KECN3hso2LclErGMK5Jc42Px+WSKVfPuzSJc8ihDxyNC0w2RmhmFk7/ijJCW5/BapKE4snZGcAHycLPqjp5WKg==}
     engines: {pnpm: '>=9.0.0'}
 
   '@csstools/color-helpers@6.1.0':
@@ -2260,7 +2257,7 @@ snapshots:
 
   '@bcoe/v8-coverage@1.0.2': {}
 
-  '@c4h/chuci@0.2.0':
+  '@c4h/chuci@1.0.0-rc1':
     dependencies:
       gsplat: 1.2.9
       swiper: 12.2.0
