@@ -32,7 +32,7 @@ Quyuan は MIT License のオープンソースソフトウェアです。
 <!-- SECTION 5: Quick Start -->
 ## クイックスタート
 
-> 特定リリースに紐づく情報（ADR-0012）。下記のバージョン `0.4.1` は現在の
+> 特定リリースに紐づく情報（ADR-0012）。下記のバージョン `1.0.0-rc1` は現在の
 > リリース値です。リリースごとに更新してください。
 
 ### インストール
@@ -91,7 +91,7 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 ### CDN（jsDelivr）
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@0.4.1/dist/quyuan.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@1.0.0-rc1/dist/quyuan.umd.js"></script>
 ```
 
 ### API リファレンス

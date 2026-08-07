@@ -36,7 +36,7 @@ Quyuan is open-source under the MIT License.
 <!-- SECTION 5: Quick Start -->
 ## Quick Start
 
-> Release-dependent information (ADR-0012). The version `0.4.1` below is the
+> Release-dependent information (ADR-0012). The version `1.0.0-rc1` below is the
 > current release; update it on each new release.
 
 ### Install
@@ -95,7 +95,7 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 ### CDN (jsDelivr)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@0.4.1/dist/quyuan.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@1.0.0-rc1/dist/quyuan.umd.js"></script>
 ```
 
 ### API reference

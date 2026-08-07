@@ -1,6 +1,6 @@
 {
   "name": "@c4h/quyuan",
-  "version": "0.4.1",
+  "version": "1.0.0-rc1",
   "description": "GeoJSON template extractor and multimedia viewer",
   "type": "module",
   "private": false,
@@ -39,7 +39,7 @@
     "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
   },
   "dependencies": {
-    "@c4h/chuci": "^0.2.0",
+    "@c4h/chuci": "^1.0.0-rc1",
     "nunjucks": "^3.2.4"
   },
   "devDependencies": {
