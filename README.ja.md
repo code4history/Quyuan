@@ -3,7 +3,6 @@
 
 <p align="center">
   <a href="https://github.com/code4history/Quyuan/actions/workflows/ci.yml"><img src="https://github.com/code4history/Quyuan/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://www.npmjs.com/package/@c4h/quyuan"><img src="https://img.shields.io/npm/v/@c4h/quyuan" alt="npm version" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/npm/l/@c4h/quyuan" alt="License" /></a>
 </p>
 
@@ -32,17 +31,21 @@ Quyuan は MIT License のオープンソースソフトウェアです。
 <!-- SECTION 5: Quick Start -->
 ## クイックスタート
 
-> 特定リリースに紐づく情報（ADR-0012）。下記のバージョン `1.0.0-rc1` は現在の
-> リリース値です。リリースごとに更新してください。
+<!-- release-pinned:start -->
+> **現在のリリース: `1.0.0-rc1`**（リリース候補）。このブロックは本リポジトリで唯一
+> リリース版数を持つ場所です（ADR-0012）。ブロックの外はすべて 1.0 正式版を前提に
+> 書かれています。
+> npm: [`@c4h/quyuan`](https://www.npmjs.com/package/@c4h/quyuan)
+> [![npm rc](https://img.shields.io/npm/v/@c4h/quyuan/rc)](https://www.npmjs.com/package/@c4h/quyuan)
 
 ### インストール
 
 ```bash
 # pnpm（推奨）
-pnpm add @c4h/quyuan
+pnpm add @c4h/quyuan@rc
 
 # npm
-npm install @c4h/quyuan
+npm install @c4h/quyuan@rc
 ```
 
 ### 最小利用例
@@ -129,6 +132,7 @@ pnpm run build
 pnpm test           # テストの実行
 pnpm run test:e2e   # E2E テストの実行
 ```
+<!-- release-pinned:end -->
 
 <!-- SECTION 6: Prerequisites -->
 ## 動作環境

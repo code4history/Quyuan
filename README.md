@@ -3,7 +3,6 @@
 
 <p align="center">
   <a href="https://github.com/code4history/Quyuan/actions/workflows/ci.yml"><img src="https://github.com/code4history/Quyuan/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://www.npmjs.com/package/@c4h/quyuan"><img src="https://img.shields.io/npm/v/@c4h/quyuan" alt="npm version" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/npm/l/@c4h/quyuan" alt="License" /></a>
 </p>
 
@@ -36,17 +35,21 @@ Quyuan is open-source under the MIT License.
 <!-- SECTION 5: Quick Start -->
 ## Quick Start
 
-> Release-dependent information (ADR-0012). The version `1.0.0-rc1` below is the
-> current release; update it on each new release.
+<!-- release-pinned:start -->
+> **Current release: `1.0.0-rc1`** — a release candidate. This block is the only place in
+> this repository that carries a release version (ADR-0012); everything outside it is
+> written against the 1.0 release.
+> npm: [`@c4h/quyuan`](https://www.npmjs.com/package/@c4h/quyuan)
+> [![npm rc](https://img.shields.io/npm/v/@c4h/quyuan/rc)](https://www.npmjs.com/package/@c4h/quyuan)
 
 ### Install
 
 ```bash
 # pnpm (recommended)
-pnpm add @c4h/quyuan
+pnpm add @c4h/quyuan@rc
 
 # npm
-npm install @c4h/quyuan
+npm install @c4h/quyuan@rc
 ```
 
 ### Minimal usage
@@ -133,6 +136,7 @@ pnpm run build
 pnpm test           # Run tests
 pnpm run test:e2e   # Run E2E tests
 ```
+<!-- release-pinned:end -->
 
 <!-- SECTION 6: Prerequisites -->
 ## Prerequisites
