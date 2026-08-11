@@ -1,55 +1,58 @@
-# Quyuan (屈原)
+<!-- SECTION 1: Header (badges, title) -->
+<h1 align="center">Quyuan</h1>
 
-GeoJSON template engine with integrated multimedia viewer
+<p align="center">
+  <a href="https://github.com/code4history/Quyuan/actions/workflows/ci.yml"><img src="https://github.com/code4history/Quyuan/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/npm/l/@c4h/quyuan" alt="License" /></a>
+</p>
 
-English | [日本語](README.ja.md)
+<!-- SECTION 2: Elevator Pitch -->
+## About Quyuan
 
-The project is named after [Qu Yuan (屈原)](https://en.wikipedia.org/wiki/Qu_Yuan), a Chinese poet and politician from the 4th century BC.
+Quyuan is a GeoJSON template engine with an integrated multimedia viewer.
+It processes GeoJSON features through Nunjucks templates to generate marker
+icons and popup HTML, and provides Web Components (`qy-swiper` /
+`qy-swiper-slide` / `qy-viewer`) for displaying images, panoramas, and videos
+inside popups.
+The project is named after
+[Qu Yuan (屈原)](https://en.wikipedia.org/wiki/Qu_Yuan), a Chinese poet and
+politician from the 4th century BC.
 
-## Purpose
+Quyuan is open-source under the MIT License.
 
-A template library that generates markers for GeoJSON and HTML to display in popups when clicked, based on attributes in the GeoJSON properties.
+<!-- SECTION 3: Language switch link -->
+**[Read this document in Japanese / 日本語で読む](README.ja.md)**
 
-It also provides a slider viewer for displaying multimedia content (images, panoramas, videos) within popups as a common use case.
+<!-- SECTION 4: Key Features -->
+## Key Features
 
-## Features
+- GeoJSON template engine using Nunjucks syntax (per-feature processing)
+- Multiple template keys (marker icons, popup HTML, etc.) with results stored in each feature
+- Web Components-based multimedia viewer (`qy-swiper` / `qy-swiper-slide` / `qy-viewer`)
+- Supported media: images, 360-degree panoramas, YouTube videos, MP4 videos, 3D models (MTL), Gaussian Splatting
+- Works with Leaflet, OpenLayers, and MapLibre GL (integration examples in `docs/api/`)
 
-### Template Engine Functionality
-- Template syntax using [Nunjucks](https://mozilla.github.io/nunjucks/)
-- Template processing for each GeoJSON feature with properties as root
-- Multiple template key definitions (marker icons, popup HTML, etc.)
-- Processing results stored in each feature's result object
+<!-- SECTION 5: Quick Start -->
+## Quick Start
 
-### Multimedia Viewer Functionality
-- Web Components-based viewer implementation
-- Thumbnail display with swiper and integration with various viewers
-- Supported formats:
-  - Images
-  - 360-degree panoramic images
-  - YouTube videos
-- Formats in development:
-  - Textured 3D polygon models
-  - 3D Gaussian Splatting
+<!-- release-pinned:start -->
+> **Current release: `1.0.0-rc1`** — a release candidate. This block is the only place in
+> this repository that carries a release version (ADR-0012); everything outside it is
+> written against the 1.0 release.
+> npm: [`@c4h/quyuan`](https://www.npmjs.com/package/@c4h/quyuan)
+> [![npm rc](https://img.shields.io/npm/v/@c4h/quyuan/rc)](https://www.npmjs.com/package/@c4h/quyuan)
 
-## Installation
+### Install
 
 ```bash
-npm install @c4h/quyuan
+# pnpm (recommended)
+pnpm add @c4h/quyuan@rc
+
+# npm
+npm install @c4h/quyuan@rc
 ```
 
-or
-
-```bash
-pnpm add @c4h/quyuan
-```
-
-## Usage
-
-### Demo
-
-- https://code4history.dev/Quyuan/
-
-### Basic Template Processing
+### Minimal usage
 
 ```javascript
 import { Quyuan } from '@c4h/quyuan';
@@ -66,24 +69,18 @@ const geojson = {
         { path: "pano1.jpg", type: "panorama", description: "360-degree image" }
       ]
     },
-    geometry: {
-      type: "Point",
-      coordinates: [139.7, 35.6]
-    }
+    geometry: { type: "Point", coordinates: [139.7, 35.6] }
   }]
 };
 
 const templates = {
-  // Template for icon selection
   icon: "{% if type == 'cultural' %}cultural.png{% else %}default.png{% endif %}",
-  
-  // Template for popup HTML generation
   html: `
     <div class="popup-content">
       <h3>{{ name }}</h3>
       <qy-swiper style="height:200px;">
         {% for image in images %}
-          <qy-swiper-slide 
+          <qy-swiper-slide
             image-url="{{ image.path }}"
             image-type="{{ image.type }}"
             caption="{{ image.description }}">
@@ -98,156 +95,123 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 // Processing results are stored in each feature's result object
 ```
 
-### Integration with Map Libraries
+### CDN (jsDelivr)
 
-#### Leaflet
-
-```javascript
-import L from 'leaflet';
-
-const map = L.map('map').setView([35.6, 139.7], 13);
-
-result.features.forEach(feature => {
-  if (feature.geometry) {
-    L.marker(feature.geometry.coordinates.slice().reverse(), {
-      icon: L.icon({
-        iconUrl: feature.result.icon,
-        iconSize: [32, 32],
-        iconAnchor: [16, 32],
-        popupAnchor: [0, -32]
-      })
-    })
-    .bindPopup(feature.result.html)
-    .addTo(map);
-  }
-});
+```html
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@1.0.0-rc1/dist/quyuan.umd.js"></script>
 ```
 
-#### OpenLayers
+### API reference
 
-```javascript
-import { Feature } from 'ol';
-import { Point } from 'ol/geom';
-import { Style, Icon } from 'ol/style';
-import { fromLonLat } from 'ol/proj';
-import Overlay from 'ol/Overlay';
+- **API signatures** (release-dependent): see [`docs/api/`](docs/api/)
 
-result.features.forEach(feature => {
-  if (feature.geometry) {
-    const point = new Feature({
-      geometry: new Point(fromLonLat(feature.geometry.coordinates))
-    });
+### Development
 
-    point.setStyle(new Style({
-      image: new Icon({
-        src: feature.result.icon,
-        scale: 0.5
-      })
-    }));
-
-    vectorSource.addFeature(point);
-
-    // Popup configuration
-    point.set('popupContent', feature.result.html);
-  }
-});
-```
-
-#### MapLibre GL
-
-```javascript
-import maplibregl from 'maplibre-gl';
-
-const map = new maplibregl.Map({
-  container: 'map',
-  style: 'https://tile.openstreetmap.jp/styles/osm-bright-ja/style.json',
-  center: [139.7, 35.6],
-  zoom: 13
-});
-
-result.features.forEach(feature => {
-  if (feature.geometry) {
-    const popup = new maplibregl.Popup()
-      .setHTML(feature.result.html);
-
-    const el = document.createElement('div');
-    el.style.backgroundImage = `url(${feature.result.icon})`;
-    el.style.width = '32px';
-    el.style.height = '32px';
-    el.style.backgroundSize = 'contain';
-    el.style.cursor = 'pointer';
-
-    new maplibregl.Marker(el)
-      .setLngLat(feature.geometry.coordinates)
-      .setPopup(popup)
-      .addTo(map);
-  }
-});
-```
-
-## Web Components
-
-Quyuan provides the following Web Components:
-
-### `<qy-swiper>`
-Component for displaying multimedia content in a slider
-
-Attributes:
-- `style`: CSS style (height specification recommended)
-
-### `<qy-swiper-slide>`
-Component defining each slide within the slider
-
-Attributes:
-- `image-url`: Image/video URL
-- `image-type`: Media type ("image", "panorama", "youtube")
-- `caption`: Caption string
-- `thumbnail-url`: Thumbnail image URL (uses image-url if omitted)
-
-### `<qy-viewer>`
-Fullscreen viewer component (automatically called from qy-swiper)
-
-## Browser Support
-
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-
-Works on modern browsers that support Web Components.
-
-## Development
+#### Setup
+Clone the repository and install dependencies.
 
 ```bash
-# Install dependencies
+git clone https://github.com/code4history/Quyuan.git
+cd Quyuan
 pnpm install
-
-# Start development server
-pnpm run dev
-
-# Build
-pnpm run build
-
-# Run tests
-pnpm test
-
-# Run E2E tests
-pnpm run test:e2e
 ```
 
+#### Development Server
+
+```bash
+pnpm run dev
+```
+
+Demo: <https://code4history.dev/Quyuan/>
+
+#### Build
+
+```bash
+pnpm run build
+```
+
+#### Test
+
+```bash
+pnpm test           # Run tests
+pnpm run test:e2e   # Run E2E tests
+```
+<!-- release-pinned:end -->
+
+<!-- SECTION 6: Prerequisites -->
+## Prerequisites
+
+> Runtime requirements (ADR-0012: release-dependent).
+
+- Node.js and pnpm (for development)
+- Browser: Chrome / Edge / Firefox / Safari (latest) — requires Web Components support
+
+<!-- SECTION 7: Peer Dependencies -->
+<!-- Quyuan has no peer dependencies. This section is omitted. -->
+
+<!-- SECTION 8: Ecosystem / Related Repositories -->
+## Ecosystem
+
+Quyuan is part of the Maplat ecosystem by [Code for History](https://github.com/code4history).
+See the full ecosystem map (8 repositories + product/corporate sites):
+
+📖 **Ecosystem Map** — *(the diagram is currently kept in a private planning
+repository; the Sister repositories table below is the public substitute)*
+
+### Sister repositories
+
+| Repository | License | npm | Role |
+|---|---|---|---|
+| [Maplat](https://github.com/code4history/Maplat) | Apache 2.0 | `@maplat/ui` | Main viewer |
+| [MaplatCore](https://github.com/code4history/MaplatCore) | Apache 2.0 | `@maplat/core` | Core library |
+| [MaplatTin](https://github.com/code4history/MaplatTin) | Apache 2.0 | `@maplat/tin` | TIN conversion |
+| [MaplatTransform](https://github.com/code4history/MaplatTransform) | Apache 2.0 | `@maplat/transform` | Coordinate transform |
+| [MaplatEditor](https://github.com/code4history/MaplatEditor) | Apache 2.0 | — | Data authoring tool (desktop) |
+| [Chuci](https://github.com/code4history/Chuci) | MIT | `@c4h/chuci` | Multimedia swiper & viewer Web Components |
+| [Quyuan](https://github.com/code4history/Quyuan) | MIT | `@c4h/quyuan` | GeoJSON template engine + multimedia viewer Web Components |
+| [Weiwudi](https://github.com/code4history/Weiwudi) | MIT | `@c4h/weiwudi` | Service Worker for tile cache |
+
+> MaplatEditor is the data authoring tool used to create the maps and POIs
+> that the viewers above render. The Maplat ecosystem is end-to-end:
+> author with MaplatEditor, serve with any of the viewer libraries.
+
+<!-- SECTION 9: Nayuta links -->
+<!-- MIT-licensed repositories (Weiwudi / Quyuan / Chuci) carry no Nayuta link (ADR-0012). -->
+
+<!-- SECTION 10: License -->
 ## License
 
-MIT License
+MIT License — see [LICENSE](LICENSE).
 
-Copyright (c) 2024 Code for History
+```
+Copyright (c) 2021-2026 Code for History
 
-## Developers
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+```
+
+<!-- SECTION 11: Contributors / Sponsors (optional) -->
+## Contributors
 
 - Kohei Otsuka ([@kochizufan](https://github.com/kochizufan))
 - Code for History
 
 ## Contributing
-
-We welcome your contributions!
 
 - Report bugs or request features in [Issues](https://github.com/code4history/Quyuan/issues)
 - Pull requests are welcome
@@ -260,8 +224,3 @@ We welcome your contributions!
 3. Commit your changes (`git commit -m 'Add some amazing feature'`)
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Create a Pull Request
-
-## Related Projects
-
-- [Chuci (楚辞)](https://github.com/code4history/Chuci) - Multimedia viewer components separated from Quyuan
-- [Maplat](https://github.com/code4history/Maplat) - Historical map platform
