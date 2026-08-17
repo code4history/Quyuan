@@ -1,5 +1,4 @@
 import { Feature, FeatureCollection, Geometry, GeoJsonProperties } from 'geojson';
-
 export interface TemplateExtractorOptions {
     geojson: FeatureCollection | Feature;
     templates: TemplateType;

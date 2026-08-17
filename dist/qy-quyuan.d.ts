@@ -1,5 +1,4 @@
 import { QyElement } from './base/qy-element.js';
-
 export declare class QyQuyuan extends QyElement {
     private _hasThumb;
     private _autoplay;

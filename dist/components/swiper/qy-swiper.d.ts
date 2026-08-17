@@ -1,5 +1,4 @@
 import { CcSwiper, CcSwiperSlide } from '@c4h/chuci';
-
 declare class QySwiper extends CcSwiper {
     private observer?;
     get slides(): QySwiperSlide[];

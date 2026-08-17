@@ -1,6 +1,5 @@
 import { QyElement } from '../../base/qy-element.js';
 import { QySwiper } from '../swiper/qy-swiper';
-
 /**
  * Wrapper component that delegates to Chuci's cc-viewer
  * while maintaining the qy-viewer interface
