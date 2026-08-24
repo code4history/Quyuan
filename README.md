@@ -36,20 +36,20 @@ Quyuan is open-source under the MIT License.
 ## Quick Start
 
 <!-- release-pinned:start -->
-> **Current release: `1.0.0-rc1`** — a release candidate. This block is the only place in
+> **Current release: `1.0.0`**. This block is the only place in
 > this repository that carries a release version (ADR-0012); everything outside it is
 > written against the 1.0 release.
 > npm: [`@c4h/quyuan`](https://www.npmjs.com/package/@c4h/quyuan)
-> [![npm rc](https://img.shields.io/npm/v/@c4h/quyuan/rc)](https://www.npmjs.com/package/@c4h/quyuan)
+> [![npm](https://img.shields.io/npm/v/@c4h/quyuan)](https://www.npmjs.com/package/@c4h/quyuan)
 
 ### Install
 
 ```bash
 # pnpm (recommended)
-pnpm add @c4h/quyuan@rc
+pnpm add @c4h/quyuan
 
 # npm
-npm install @c4h/quyuan@rc
+npm install @c4h/quyuan
 ```
 
 ### Minimal usage
@@ -98,7 +98,7 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 ### CDN (jsDelivr)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@1.0.0-rc1/dist/quyuan.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@1.0.0/dist/quyuan.umd.js"></script>
 ```
 
 ### API reference
