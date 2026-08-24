@@ -15,8 +15,8 @@ importers:
   .:
     dependencies:
       '@c4h/chuci':
-        specifier: ^1.0.0-rc1
-        version: 1.0.0-rc1
+        specifier: ^1.0.0
+        version: 1.0.0
       nunjucks:
         specifier: ^3.2.4
         version: 3.2.4
@@ -144,8 +144,8 @@ packages:
     resolution: {integrity: sha512-ctxtJ/eA+t+6q2++vj5j7FYX3nRu311q1wfYH3xjlLOsczhlhxAg2FWNUXhpGvAw3BWo1xBcvOV6/YLc2r5FJw==}
     hasBin: true
 
-  '@c4h/chuci@1.0.0-rc1':
-    resolution: {integrity: sha512-KECN3hso2LclErGMK5Jc42Px+WSKVfPuzSJc8ihDxyNC0w2RmhmFk7/ijJCW5/BapKE4snZGcAHycLPqjp5WKg==}
+  '@c4h/chuci@1.0.0':
+    resolution: {integrity: sha512-UC6+j/J202NHxDuaL3mlU6DkVWo2jDjQG+DT+A0U6virca3PWZbnXssEQo+qGzrcal2vlPawRLaHIi0DRhonYQ==}
     engines: {pnpm: '>=9.0.0'}
 
   '@csstools/color-helpers@6.1.1':
@@ -1123,6 +1123,7 @@ packages:
   eslint@9.39.5:
     resolution: {integrity: sha512-DgZS62aPLXKlnxILS/AYCoRvHaZeXceIzlXPkkGGzJWSow1aEk0lbTlxUSlyjC8jcaKxAdOnTDz+o1JFSBsyjw==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -2047,7 +2048,7 @@ snapshots:
     dependencies:
       css-tree: 3.2.1
 
-  '@c4h/chuci@1.0.0-rc1':
+  '@c4h/chuci@1.0.0':
     dependencies:
       gsplat: 1.2.9
       swiper: 12.2.0
