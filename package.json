@@ -59,7 +59,7 @@
     "eslint-config-prettier": "^10.1.8",
     "jsdom": "^30.0.1",
     "leaflet": "^1.9.4",
-    "maplibre-gl": "^5.15.0",
+    "maplibre-gl": "^6.4.1",
     "ol": "^10.10.0",
     "prettier": "^3.9.6",
     "typescript": "^5.9.3",
