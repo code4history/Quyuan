@@ -95,6 +95,31 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 // Processing results are stored in each feature's result object
 ```
 
+### Template-only usage (no UI components)
+
+If you only need the GeoJSON template engine and do not use the Web Components
+(`qy-swiper` / `qy-viewer`), import the template-only entry point:
+
+```javascript
+import { Quyuan } from '@c4h/quyuan/template';
+
+// No UI components are registered; @c4h/chuci is not required.
+const result = Quyuan.templateExtractor({ geojson, templates });
+```
+
+The template entry does not import `@c4h/chuci`. Use it when you want to avoid
+pulling in the multimedia viewer dependencies.
+
+> **UI usage (root import) and the optional peer dependency**: the root entry
+> (`@c4h/quyuan`) registers the Web Components and bundles `@c4h/chuci`.
+> `@c4h/chuci` is declared as an optional peer dependency. pnpm installs optional
+> peers automatically, but npm does not — if you use the UI components with npm,
+> add `@c4h/chuci` explicitly:
+>
+> ```bash
+> npm install @c4h/chuci
+> ```
+
 ### CDN (jsDelivr)
 
 ```html

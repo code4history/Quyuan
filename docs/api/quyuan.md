@@ -2,6 +2,19 @@
 
 Web Components provided by `@c4h/quyuan` and integration examples with map libraries.
 
+## Entry points
+
+`@c4h/quyuan` exposes two entry points:
+
+| Entry point | Import | Notes |
+|---|---|---|
+| `@c4h/quyuan` | `import { Quyuan } from '@c4h/quyuan'` | Registers the Web Components and bundles `@c4h/chuci`. |
+| `@c4h/quyuan/template` | `import { Quyuan } from '@c4h/quyuan/template'` | Template engine only. Does not import `@c4h/chuci` and does not register UI components. |
+
+`@c4h/chuci` is an optional peer dependency of `@c4h/quyuan`. pnpm installs optional
+peers automatically, but npm does not — add `@c4h/chuci` explicitly when using the
+UI components with npm.
+
 ## Web Components
 
 Quyuan provides the following Web Components:

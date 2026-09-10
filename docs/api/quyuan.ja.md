@@ -2,6 +2,19 @@
 
 `@c4h/quyuan` が提供する Web Components と、マップライブラリとの統合例。
 
+## エントリポイント
+
+`@c4h/quyuan` は2つのエントリポイントを公開しています。
+
+| エントリポイント | import | 備考 |
+|---|---|---|
+| `@c4h/quyuan` | `import { Quyuan } from '@c4h/quyuan'` | Web Components を登録し、`@c4h/chuci` を同梱します。 |
+| `@c4h/quyuan/template` | `import { Quyuan } from '@c4h/quyuan/template'` | テンプレートエンジンのみ。`@c4h/chuci` を import せず、UI コンポーネントも登録しません。 |
+
+`@c4h/chuci` は `@c4h/quyuan` の optional peer dependency です。pnpm は optional peer を
+自動インストールしますが、npm は自動インストールしません。npm で UI コンポーネントを
+使う場合は `@c4h/chuci` を明示的に追加してください。
+
 ## Web Components
 
 Quyuan は以下の Web Components を提供しています:

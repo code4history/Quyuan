@@ -91,6 +91,31 @@ const result = Quyuan.templateExtractor({ geojson, templates });
 // 各 feature の result オブジェクトに処理結果が格納されます
 ```
 
+### テンプレートのみの利用（UI コンポーネントなし）
+
+GeoJSON テンプレートエンジンだけを使い、Web Components（`qy-swiper` / `qy-viewer`）を
+使わない場合は、テンプレート専用の入口を import してください。
+
+```javascript
+import { Quyuan } from '@c4h/quyuan/template';
+
+// UI コンポーネントは登録されません。@c4h/chuci は不要です。
+const result = Quyuan.templateExtractor({ geojson, templates });
+```
+
+テンプレート入口は `@c4h/chuci` を import しません。マルチメディアビューアの依存を
+取り込みたくない場合に使用します。
+
+> **UI を使う場合（root import）と optional peer dependency**: root 入口
+> （`@c4h/quyuan`）は Web Components を登録し、`@c4h/chuci` を同梱します。
+> `@c4h/chuci` は optional peer dependency として宣言されています。pnpm は
+> optional peer を自動インストールしますが、npm は自動インストールしません。
+> npm で UI コンポーネントを使う場合は `@c4h/chuci` を明示的に追加してください。
+>
+> ```bash
+> npm install @c4h/chuci
+> ```
+
 ### CDN（jsDelivr）
 
 ```html

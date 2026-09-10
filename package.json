@@ -12,6 +12,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/quyuan.js"
+    },
+    "./template": {
+      "types": "./dist/template.d.ts",
+      "import": "./dist/template.js"
     }
   },
   "files": [
@@ -25,7 +29,7 @@
   },
   "scripts": {
     "dev": "vite --host",
-    "build": "pnpm run typecheck && cross-env BUILD_MODE=package vite build",
+    "build": "pnpm run typecheck && cross-env BUILD_MODE=package vite build && vite build -c vite.config.template.ts",
     "build:demo": "vite build",
     "deploy": "pnpm run typecheck && vite build",
     "typecheck": "tsc --noEmit --allowImportingTsExtensions",
@@ -39,8 +43,15 @@
     "prepublishOnly": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build"
   },
   "dependencies": {
-    "@c4h/chuci": "^1.0.0",
     "nunjucks": "^3.2.4"
+  },
+  "peerDependencies": {
+    "@c4h/chuci": "^1.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@c4h/chuci": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",
