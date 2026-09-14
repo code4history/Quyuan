@@ -30,7 +30,6 @@ export default defineConfig({
       skipDiagnostics: true,
       tsconfigPath: './tsconfig.json',
       logLevel: 'silent',
-      insertTypesEntry: true,
       staticImport: true,
       beforeWriteFile: (filePath, content) => {
         // Remove .ts extensions from imports in d.ts files（root config と同一）
