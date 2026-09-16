@@ -10,7 +10,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      id-token: write
     
     steps:
     - uses: actions/checkout@v4
@@ -40,10 +39,6 @@ jobs:
     - name: Run prepublishOnly script
       run: pnpm run prepublishOnly
     
-    - name: Publish to npm
-      run: pnpm publish --access public --no-git-checks
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
