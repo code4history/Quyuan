@@ -2,6 +2,12 @@
 
 このプロジェクトの主な変更を記録します。版数は [Semantic Versioning](https://semver.org/) に従います。
 
+## [1.1.0-rc.2] - 2026-10-01
+
+### Fixed
+- `qy-swiper` のサムネイル付き表示で、サムネイルをクリックするたびに `TypeError: Cannot read properties of undefined (reading 'swiper')` が出る不具合を修正（継承元の `@c4h/chuci` 1.0.1-rc.2 へ追随。code4history/Chuci#5）
+- デモ `test-media.html` で `qy-swiper` のサムネイルが有効になっていなかった（属性名を `hasThumb` と書いていた。正しくは `has-thumb`）不具合を修正
+
 ## [1.1.0-rc.1] - 2026-09-28
 
 ### Added
