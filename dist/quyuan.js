@@ -3239,6 +3239,7 @@ function Gd(r) {
 }
 class gh extends On {
   slider;
+  thumbsSlider;
   divContainer;
   divSlides;
   divGallery;
@@ -3411,6 +3412,12 @@ class gh extends On {
       }
 
       /* Navigation button styles with SVG icons */
+      /* swiper 12 の Navigation が挿入する SVG アイコンを隠し、下の ::after の chevron だけを描く（二重矢印の解消） */
+      .swiper-button-prev .swiper-navigation-icon,
+      .swiper-button-next .swiper-navigation-icon {
+        display: none;
+      }
+
       .swiper-button-prev,
       .swiper-button-next {
         color: var(--swiper-navigation-color);
@@ -3473,7 +3480,11 @@ class gh extends On {
   initializeSwiper() {
     this.divContainer = this.query("#divContainer") ?? void 0, this.divSlides = this.query("#divSlides") ?? void 0, this.divGallery = this.query("#divGallery") ?? void 0, this.divPagination = this.query("#divPagination") ?? void 0, this.divPrevious = this.query("#divPrevious") ?? void 0, this.divNext = this.query("#divNext") ?? void 0, this.slides.some((t) => t.getAttribute("caption")) && this.divContainer && this.divContainer.classList.add("has-captions");
     const e = this.slides.length >= 2;
-    this.divContainer && (this.slider && this.slider.destroy(), this.slider = new Kt(this.divContainer, {
+    this.divContainer && (this.slider && this.slider.destroy(), this.thumbsSlider && (this.thumbsSlider.destroy(!0, !1), this.thumbsSlider = void 0), this.hasThumb && this.divGallery && (this.thumbsSlider = new Kt(this.divGallery, {
+      spaceBetween: 10,
+      slidesPerView: Math.min(Math.max(4, this.slides.length), 8),
+      watchSlidesProgress: !0
+    })), this.slider = new Kt(this.divContainer, {
       modules: [kd, Pd, Vd, Od, zd, Nd],
       navigation: {
         prevEl: this.divPrevious,
@@ -3489,12 +3500,8 @@ class gh extends On {
         stopOnLastSlide: !1,
         waitForTransition: !0
       } : !1,
-      thumbs: this.hasThumb && this.divGallery ? {
-        swiper: new Kt(this.divGallery, {
-          spaceBetween: 10,
-          slidesPerView: Math.min(Math.max(4, this.slides.length), 8),
-          watchSlidesProgress: !0
-        })
+      thumbs: this.thumbsSlider ? {
+        swiper: this.thumbsSlider
       } : {},
       preventClicks: !1,
       preventClicksPropagation: !1,
