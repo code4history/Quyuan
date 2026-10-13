@@ -104,7 +104,8 @@ const main = async () => {
   map.on('pointermove', (evt) => {
     const pixel = map.getEventPixel(evt.originalEvent);
     const hit = map.hasFeatureAtPixel(pixel);
-    map.getViewport().style.cursor = hit ? 'pointer' : '';
+    // getViewport() が undefined を返すのは OffscreenCanvas の Worker 内で Map を作った場合だけ。本デモはメインスレッドで作るので必ずある
+    map.getViewport()!.style.cursor = hit ? 'pointer' : '';
   });
 
   // クリックイベントの処理
