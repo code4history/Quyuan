@@ -6,6 +6,14 @@ import { readFileSync } from 'fs';
 const packageJson = JSON.parse(readFileSync('./package.json', 'utf-8'));
 const isPackageBuild = process.env.BUILD_MODE === 'package';
 
+// nov26-m9-t6 §3.3（試行・merge しない）: vite 8 で既定が変わった build.target・cssTarget・minify を、
+// base（vite 7.3 の解決値。collect vite-config の出力）のまま明示して保つ。cssMinify は両側とも true で同じ。
+const M9_T6_BASE_BUILD = {
+  target: ['chrome107', 'edge107', 'firefox104', 'safari16'],
+  cssTarget: ['chrome107', 'edge107', 'firefox104', 'safari16'],
+  minify: 'esbuild'
+};
+
 // Plugin to remove .ts extensions from imports
 const removeTsExtensions = () => {
   return {
@@ -26,6 +34,7 @@ const removeTsExtensions = () => {
 export default defineConfig({
   base: './',
   build: isPackageBuild ? {
+    ...M9_T6_BASE_BUILD,
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       formats: ['es', 'umd'],
@@ -54,6 +63,7 @@ export default defineConfig({
     copyPublicDir: false  // Prevent public assets from contaminating dist
   } : {
     outDir: 'dist-demo',
+    ...M9_T6_BASE_BUILD,
     emptyOutDir: true,
     rollupOptions: {
       input: {
