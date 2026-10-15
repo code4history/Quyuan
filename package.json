@@ -59,7 +59,7 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@types/geojson": "^7946.0.16",
-    "@types/jsdom": "^21.1.7",
+    "@types/jsdom": "^30.0.0",
     "@types/leaflet": "^1.9.21",
     "@types/nunjucks": "^3.2.6",
     "@typescript-eslint/eslint-plugin": "^8.66.0",
