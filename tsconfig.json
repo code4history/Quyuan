@@ -21,8 +21,8 @@
     "declaration": true,
     "sourceMap": true,
     "experimentalDecorators": true,
+    "noUncheckedSideEffectImports": false,
     "outDir": "./dist",
-    "baseUrl": ".",
     "paths": {
       "@/*": [
         "./src/*"
