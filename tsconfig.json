@@ -21,6 +21,7 @@
     "declaration": true,
     "sourceMap": true,
     "experimentalDecorators": true,
+    "noUncheckedSideEffectImports": false,
     "outDir": "./dist",
     "paths": {
       "@/*": [
