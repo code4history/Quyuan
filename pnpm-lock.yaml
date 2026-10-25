@@ -15,8 +15,8 @@ importers:
   .:
     dependencies:
       '@c4h/chuci':
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.0.2-rc.1
+        version: 1.0.2-rc.1
       nunjucks:
         specifier: ^3.2.4
         version: 3.2.4
@@ -140,8 +140,8 @@ packages:
     resolution: {integrity: sha512-0GEz8qJWokkUVYQYRukmkSHIFNoBH8QTreeHrAFbvz1XFYc3Y+puhMs8PQ5x8GNugiC2l5jvDBXKLbBIByeSBw==}
     hasBin: true
 
-  '@c4h/chuci@1.0.1':
-    resolution: {integrity: sha512-+1AQLS8dH17l6N/KgUH7PZOEjZ2BDM6JmfWJcum/IF3Ki5pfsDuDdLrMB3uNmPm1XD0dGFc2IvaToAMBkDdoWQ==}
+  '@c4h/chuci@1.0.2-rc.1':
+    resolution: {integrity: sha512-rSg2iqDi+HnoiOjjwL5voeKBW92Ato/rDC4zZ4qA21cHxs7Y8ublpxQkb+cb0eG3q1DHkV00P7dFSSTWt21XJg==}
     engines: {pnpm: '>=9.0.0'}
 
   '@cacheable/memory@2.2.0':
@@ -1372,8 +1372,8 @@ packages:
     resolution: {integrity: sha512-K8uXsBZU6ME97Ia3xbBge8IRCnR1lOmIILzvY/jGVic7dSTQ530s3uO8RvXbPUtkkXLWIwmZLRPbtDxRWVAFdg==}
     engines: {node: '>= 4.7.0'}
 
-  three@0.171.0:
-    resolution: {integrity: sha512-Y/lAXPaKZPcEdkKjh0JOAHVv8OOnv/NDJqm0wjfCzyQmfKxV7zvkwsnBgPBKTzJHToSOhRGQAGbPJObT59B/PQ==}
+  three@0.186.1:
+    resolution: {integrity: sha512-blFeqb49wRCSGUGj7gtpfnSGHy2lwDk94RhUmS1c/hTby70kvChbWpkJ4Pm1390LqzzvTmzgXKHPEafJwCb8jA==}
 
   tinybench@6.2.2:
     resolution: {integrity: sha512-nIZ2N2dFpjBsg2hgitKu7mA+FvsIJuGJOwysRngmVRRmWgR/UyPjwJj8c/fT/dhm8EkHnF5EOogRf+0Z2qrimA==}
@@ -1685,11 +1685,11 @@ snapshots:
     dependencies:
       css-tree: 3.2.1
 
-  '@c4h/chuci@1.0.1':
+  '@c4h/chuci@1.0.2-rc.1':
     dependencies:
       gsplat: 1.2.9
       swiper: 12.2.0
-      three: 0.171.0
+      three: 0.186.1
       viewerjs: 1.15.2
 
   '@cacheable/memory@2.2.0':
@@ -2837,7 +2837,7 @@ snapshots:
 
   swiper@12.2.0: {}
 
-  three@0.171.0: {}
+  three@0.186.1: {}
 
   tinybench@6.2.2: {}
 

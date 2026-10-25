@@ -2,7 +2,7 @@
 
 このプロジェクトの主な変更を記録します。版数は [Semantic Versioning](https://semver.org/) に従います。
 
-## [Unreleased]
+## [1.1.1-rc.1] - 2026-10-26
 
 ### Changed
 - 同梱する `@c4h/chuci` を Chuci の RC へ追随（Chuci の是正が Quyuan の利用者に届く）。コードは変えません。
