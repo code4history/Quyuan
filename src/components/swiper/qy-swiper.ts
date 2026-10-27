@@ -46,7 +46,6 @@ class QySwiper extends CcSwiper {
       });
 
       if (hasSlideChanges) {
-        console.log('[qy-swiper] Slides changed, re-rendering...');
         this.render();
       }
     });
@@ -58,9 +57,7 @@ class QySwiper extends CcSwiper {
 
     // Ensure slides are rendered after they're defined
     customElements.whenDefined('qy-swiper-slide').then(() => {
-      console.log('[qy-swiper] qy-swiper-slide defined, checking if re-render needed');
       if (this.slides.length > 0) {
-        console.log('[qy-swiper] Re-rendering with slides');
         this.render();
       }
     });
@@ -77,32 +74,20 @@ class QySwiper extends CcSwiper {
 
   // Override render to ensure we're processing qy-swiper-slide elements
   protected render() {
-    // Debug: Check if we have slides before rendering
-    const slideCount = this.slides.length;
-    console.log(`[qy-swiper] Rendering with ${slideCount} slides`);
-
-    if (slideCount === 0) {
-      console.warn('[qy-swiper] No slides found during render. Slides might not be initialized yet.');
-    }
-
     // Call parent render which will use our overridden slides getter
     super.render();
   }
 
   // Override firstUpdated to ensure slides are processed
   protected firstUpdated() {
-    console.log('[qy-swiper] firstUpdated called');
     super.firstUpdated();
   }
 
 
   async openViewer(imageUrl: string, imageType: string, slideIndex?: number) {
-    console.log('[qy-swiper] openViewer called with:', { imageUrl, imageType, slideIndex });
-
     // Look for qy-viewer instead of cc-viewer
     let qyView = document.querySelector("qy-viewer");
     if (!qyView) {
-      console.log('[qy-swiper] Creating qy-viewer element');
       const viewerElement = document.createElement("qy-viewer");
       document.body.appendChild(viewerElement);
 
@@ -116,8 +101,6 @@ class QySwiper extends CcSwiper {
         }, 100);
       });
     }
-
-    console.log('[qy-swiper] qy-viewer element found:', !!qyView);
 
     if (qyView) {
       // Set the swiper reference
@@ -139,7 +122,6 @@ class QySwiper extends CcSwiper {
       }
 
       // Open the viewer
-      console.log('[qy-swiper] Calling qy-viewer.open');
       (qyView as unknown as QyViewer).open(imageUrl, imageType, attributes);
     }
   }

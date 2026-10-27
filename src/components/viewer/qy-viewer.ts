@@ -72,12 +72,10 @@ export class QyViewer extends QyElement {
   }
 
   async open(imgUrl: string, type: string, attributes?: Record<string, unknown>) {
-    console.log('[qy-viewer] open called with:', { imgUrl, type, attributes });
     this.currentType = type;
 
     // If cc-viewer not ready yet, wait for it
     if (!this.ccViewer) {
-      console.log('[qy-viewer] cc-viewer not ready, waiting...');
       if (!this.ccViewer) {
         await new Promise(resolve => requestAnimationFrame(resolve));
         this.ccViewer = (this.shadowRoot!.querySelector('cc-viewer') as unknown as CcViewer) || undefined;
@@ -85,7 +83,6 @@ export class QyViewer extends QyElement {
     }
 
     if (this.ccViewer) {
-      console.log('[qy-viewer] Calling cc-viewer.open');
       this.ccViewer.style.display = 'block'; // Ensure visible
       this.ccViewer.open(imgUrl, type, attributes);
     } else {
@@ -94,7 +91,6 @@ export class QyViewer extends QyElement {
   }
 
   close() {
-    console.log('[qy-viewer] close called');
     this.currentType = '';
     if (this.ccViewer) {
       this.ccViewer.style.display = 'none';
@@ -105,59 +101,41 @@ export class QyViewer extends QyElement {
   }
 
   setSwiper(swiper: QySwiper) {
-    console.log('[qy-viewer] setSwiper called');
     this.swiper = swiper;
     if (this.ccViewer && this.ccViewer.setSwiper) {
-      console.log('[qy-viewer] Calling cc-viewer.setSwiper');
       this.ccViewer.setSwiper(swiper);
     }
   }
 
   setCurrentSlideIndex(index: number) {
-    console.log('[qy-viewer] setCurrentSlideIndex called with:', index);
     this.currentSlideIndex = index;
     if (this.ccViewer && this.ccViewer.setCurrentSlideIndex) {
-      console.log('[qy-viewer] Calling cc-viewer.setCurrentSlideIndex');
       this.ccViewer.setCurrentSlideIndex(index);
     }
   }
 
   protected async firstUpdated() {
-    console.log('[qy-viewer] firstUpdated called');
-    console.log('[qy-viewer] Initial Shadow DOM content:', this.shadowRoot?.innerHTML);
-
     // Force render to ensure shadow DOM is populated
     // this.requestUpdate(); // Lit specific
     // await this.updateComplete; // Lit specific
     this.render();
 
-    console.log('[qy-viewer] Shadow DOM after render:', this.shadowRoot?.innerHTML);
-
     const event = new CustomEvent('load');
     this.dispatchEvent(event);
 
     // Wait for cc-viewer to be defined
-    console.log('[qy-viewer] Waiting for cc-viewer to be defined...');
-    console.log('[qy-viewer] cc-viewer already defined?', !!customElements.get('cc-viewer'));
-
     await customElements.whenDefined('cc-viewer');
-    console.log('[qy-viewer] cc-viewer is defined');
 
     // Get reference to cc-viewer with a small delay to ensure it's fully initialized
     await new Promise(resolve => setTimeout(resolve, 100));
 
     this.ccViewer = (this.shadowRoot!.querySelector('cc-viewer') as unknown as CcViewer) || undefined;
 
-    console.log('[qy-viewer] cc-viewer element found:', !!this.ccViewer);
-    console.log('[qy-viewer] Final Shadow DOM:', this.shadowRoot?.innerHTML);
-
     if (this.ccViewer) {
       if (this.swiper && this.ccViewer.setSwiper) {
-        console.log('[qy-viewer] Setting swiper on cc-viewer');
         this.ccViewer.setSwiper(this.swiper);
       }
       if (this.currentSlideIndex !== undefined && this.ccViewer.setCurrentSlideIndex) {
-        console.log('[qy-viewer] Setting currentSlideIndex on cc-viewer:', this.currentSlideIndex);
         this.ccViewer.setCurrentSlideIndex(this.currentSlideIndex);
       }
     }
