@@ -46,23 +46,148 @@ interface NunjucksContext {
 }
 
 interface NunjucksNode {
+  typename: string
   value?: unknown
+  key?: NunjucksNode
   name?: NunjucksNode
   target?: NunjucksNode
   targets?: NunjucksNode[]
+  right?: NunjucksNode
+  val?: NunjucksNode
+  args?: { children: NunjucksNode[] }
   names?: { children: NunjucksNode[] }
-  findAll: (type: unknown) => NunjucksNode[]
+  children?: NunjucksNode[]
 }
 
 interface NunjucksParserApi {
   parser: { parse: (src: string) => NunjucksNode }
-  nodes: Record<'Set' | 'Macro' | 'Import' | 'FromImport' | 'Pair', unknown>
 }
 
-// Top-level `{% set %}`, `{% macro %}` and `{% import %}` write into the render
-// context, which is a plain object: `{% set __proto__ = [] %}` would replace
-// its prototype. Refuse such templates before they render.
-const assertNoBlockedAssignment = (templateRaw: string): void => {
+// The Nunjucks compiler writes names into the JavaScript it generates without
+// escaping them, so a name must not be able to end the string it lands in.
+// Attribute names come from the data and are often not ASCII, so this keeps
+// everything a name can hold today that has no meaning in JavaScript: ASCII
+// letters, digits, `_` and `$`, plus non-ASCII letters, marks, numbers,
+// punctuation and symbols (`名称`, `緯度・経度`, `面積（㎡）`). It leaves out the
+// other ASCII characters, separators, and control and format characters.
+const SAFE_NAME = /^(?:[\w$]|[^\p{ASCII}\p{C}\p{Z}])+$/u
+
+// The string key of a called member is only escaped for quotes, in the name the
+// compiler keeps for its error message.
+const UNSAFE_CALLEE_KEY = /[\\\r\n\u2028\u2029]/
+
+const refuseName = (name: unknown): never => {
+  throw new Error('The name ' + JSON.stringify(name) + ' is not allowed in templates')
+}
+
+const assertSafeName = (name: unknown): void => {
+  if (!SAFE_NAME.test(String(name))) refuseName(name)
+}
+
+const assertSafeCallee = (node: NunjucksNode | undefined): void => {
+  if (node?.typename === 'FunCall') {
+    assertSafeCallee(node.name)
+  } else if (node?.typename === 'LookupVal') {
+    assertSafeCallee(node.target)
+    assertSafeCallee(node.val)
+  } else if (
+    node?.typename === 'Literal' &&
+    typeof node.value === 'string' &&
+    UNSAFE_CALLEE_KEY.test(node.value)
+  ) {
+    refuseName(node.value)
+  }
+}
+
+// The nodes that a template assigns to the render context.
+const assignedNodes = (node: NunjucksNode): (NunjucksNode | undefined)[] => {
+  switch (node.typename) {
+    case 'Set':
+      return node.targets ?? []
+    case 'Macro':
+    case 'Caller':
+      return [node.name]
+    case 'Import':
+      return [node.target]
+    case 'FromImport':
+      // `{% from "x" import a as b %}` is a Pair whose value is the alias.
+      return (node.names?.children ?? []).map((child) =>
+        child.typename === 'Pair' ? (child.value as NunjucksNode | undefined) : child
+      )
+    default:
+      return []
+  }
+}
+
+// The other nodes the compiler reads as a name, whatever the parser accepted.
+const otherNameNodes = (node: NunjucksNode): (NunjucksNode | undefined)[] => {
+  switch (node.typename) {
+    case 'For':
+    case 'AsyncEach':
+    case 'AsyncAll':
+      return node.name?.typename === 'Array' ? (node.name.children ?? []) : []
+    case 'Macro':
+    case 'Caller': {
+      // A trailing dict is read as the keyword arguments of the macro.
+      const last = node.args?.children[node.args.children.length - 1]
+      return last?.typename === 'Dict' || last?.typename === 'KeywordArgs'
+        ? (last.children ?? []).map((pair) => pair.key)
+        : []
+    }
+    case 'FromImport':
+      return (node.names?.children ?? []).flatMap((child) =>
+        child.typename === 'Pair' ? [child.key] : []
+      )
+    default:
+      return []
+  }
+}
+
+const assertPlainName = (node: NunjucksNode | undefined): void => {
+  if (node?.typename !== 'Symbol') {
+    throw new Error('Only plain names can be assigned in templates')
+  }
+}
+
+const assertSafeNode = (node: NunjucksNode): void => {
+  if (node.typename === 'Symbol') {
+    assertSafeName(node.value)
+  } else if (node.typename === 'Is') {
+    // A test can be named by a string, as in `x is "string"`, or be called.
+    const test = node.right?.name ?? node.right
+    if (test?.value !== undefined) assertSafeName(test.value)
+  } else if (node.typename === 'FunCall') {
+    assertSafeCallee(node.name)
+  }
+  // Top-level `{% set %}`, `{% macro %}` and `{% import %}` write into the render
+  // context, which is a plain object: `{% set __proto__ = [] %}` would replace
+  // its prototype.
+  for (const assigned of assignedNodes(node)) {
+    assertPlainName(assigned)
+    if (BLOCKED_NAMES.has(String(assigned?.value))) {
+      throw new Error('Assigning to `' + String(assigned?.value) + '` is not allowed in templates')
+    }
+  }
+  otherNameNodes(node).forEach(assertPlainName)
+}
+
+const isNode = (value: unknown): value is NunjucksNode =>
+  typeof value === 'object' && value !== null && 'typename' in value
+
+// Visits every node. `findAll` only follows a node's declared fields, which
+// leave out the body of a `{% set %}` block.
+const walkNodes = (value: unknown, visit: (node: NunjucksNode) => void): void => {
+  if (Array.isArray(value)) {
+    value.forEach((item) => walkNodes(item, visit))
+  } else if (isNode(value)) {
+    visit(value)
+    Object.values(value).forEach((item) => walkNodes(item, visit))
+  }
+}
+
+// Refuses a template before it compiles if it holds a name that would break out
+// of the generated code or an assignment that would reach the context prototype.
+const assertSafeTemplate = (templateRaw: string): void => {
   const api = nunjucks as unknown as NunjucksParserApi
   let root: NunjucksNode
   try {
@@ -71,27 +196,7 @@ const assertNoBlockedAssignment = (templateRaw: string): void => {
     // Syntax errors are reported by Nunjucks itself when the template renders.
     return
   }
-  const names: unknown[] = []
-  for (const node of root.findAll(api.nodes.Set)) {
-    for (const target of node.targets ?? []) names.push(target.value)
-  }
-  for (const node of root.findAll(api.nodes.Macro)) names.push(node.name?.value)
-  for (const node of root.findAll(api.nodes.Import)) names.push(node.target?.value)
-  for (const node of root.findAll(api.nodes.FromImport)) {
-    for (const child of node.names?.children ?? []) {
-      // `{% from "x" import a as b %}` is a Pair whose value is the alias.
-      names.push(
-        child instanceof (api.nodes.Pair as new () => unknown)
-          ? (child.value as NunjucksNode | undefined)?.value
-          : child.value
-      )
-    }
-  }
-  for (const name of names) {
-    if (BLOCKED_NAMES.has(String(name))) {
-      throw new Error('Assigning to `' + String(name) + '` is not allowed in templates')
-    }
-  }
+  walkNodes(root, assertSafeNode)
 }
 
 interface NunjucksRuntime {
@@ -262,7 +367,7 @@ interface TemplateType {
 export function templateExtractor(options: TemplateExtractorOptions) {
   const compiledTemplates = {} as CompiledTemplateType
   for (const [key, templateRaw] of Object.entries(options.templates)) {
-    assertNoBlockedAssignment(templateRaw)
+    assertSafeTemplate(templateRaw)
     compiledTemplates[key] = nunjucks.compile(templateRaw, createEnvironment())
   }
 
