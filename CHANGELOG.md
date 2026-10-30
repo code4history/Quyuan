@@ -7,8 +7,12 @@
 ### Changed
 - 同梱する `@c4h/chuci` を Chuci の RC へ追随（Chuci の是正が Quyuan の利用者に届く）。コードは変えません。
 
+### Documentation
+- README に「セキュリティ」の節を足した。テンプレートはコードとして実行され、Quyuan も Nunjucks もサンドボックスではないため、信頼できる書き手のテンプレートだけを使うことを明記した
+
 ### Fixed
 - `qy-swiper`・`qy-viewer` が本番でデバッグ用のログ（`console.log`）を出していたのをやめた（スライダーとビューアを開くたびにコンソールへ出ていた）。描画の時点でスライドが 0 枚のときに出ていた警告も、正常な流れでも出るため外した
+- npm パッケージに試験のソースと試験の型定義（`*.test.ts`・`*.test.d.ts`）が入っていたのを外した
 
 ### Security
 - テンプレートの評価で、`constructor`・`__proto__` などのプロパティや、`valueOf` のように `Object.prototype` から継承した名前の filter・test を辿って任意の JavaScript を実行できた、既知の経路を塞いだ。テンプレートを描画している間だけ、`constructor`・`__proto__`・`prototype`・`call`・`apply`・`bind` などの名前の読み出しは空（undefined）になり、`Function`・`Object`・`Reflect` の値は読み出しも呼び出しもできず、filter・test・global は Nunjucks に登録されたものだけを引く。最上位の名前は、テンプレートで設定したもの・データの属性・Nunjucks の global だけを引き、`{% set __proto__ = … %}` のようにそれらの名前へ代入するテンプレートは評価しない。それらを使うテンプレートは評価の誤りになる。同じプロセスで Nunjucks を直接使う他の利用者には影響しない。これで経路がすべて塞がったとは言えない。Nunjucks はサンドボックスではないため、信頼できない人が書いたテンプレートを評価しない前提は変わらない
