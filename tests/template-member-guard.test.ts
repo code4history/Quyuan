@@ -119,6 +119,70 @@ const prototypeWalkingAttacks: Array<[string, string]> = [
     'constructor of hasOwnProperty',
     '{{ range.hasOwnProperty.constructor("globalThis.__qyPwned=26")() }}',
   ],
+  [
+    'Object through an inherited filter name and getFilter',
+    '{% set O=(1|valueOf).env.getFilter("constructor") %}{{ O.getOwnPropertyDescriptor(O.getPrototypeOf(range),"constructor").value("globalThis.__qyPwned=27")() }}',
+  ],
+  [
+    'Object through an inherited filter name and getGlobal',
+    '{% set O=(1|valueOf).env.getGlobal("constructor") %}{{ O.getOwnPropertyDescriptor(O.getPrototypeOf(range),"constructor").value("globalThis.__qyPwned=28")() }}',
+  ],
+  [
+    'Object through an inherited filter name and getTest',
+    '{% set O=(1|valueOf).env.getTest("constructor") %}{{ O.getOwnPropertyDescriptor(O.getPrototypeOf(range),"constructor").value("globalThis.__qyPwned=29")() }}',
+  ],
+  [
+    'property descriptors sorted with dictsort',
+    '{% set O=(1|valueOf).env.getFilter("constructor") %}{% for p in O.getOwnPropertyDescriptors(O.getPrototypeOf(range)) | dictsort %}{% if p[0] == "construc" ~ "tor" %}{{ p[1].value("globalThis.__qyPwned=30")() }}{% endif %}{% endfor %}',
+  ],
+  [
+    'property descriptors iterated with for',
+    '{% set O=(1|valueOf).env.getFilter("constructor") %}{% for k, v in O.getOwnPropertyDescriptors(O.getPrototypeOf(range)) %}{% if k == "construc" ~ "tor" %}{{ v.value("globalThis.__qyPwned=31")() }}{% endif %}{% endfor %}',
+  ],
+  [
+    'a key object whose name changes between check and lookup',
+    '{% set c = cycler("a","constructor","constructor") %}{% set k = {toString: c.next} %}{{ range[k]("globalThis.__qyPwned=32")() }}',
+  ],
+  [
+    'chained key objects whose names change',
+    '{% set c = cycler("a","constructor","constructor") %}{% set k = {toString: c.next} %}{% set c2 = cycler("a","constructor","constructor") %}{% set k2 = {toString: c2.next} %}{{ ""[k][k2]("globalThis.__qyPwned=33")() }}',
+  ],
+  [
+    'a key object backed by joiner',
+    '{% set j = joiner("constructor") %}{% set k = {toString: j} %}{{ range[k]("globalThis.__qyPwned=34")() }}',
+  ],
+  [
+    'an array key',
+    '{{ range[["construc" ~ "tor"]]("globalThis.__qyPwned=35")() }}',
+  ],
+  [
+    'constructor of a cycler method reached by for',
+    '{% for k, v in cycler("a") %}{% if k == "next" %}{{ v.constructor("globalThis.__qyPwned=36")() }}{% endif %}{% endfor %}',
+  ],
+  [
+    'constructor of a macro',
+    '{% macro m() %}x{% endmacro %}{{ m.constructor("globalThis.__qyPwned=37")() }}',
+  ],
+  [
+    'constructor of caller',
+    '{% macro m() %}{{ caller.constructor("globalThis.__qyPwned=38")() }}{% endmacro %}{% call m() %}y{% endcall %}',
+  ],
+  [
+    'constructor reached from loop',
+    '{% for i in [1] %}{{ loop.__proto__.constructor.constructor("globalThis.__qyPwned=39")() }}{% endfor %}',
+  ],
+  [
+    'constructor of a regular expression literal',
+    '{{ (r/x/).constructor.constructor("globalThis.__qyPwned=40")() }}',
+  ],
+  [
+    'constructor of a safe string',
+    '{{ ("x" | safe).constructor.constructor("globalThis.__qyPwned=41")() }}',
+  ],
+  [
+    'constructor of the joiner result',
+    '{{ joiner().constructor("globalThis.__qyPwned=42")() }}',
+  ],
 ]
 
 const ordinaryProperties = {
@@ -172,6 +236,48 @@ describe('template member guard', () => {
         // the payload never ran.
       }
       expect(pwned()).toBeUndefined()
+    })
+  })
+
+  describe('host values that build code or reach any object', () => {
+    // Templates should never receive these, but if a host passes them in the
+    // data, the template still must not be able to use them.
+    const hostProperties = { O: Object, F: Function, R: Reflect, fns: [Function] }
+
+    beforeEach(() => {
+      delete (globalThis as Record<string, unknown>).__qyPwned
+    })
+
+    afterEach(() => {
+      delete (globalThis as Record<string, unknown>).__qyPwned
+    })
+
+    it.each([
+      ['Object', '{{ O.getOwnPropertyDescriptor(O.getPrototypeOf(range),"constructor").value("globalThis.__qyPwned=51")() }}'],
+      ['Function', '{{ F("globalThis.__qyPwned=52")() }}'],
+      ['Reflect', '{{ R.getOwnPropertyDescriptor(R.getPrototypeOf(range), "constructor").value("globalThis.__qyPwned=53")() }}'],
+      ['Function returned by a filter', '{{ (fns | first)("globalThis.__qyPwned=54")() }}'],
+    ])('does not let a template use %s', (_label, template) => {
+      try {
+        render(template, hostProperties)
+      } catch {
+        // A refused value may surface as a render error.
+      }
+      expect(pwned()).toBeUndefined()
+    })
+  })
+
+  describe('filter and test names', () => {
+    it.each([
+      ['an inherited filter name', '{{ 1 | valueOf }}'],
+      ['an inherited filter name (constructor)', '{{ 1 | constructor }}'],
+      ['an inherited test name', '{% if range is constructor %}x{% endif %}'],
+    ])('rejects %s', (_label, template) => {
+      expect(() => render(template, { name: '太郎' })).toThrow()
+    })
+
+    it('keeps built-in filters and tests', () => {
+      expect(render('{{ name | upper }}{% if name is string %}!{% endif %}', { name: 'a' })).toBe('A!')
     })
   })
 
