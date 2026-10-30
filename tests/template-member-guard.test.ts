@@ -239,6 +239,51 @@ describe('template member guard', () => {
     })
   })
 
+  describe('replacing the prototype of the render context', () => {
+    const renderOrError = (template: string): string => {
+      try {
+        return render(template, { name: 'x' })
+      } catch {
+        return 'ERR'
+      }
+    }
+
+    it('does not reach the render context through concat', () => {
+      const out = renderOrError(
+        '{% set __proto__ = [1] %}{% set c = concat() | first %}{{ c.ctx.name }}|{{ c.env.opts.autoescape }}'
+      )
+      expect(out).not.toContain('x|true')
+      expect(out).not.toContain('true')
+    })
+
+    it('does not call array methods on the render context', () => {
+      const out = renderOrError('{% set __proto__ = [1] %}{{ push(range) }}')
+      expect(out === 'ERR' || out === '').toBe(true)
+    })
+
+    it('does not expose inherited functions of a replaced prototype', () => {
+      const out = renderOrError('{% set __proto__ = range %}{{ toString }}')
+      expect(out).not.toContain('native code')
+    })
+
+    it.each([
+      ['set', '{% set __proto__ = [1] %}x'],
+      ['set with several targets', '{% set a, constructor = 1 %}x'],
+      ['set block', '{% set prototype %}y{% endset %}x'],
+      ['macro', '{% macro __proto__() %}y{% endmacro %}x'],
+      ['import', '{% import "t.html" as __proto__ %}x'],
+      ['from import alias', '{% from "t.html" import a as __proto__ %}x'],
+    ])('refuses assignment to a blocked name with %s', (_label, template) => {
+      expect(() => render(template, { name: 'x' })).toThrow(/not allowed/)
+    })
+
+    it('keeps ordinary top-level assignments', () => {
+      expect(
+        render('{% set a = name %}{% macro m(v) %}[{{ v }}]{% endmacro %}{{ a }}{{ m(a) }}', { name: 'x' })
+      ).toBe('x[x]')
+    })
+  })
+
   describe('host values that build code or reach any object', () => {
     // Templates should never receive these, but if a host passes them in the
     // data, the template still must not be able to use them.

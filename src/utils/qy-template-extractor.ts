@@ -28,15 +28,6 @@ const BLOCKED_VALUES: ReadonlySet<unknown> = new Set<unknown>([
   Reflect,
 ])
 
-const OBJECT_PROTOTYPE_NAMES = new Set(Object.getOwnPropertyNames(Object.prototype))
-
-const isInheritedFromObjectPrototype = (name: string, value: unknown): boolean => {
-  if (!OBJECT_PROTOTYPE_NAMES.has(name)) {
-    return false
-  }
-  return value === (Object.prototype as Record<string, unknown>)[name]
-}
-
 const hasOwn = (obj: object, name: string): boolean =>
   Object.prototype.hasOwnProperty.call(obj, name)
 
@@ -44,6 +35,64 @@ const hasOwn = (obj: object, name: string): boolean =>
 // value (a key object could return a different name on each toString call).
 const normalizeKey = (val: unknown): string | symbol =>
   typeof val === 'symbol' ? val : String(val)
+
+interface NunjucksFrame {
+  lookup: (name: string) => unknown
+}
+
+interface NunjucksContext {
+  ctx: Record<string, unknown>
+  env: { globals: Record<string, unknown> }
+}
+
+interface NunjucksNode {
+  value?: unknown
+  name?: NunjucksNode
+  target?: NunjucksNode
+  targets?: NunjucksNode[]
+  names?: { children: NunjucksNode[] }
+  findAll: (type: unknown) => NunjucksNode[]
+}
+
+interface NunjucksParserApi {
+  parser: { parse: (src: string) => NunjucksNode }
+  nodes: Record<'Set' | 'Macro' | 'Import' | 'FromImport' | 'Pair', unknown>
+}
+
+// Top-level `{% set %}`, `{% macro %}` and `{% import %}` write into the render
+// context, which is a plain object: `{% set __proto__ = [] %}` would replace
+// its prototype. Refuse such templates before they render.
+const assertNoBlockedAssignment = (templateRaw: string): void => {
+  const api = nunjucks as unknown as NunjucksParserApi
+  let root: NunjucksNode
+  try {
+    root = api.parser.parse(templateRaw)
+  } catch {
+    // Syntax errors are reported by Nunjucks itself when the template renders.
+    return
+  }
+  const names: unknown[] = []
+  for (const node of root.findAll(api.nodes.Set)) {
+    for (const target of node.targets ?? []) names.push(target.value)
+  }
+  for (const node of root.findAll(api.nodes.Macro)) names.push(node.name?.value)
+  for (const node of root.findAll(api.nodes.Import)) names.push(node.target?.value)
+  for (const node of root.findAll(api.nodes.FromImport)) {
+    for (const child of node.names?.children ?? []) {
+      // `{% from "x" import a as b %}` is a Pair whose value is the alias.
+      names.push(
+        child instanceof (api.nodes.Pair as new () => unknown)
+          ? (child.value as NunjucksNode | undefined)?.value
+          : child.value
+      )
+    }
+  }
+  for (const name of names) {
+    if (BLOCKED_NAMES.has(String(name))) {
+      throw new Error('Assigning to `' + String(name) + '` is not allowed in templates')
+    }
+  }
+}
 
 interface NunjucksRuntime {
   memberLookup: (obj: unknown, val: unknown) => unknown
@@ -120,13 +169,24 @@ function runWithMemberGuard<T>(render: () => T): T {
     return originalMemberLookup(obj, key)
   }
 
+  // Only names set in the template (the frame), the template data's own
+  // properties and the environment's own globals are visible. Inherited
+  // properties of the render context are not, even if its prototype changes.
   runtime.contextOrFrameLookup = (context, frame, name) => {
     const key = String(name)
     if (BLOCKED_NAMES.has(key)) {
       return undefined
     }
-    const value = originalContextOrFrameLookup(context, frame, key)
-    if (isInheritedFromObjectPrototype(key, value) || BLOCKED_VALUES.has(value)) {
+    let value = (frame as NunjucksFrame).lookup(key)
+    if (value === undefined) {
+      const { ctx, env } = context as NunjucksContext
+      if (hasOwn(ctx, key)) {
+        value = ctx[key]
+      } else if (hasOwn(env.globals, key)) {
+        value = env.globals[key]
+      }
+    }
+    if (BLOCKED_VALUES.has(value)) {
       return undefined
     }
     return value
@@ -202,6 +262,7 @@ interface TemplateType {
 export function templateExtractor(options: TemplateExtractorOptions) {
   const compiledTemplates = {} as CompiledTemplateType
   for (const [key, templateRaw] of Object.entries(options.templates)) {
+    assertNoBlockedAssignment(templateRaw)
     compiledTemplates[key] = nunjucks.compile(templateRaw, createEnvironment())
   }
 
