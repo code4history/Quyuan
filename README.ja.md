@@ -28,6 +28,10 @@ Quyuan は MIT License のオープンソースソフトウェアです。
 - 対応メディア: 画像・360度全球画像・YouTube 動画・MP4 動画・3D モデル (MTL)・Gaussian Splatting
 - Leaflet・OpenLayers・MapLibre GL と連携（統合例は `docs/api/` を参照）
 
+## セキュリティ
+
+テンプレートは Nunjucks がコードとしてコンパイルし、渡したデータにアクセスできます。**Quyuan はサンドボックスではありません。** Nunjucks もサンドボックスではなく、Quyuan が描画時に行う確認は任意の JavaScript に至る既知の経路を塞ぐものですが、信頼できない書き手のテンプレートを安全に評価できるようにするものではありません。テンプレートは信頼できる書き手のものだけを使い、利用者の入力からテンプレートを作らないでください。
+
 <!-- SECTION 5: Quick Start -->
 ## クイックスタート
 

@@ -42,6 +42,9 @@ importers:
       '@types/leaflet':
         specifier: ^1.9.21
         version: 1.9.22
+      '@types/node':
+        specifier: ^26.6.5
+        version: 26.6.5
       '@types/nunjucks':
         specifier: ^3.2.6
         version: 3.2.6

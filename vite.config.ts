@@ -75,7 +75,7 @@ export default defineConfig({
     removeTsExtensions(),
     ...(isPackageBuild ? [dts({
       outDir: 'dist',
-      exclude: ['tests', 'node_modules', 'demo'],
+      exclude: ['tests', 'node_modules', 'demo', '**/*.test.ts'],
       rollupTypes: false,  // Avoid type definition merging errors
       skipDiagnostics: true,
       tsconfigPath: './tsconfig.json',

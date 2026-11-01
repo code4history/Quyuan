@@ -32,6 +32,10 @@ Quyuan is open-source under the MIT License.
 - Supported media: images, 360-degree panoramas, YouTube videos, MP4 videos, 3D models (MTL), Gaussian Splatting
 - Works with Leaflet, OpenLayers, and MapLibre GL (integration examples in `docs/api/`)
 
+## Security
+
+Templates are compiled to code by Nunjucks and run with access to the data you pass in. **Quyuan is not a sandbox.** Nunjucks is not a sandbox either: the checks Quyuan applies while a template renders close the known routes to arbitrary JavaScript, but they do not make a template from an untrusted author safe to evaluate. Use templates only from authors you trust, and never build templates from end-user input.
+
 <!-- SECTION 5: Quick Start -->
 ## Quick Start
 
