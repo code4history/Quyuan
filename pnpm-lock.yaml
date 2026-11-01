@@ -15,8 +15,8 @@ importers:
   .:
     dependencies:
       '@c4h/chuci':
-        specifier: ^1.0.2-rc.1
-        version: 1.0.2-rc.1
+        specifier: ^1.0.2
+        version: 1.0.2
       nunjucks:
         specifier: ^3.2.4
         version: 3.2.4
@@ -140,8 +140,8 @@ packages:
     resolution: {integrity: sha512-0GEz8qJWokkUVYQYRukmkSHIFNoBH8QTreeHrAFbvz1XFYc3Y+puhMs8PQ5x8GNugiC2l5jvDBXKLbBIByeSBw==}
     hasBin: true
 
-  '@c4h/chuci@1.0.2-rc.1':
-    resolution: {integrity: sha512-rSg2iqDi+HnoiOjjwL5voeKBW92Ato/rDC4zZ4qA21cHxs7Y8ublpxQkb+cb0eG3q1DHkV00P7dFSSTWt21XJg==}
+  '@c4h/chuci@1.0.2':
+    resolution: {integrity: sha512-riPtOEI6t9VDHEOgjQLOcXrIckjoytmGGbrjosAylpg/dSjc4MnC8DX71YmR5CH1nkkK/nM8kWETxbJ6RQOBdQ==}
     engines: {pnpm: '>=9.0.0'}
 
   '@cacheable/memory@2.2.0':
@@ -1685,7 +1685,7 @@ snapshots:
     dependencies:
       css-tree: 3.2.1
 
-  '@c4h/chuci@1.0.2-rc.1':
+  '@c4h/chuci@1.0.2':
     dependencies:
       gsplat: 1.2.9
       swiper: 12.2.0
