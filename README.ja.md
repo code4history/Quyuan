@@ -37,7 +37,7 @@ Quyuan は MIT License のオープンソースソフトウェアです。
 
 <!-- release-pinned:start -->
 > **現在のリリース: `1.1.1`**。このブロックは本リポジトリで唯一
-> リリース版数を持つ場所です（ADR-0012）。ブロックの外はすべて 1.0 正式版を前提に
+> リリース版数を持つ場所です。ブロックの外はすべて 1.0 正式版を前提に
 > 書かれています。
 > npm: [`@c4h/quyuan`](https://www.npmjs.com/package/@c4h/quyuan)
 > [![npm](https://img.shields.io/npm/v/@c4h/quyuan)](https://www.npmjs.com/package/@c4h/quyuan)
@@ -166,7 +166,7 @@ pnpm run test:e2e   # E2E テストの実行
 <!-- SECTION 6: Prerequisites -->
 ## 動作環境
 
-> ランタイム要件（ADR-0012: 特定リリースに紐づく）。
+> ランタイム要件（特定リリースに紐づく）。
 
 - Node.js と pnpm（開発時）
 - ブラウザ: Chrome / Edge / Firefox / Safari（最新版）・Web Components サポート必須
@@ -201,7 +201,7 @@ Maplat エコシステムの一部です。全容は下記エコシステム図�
 > MaplatEditor で作成し、いずれかのビューアライブラリで公開、という流れになります。
 
 <!-- SECTION 9: Nayuta links -->
-<!-- MIT ライセンスのリポジトリ（Weiwudi / Quyuan / Chuci）へは那由多社リンクを置きません（ADR-0012）。 -->
+<!-- MIT ライセンスのリポジトリ（Weiwudi / Quyuan / Chuci）へは那由多社リンクを置きません。 -->
 
 <!-- SECTION 10: License -->
 ## License

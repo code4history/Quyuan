@@ -41,7 +41,7 @@ Templates are compiled to code by Nunjucks and run with access to the data you p
 
 <!-- release-pinned:start -->
 > **Current release: `1.1.1`**. This block is the only place in
-> this repository that carries a release version (ADR-0012); everything outside it is
+> this repository that carries a release version; everything outside it is
 > written against the 1.0 release.
 > npm: [`@c4h/quyuan`](https://www.npmjs.com/package/@c4h/quyuan)
 > [![npm](https://img.shields.io/npm/v/@c4h/quyuan)](https://www.npmjs.com/package/@c4h/quyuan)
@@ -170,7 +170,7 @@ pnpm run test:e2e   # Run E2E tests
 <!-- SECTION 6: Prerequisites -->
 ## Prerequisites
 
-> Runtime requirements (ADR-0012: release-dependent).
+> Runtime requirements (release-dependent).
 
 - Node.js and pnpm (for development)
 - Browser: Chrome / Edge / Firefox / Safari (latest) — requires Web Components support
@@ -205,7 +205,7 @@ repository; the Sister repositories table below is the public substitute)*
 > author with MaplatEditor, serve with any of the viewer libraries.
 
 <!-- SECTION 9: Nayuta links -->
-<!-- MIT-licensed repositories (Weiwudi / Quyuan / Chuci) carry no Nayuta link (ADR-0012). -->
+<!-- MIT-licensed repositories (Weiwudi / Quyuan / Chuci) carry no Nayuta link. -->
 
 <!-- SECTION 10: License -->
 ## License
