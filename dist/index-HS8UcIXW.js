@@ -23485,7 +23485,7 @@ async function tv(r, e, t) {
       if (r.showTexture !== !1 && c.textureLoadFailed)
         throw new Error("Failed to load a required model texture");
     } else {
-      const { prepareGaussianScene: c } = await import("./gaussian-renderer-CLFOCG_z-Df3vtsHc.js");
+      const { prepareGaussianScene: c } = await import("./gaussian-renderer-MvZGJW38-Bo8z9R9H.js");
       await c(o, r, t);
     }
     return t.throwIfAborted(), await o.capture(e);
@@ -24040,15 +24040,17 @@ class zt extends Ts {
     ));
   }
   async openViewer(e) {
-    const t = ur(
+    const t = zt.activeViewerOwner;
+    t && t !== this && (t.viewerOpen = !1, t.resumeAutoplay()), zt.activeViewerOwner = this, this.viewerOpen = !0, this.pauseAutoplay();
+    const i = this.viewerTagName();
+    let n = document.querySelector(i);
+    n || (n = document.createElement(i), document.body.append(n)), await customElements.whenDefined(i);
+    const a = this.items, s = ur(
       Number.isFinite(e) ? Math.trunc(e) : 0,
-      this.items.length,
+      a.length,
       this.loop
-    ), i = zt.activeViewerOwner;
-    i && i !== this && (i.viewerOpen = !1, i.resumeAutoplay()), zt.activeViewerOwner = this, this.viewerOpen = !0, this.viewerIndex = t, this.pauseAutoplay();
-    const n = this.viewerTagName();
-    let a = document.querySelector(n);
-    a || (a = document.createElement(n), document.body.append(a)), await customElements.whenDefined(n), a.open(this.items, t, { loop: this.loop });
+    );
+    this.viewerIndex = s, n.open(a, s, { loop: this.loop });
   }
 }
 customElements.get("cc-swiper") || customElements.define("cc-swiper", zt);
@@ -24294,7 +24296,7 @@ async function vv(r) {
     case "3dmodel":
       return new kg();
     case "gaussian": {
-      const { GaussianRenderer: e } = await import("./gaussian-renderer-CLFOCG_z-Df3vtsHc.js");
+      const { GaussianRenderer: e } = await import("./gaussian-renderer-MvZGJW38-Bo8z9R9H.js");
       return new e();
     }
     default:

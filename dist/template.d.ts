@@ -1,4 +1,4 @@
-import { templateExtractor } from './utils/qy-template-extractor';
+import { templateExtractor } from './utils/qy-template-extractor.js';
 export declare const Quyuan: {
     templateExtractor: typeof templateExtractor;
 };

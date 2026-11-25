@@ -188,7 +188,9 @@ bundles it in the distributed UI build. Chuci's carousel and viewers do not use
 Swiper.js, viewer.js, gsplat, or A-Frame; they bundle three.js. The ESM build
 loads a separate Spark chunk on demand for Gaussian splats, so keep all `dist/`
 files together. The UMD/CDN build contains Spark. The template-only entry does
-not require Chuci.
+not require Chuci. To use the UI component types (`QyViewer`, `QySwiper`, or the
+`qy-*` entries in `HTMLElementTagNameMap`), install `@c4h/chuci` as well;
+`QySwiper` inherits Chuci's component types.
 
 <!-- SECTION 8: Ecosystem / Related Repositories -->
 ## Ecosystem

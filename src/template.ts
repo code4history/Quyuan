@@ -1,4 +1,4 @@
-import {templateExtractor} from "./utils/qy-template-extractor"
+import {templateExtractor} from "./utils/qy-template-extractor.js"
 
 // template-only entry（@c4h/quyuan/template）
 // UI コンポーネント（qy-swiper / qy-viewer）を副作用 import しないため、

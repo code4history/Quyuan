@@ -184,7 +184,10 @@ UI 入口は `@c4h/chuci` `^2.0.0` を optional peer dependency とし、配布�
 gsplat・A-Frame を使わず、three.js を同梱します。ESM ビルドでは Gaussian
 スプラット用の Spark を別チャンクとして必要時に読み込むため、`dist/` の全ファイルを
 一緒に配置してください。UMD・CDN ビルドは Spark を内包しています。
-テンプレート専用入口では Chuci は不要です。
+テンプレート専用入口では Chuci は不要です。UI コンポーネントの型
+（`QyViewer`・`QySwiper`・`HTMLElementTagNameMap` の `qy-*` エントリ）を使う場合は
+`@c4h/chuci` もインストールしてください。`QySwiper` は Chuci のコンポーネント型を
+継承しています。
 
 <!-- SECTION 8: Ecosystem / Related Repositories -->
 ## エコシステム
