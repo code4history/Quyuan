@@ -34755,12 +34755,6 @@ const pn = /* @__PURE__ */ Xb(Yb), ll = /* @__PURE__ */ new Set([
     case "Macro":
     case "Caller":
       return [i.name];
-    case "Import":
-      return [i.target];
-    case "FromImport":
-      return (i.names?.children ?? []).map(
-        (e) => e.typename === "Pair" ? e.value : e
-      );
     default:
       return [];
   }
@@ -34775,17 +34769,15 @@ const pn = /* @__PURE__ */ Xb(Yb), ll = /* @__PURE__ */ new Set([
       const e = i.args?.children[i.args.children.length - 1];
       return e?.typename === "Dict" || e?.typename === "KeywordArgs" ? (e.children ?? []).map((t) => t.key) : [];
     }
-    case "FromImport":
-      return (i.names?.children ?? []).flatMap(
-        (e) => e.typename === "Pair" ? [e.key] : []
-      );
     default:
       return [];
   }
 }, zh = (i) => {
   if (i?.typename !== "Symbol")
     throw new Error("Only plain names can be assigned in templates");
-}, ry = (i) => {
+}, ry = /* @__PURE__ */ new Set(["Include", "Import", "FromImport", "Extends"]), sy = (i) => {
+  if (ry.has(i.typename))
+    throw new Error("Loading another template is not allowed in templates");
   if (i.typename === "Symbol")
     Vh(i.value);
   else if (i.typename === "Is") {
@@ -34796,9 +34788,9 @@ const pn = /* @__PURE__ */ Xb(Yb), ll = /* @__PURE__ */ new Set([
     if (zh(e), ll.has(String(e?.value)))
       throw new Error("Assigning to `" + String(e?.value) + "` is not allowed in templates");
   iy(i).forEach(zh);
-}, sy = (i) => typeof i == "object" && i !== null && "typename" in i, cl = (i, e) => {
-  Array.isArray(i) ? i.forEach((t) => cl(t, e)) : sy(i) && (e(i), Object.values(i).forEach((t) => cl(t, e)));
-}, ay = (i) => {
+}, ay = (i) => typeof i == "object" && i !== null && "typename" in i, cl = (i, e) => {
+  Array.isArray(i) ? i.forEach((t) => cl(t, e)) : ay(i) && (e(i), Object.values(i).forEach((t) => cl(t, e)));
+}, ny = (i) => {
   const e = pn;
   let t;
   try {
@@ -34806,9 +34798,11 @@ const pn = /* @__PURE__ */ Xb(Yb), ll = /* @__PURE__ */ new Set([
   } catch {
     return;
   }
-  cl(t, ry);
-}, ny = () => pn.runtime, oy = () => {
-  const i = new pn.Environment(), e = i;
+  cl(t, sy);
+}, oy = () => pn.runtime, ly = () => {
+  const i = new pn.Environment([]);
+  i.loaders = [];
+  const e = i;
   return e.getFilter = function(t) {
     if (!Fs(this.filters, t) || !this.filters[t])
       throw new Error("filter not found: " + t);
@@ -34824,8 +34818,8 @@ const pn = /* @__PURE__ */ Xb(Yb), ll = /* @__PURE__ */ new Set([
   }, i;
 };
 let oo = !1;
-function ly(i) {
-  const e = ny();
+function cy(i) {
+  const e = oy();
   if (oo || !e)
     return i();
   const t = e.memberLookup, r = e.contextOrFrameLookup, s = e.callWrap;
@@ -34857,23 +34851,23 @@ function ly(i) {
     e.memberLookup = t, e.contextOrFrameLookup = r, e.callWrap = s, oo = !1;
   }
 }
-function cy(i) {
+function hy(i) {
   const e = {};
   for (const [r, s] of Object.entries(i.templates))
-    ay(s), e[r] = pn.compile(s, oy());
+    ny(s), e[r] = pn.compile(s, ly());
   const t = (r) => {
     r.result = {};
     for (const s of Object.keys(i.templates))
       r.result[s] = e[s].render(r.properties || {});
   };
-  return ly(() => {
+  return cy(() => {
     "features" in i.geojson ? i.geojson.features.forEach(t) : t(i.geojson);
   }), i.geojson;
 }
-const my = {
-  templateExtractor: cy
+const gy = {
+  templateExtractor: hy
 };
 export {
-  my as Quyuan,
-  my as default
+  gy as Quyuan,
+  gy as default
 };
