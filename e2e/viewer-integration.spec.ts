@@ -81,7 +81,7 @@ test.describe('Viewer Integration', () => {
         if (!viewer) return { exists: false };
         
         const shadowRoot = viewer.shadowRoot;
-        const ccViewer = shadowRoot?.querySelector('cc-viewer');
+        const ccViewer = shadowRoot?.querySelector('qy-viewer-inner');
         
         return {
           exists: true,

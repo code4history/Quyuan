@@ -66,7 +66,7 @@ test.describe('Quyuan E2E Tests', () => {
     });
 
     const viewer = page.locator('qy-viewer');
-    await expect(viewer.locator('cc-viewer').locator('.backdrop')).toBeVisible();
+    await expect(viewer.locator('qy-viewer-inner').locator('.backdrop')).toBeVisible();
     await expect(viewer).toHaveAttribute('currenttype', 'image');
   });
 });

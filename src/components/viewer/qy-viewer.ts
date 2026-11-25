@@ -1,12 +1,14 @@
 import { QyElement } from '../../base/qy-element.js';
-import '@c4h/chuci';
 import { CcViewer } from '@c4h/chuci';
 import type { MediaItem } from '@c4h/chuci';
 
-/**
- * Wrapper component that delegates to Chuci's cc-viewer
- * while maintaining the qy-viewer interface
- */
+// Use this bundle's viewer even when a page has already registered another cc-viewer.
+class QyViewerInner extends CcViewer {}
+if (!customElements.get('qy-viewer-inner')) {
+  customElements.define('qy-viewer-inner', QyViewerInner);
+}
+
+/** Wrapper preserving the public qy-viewer interface. */
 export class QyViewer extends QyElement {
   private _currentSlideIndex: number = 0;
   private _currentType: string = "";
@@ -55,16 +57,13 @@ export class QyViewer extends QyElement {
   }
 
   async open(items: MediaItem[], index: number, opts?: { loop?: boolean }) {
-    if (!this.ccViewer) {
-      await customElements.whenDefined('cc-viewer');
-      this.ccViewer = this.shadowRoot!.querySelector('cc-viewer') as CcViewer;
-    }
-
+    this.render();
+    const viewer = this.ccViewer!;
     this.items = items.slice();
-    this.ccViewer.style.display = 'block';
-    this.ccViewer.open(items, index, opts);
-    this.currentSlideIndex = this.ccViewer.index;
-    this.currentType = this.items[this.ccViewer.index]?.type ?? '';
+    viewer.style.display = 'block';
+    viewer.open(items, index, opts);
+    this.currentSlideIndex = viewer.index;
+    this.currentType = this.items[viewer.index]?.type ?? '';
   }
 
   close() {
@@ -73,7 +72,25 @@ export class QyViewer extends QyElement {
   }
 
   protected firstUpdated() {
-    this.ccViewer = this.shadowRoot!.querySelector('cc-viewer') as CcViewer;
+    this.dispatchEvent(new CustomEvent('load'));
+  }
+
+  protected render() {
+    if (this.ccViewer) return;
+
+    this.updateShadowRoot(this.html`
+      <style>
+        :host {
+          --qy-viewer-z-index: 1000;
+        }
+
+        qy-viewer-inner {
+          --cc-viewer-z-index: var(--qy-viewer-z-index);
+        }
+      </style>
+      <qy-viewer-inner></qy-viewer-inner>
+    `);
+    this.ccViewer = this.query<CcViewer>('qy-viewer-inner')!;
     this.ccViewer.addEventListener('cc-viewer-index-change', (event) => {
       const { index } = (event as CustomEvent<{ index: number }>).detail;
       this.currentSlideIndex = index;
@@ -83,27 +100,6 @@ export class QyViewer extends QyElement {
       this.items = [];
       this.currentType = '';
     });
-    this.dispatchEvent(new CustomEvent('load'));
-  }
-
-  protected render() {
-    // Keep the inner viewer alive when compatibility attributes change.
-    if (this.shadowRoot?.querySelector('cc-viewer')) {
-      return;
-    }
-
-    this.updateShadowRoot(this.html`
-      <style>
-        :host {
-          --qy-viewer-z-index: 1000;
-        }
-
-        cc-viewer {
-          --cc-viewer-z-index: var(--qy-viewer-z-index);
-        }
-      </style>
-      <cc-viewer></cc-viewer>
-    `);
   }
 }
 

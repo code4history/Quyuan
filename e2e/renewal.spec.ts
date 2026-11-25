@@ -3,7 +3,7 @@ import { test, expect, type Locator, type Page } from '@playwright/test';
 const mediaTypes = ['image', 'panorama', 'youtube', 'video', '3dmodel', 'gaussian'] as const;
 
 function innerViewer(page: Page) {
-  return page.locator('qy-viewer cc-viewer');
+  return page.locator('qy-viewer qy-viewer-inner');
 }
 
 async function waitForViewerReady(page: Page, mediaLabel: string) {
@@ -140,7 +140,7 @@ test.describe('viewer renewal', () => {
         await expect(innerViewer(page).locator('.backdrop')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
         const spinnerIdentity = await page.evaluate(() => {
           const spinner = (document.querySelector('qy-viewer') as any)
-            ?.shadowRoot?.querySelector('cc-viewer')?.shadowRoot?.querySelector('.spinner');
+            ?.shadowRoot?.querySelector('qy-viewer-inner')?.shadowRoot?.querySelector('.spinner');
           const state = window as any;
           if (!spinner) return 'missing';
           if (!state.renewalSpinner) state.renewalSpinner = spinner;
@@ -184,7 +184,7 @@ test.describe('viewer renewal', () => {
       viewer.id = 'context-stress-viewer';
       document.body.append(viewer);
       await viewer.updateComplete;
-      const ccViewer = viewer.shadowRoot?.querySelector('cc-viewer') as any;
+      const ccViewer = viewer.shadowRoot?.querySelector('qy-viewer-inner') as any;
       (window as any).visibleContextLosses = 0;
       ccViewer.shadowRoot.addEventListener('webglcontextlost', () => {
         const backdrop = ccViewer.shadowRoot.querySelector('.backdrop');
@@ -217,7 +217,7 @@ test.describe('viewer renewal', () => {
       await waitForViewerReady(page, 'intentional context loss');
       await page.evaluate(() => {
         const viewer = document.querySelector('#context-stress-viewer') as any;
-        const canvas = viewer.shadowRoot?.querySelector('cc-viewer')?.shadowRoot?.querySelector('canvas') as HTMLCanvasElement;
+        const canvas = viewer.shadowRoot?.querySelector('qy-viewer-inner')?.shadowRoot?.querySelector('canvas') as HTMLCanvasElement;
         const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
         const extension = gl?.getExtension('WEBGL_lose_context');
         if (!extension) throw new Error('WEBGL_lose_context is unavailable');
@@ -289,48 +289,82 @@ test.describe('viewer renewal', () => {
     expect(await indexedDbThumbnailCount(page)).toBe(1);
   });
 
-  test('gaussian camera-position changes the initial view', async ({ page }) => {
-    test.setTimeout(180_000);
-    await page.setViewportSize({ width: 160, height: 90 });
-    const createSwiper = (cameraPosition?: string) => page.evaluate((position) => {
-      const swiper = document.createElement('qy-swiper') as any;
-      swiper.id = 'gaussian-swiper';
-      swiper.style.cssText = 'display:block;width:160px;height:90px';
-      const slide = document.createElement('qy-swiper-slide');
-      slide.setAttribute('image-url', 'https://t.tilemap.jp/3ddata/okuman.splat');
-      slide.setAttribute('image-type', 'gaussian');
-      slide.setAttribute('thumbnail-url', '/assets/jizo.png');
-      slide.setAttribute('caption', 'camera comparison');
-      if (position) slide.setAttribute('camera-position', position);
-      swiper.append(slide);
-      document.body.append(swiper);
-    }, cameraPosition);
-    const openGaussian = async () => {
-      await page.evaluate(async () => {
-        await (document.querySelector('#gaussian-swiper') as any).openViewer(0);
-      });
-      await waitForViewerReady(page, 'https://t.tilemap.jp/3ddata/okuman.splat');
-      await expect(innerViewer(page).locator('canvas')).toBeVisible();
-      return page.evaluate(() => new Promise<string>((resolve, reject) => {
-        requestAnimationFrame(() => {
-          const canvas = (document.querySelector('qy-viewer') as any)
-            ?.shadowRoot?.querySelector('cc-viewer')?.shadowRoot?.querySelector('canvas');
-          if (!canvas) {
-            reject(new Error('Gaussian canvas not found'));
-            return;
-          }
-          resolve(canvas.toDataURL('image/png'));
-        });
-      }));
-    };
+});
 
-    await page.goto('/e2e-test.html');
-    await createSwiper();
-    const defaultView = await openGaussian();
-    await closeViewer(page);
-    await page.reload();
-    await createSwiper('8,4,8');
-    const customView = await openGaussian();
-    expect(defaultView).not.toBe(customView);
+test('gaussian camera-position changes the initial view and both views close', async ({ page, browserName }) => {
+  test.skip(browserName !== 'chromium', 'renewal e2e は Chromium 専用');
+  await page.setViewportSize({ width: 320, height: 240 });
+  // Each .splat record contains position and scale (little-endian floats),
+  // RGBA, and a quaternion in WXYZ byte order. Use an asymmetric local scene.
+  const points = [
+    { position: [0, 0, 0], color: [255, 60, 20, 255] },
+    { position: [0.16, 0.06, 0], color: [20, 100, 255, 255] },
+  ];
+  const splats = Buffer.alloc(points.length * 32);
+  points.forEach(({ position, color }, i) => {
+    const start = i * 32;
+    [...position, 0.045, 0.07, 0.055].forEach((value, j) => splats.writeFloatLE(value, start + j * 4));
+    splats.set(color, start + 24);
+    splats.set([255, 128, 128, 128], start + 28);
   });
+  const scene = '/e2e-camera.splat';
+  await page.route(`**${scene}`, (route) => route.fulfill({
+    contentType: 'application/octet-stream',
+    body: splats,
+  }));
+  await page.goto('/e2e-test.html');
+  await page.evaluate((url) => {
+    const swiper = document.createElement('qy-swiper');
+    swiper.id = 'gaussian-swiper';
+    swiper.style.cssText = 'display:block;width:250px;height:180px';
+    const slide = document.createElement('qy-swiper-slide');
+    slide.setAttribute('image-url', url);
+    slide.setAttribute('image-type', 'gaussian');
+    slide.setAttribute('thumbnail-url', '/assets/jizo.png');
+    swiper.append(slide);
+    document.body.append(swiper);
+  }, scene);
+
+  const viewer = innerViewer(page);
+  const swiper = page.locator('#gaussian-swiper');
+  const captureView = async () => {
+    await swiper.locator('.cc-slide img').click();
+    await waitForViewerReady(page, scene);
+    const canvas = viewer.locator('canvas');
+    await expect(canvas).toBeVisible();
+    const frame = await canvas.evaluate((source: HTMLCanvasElement) =>
+      new Promise<{ png: string; hasColor: boolean }>((resolve, reject) => {
+        const timer = setTimeout(() => {
+          cancelAnimationFrame(frameId);
+          reject(new Error('Timed out waiting for a Gaussian frame'));
+        }, 5000);
+        const frameId = requestAnimationFrame(() => {
+          clearTimeout(timer);
+          try {
+            const copy = document.createElement('canvas');
+            copy.width = source.width;
+            copy.height = source.height;
+            const context = copy.getContext('2d')!;
+            context.drawImage(source, 0, 0);
+            const { data } = context.getImageData(0, 0, copy.width, copy.height);
+            resolve({
+              png: copy.toDataURL('image/png'),
+              hasColor: data.some((value, i) => i % 4 !== 3 && value > 15),
+            });
+          } catch (error) {
+            reject(error);
+          }
+        });
+      }), undefined, { timeout: 5000 });
+    expect(frame.hasColor).toBe(true);
+    await viewer.locator('.nav-close').click({ timeout: 5000 });
+    await expect(viewer.locator('.backdrop')).toBeHidden({ timeout: 5000 });
+    await expect(canvas).toHaveCount(0);
+    return frame.png;
+  };
+
+  const defaultView = await captureView();
+  await swiper.locator('qy-swiper-slide').evaluate((slide) => slide.setAttribute('camera-position', '8,4,8'));
+  const customView = await captureView();
+  expect(defaultView).not.toBe(customView);
 });

@@ -38,7 +38,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run dev',
+    command: 'node_modules/.bin/vite --port 5173',
     port: 5173,
     reuseExistingServer: !process.env.CI,
   },

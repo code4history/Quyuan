@@ -2,7 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  testMatch: '**/smoke.spec.ts',  // スモークテストのみ実行
+  testMatch: ['**/smoke.spec.ts', '**/preregistered-chuci.spec.ts'],
   fullyParallel: true,
   forbidOnly: true,
   retries: 0,  // CI環境ではリトライなし（高速化）
@@ -27,7 +27,7 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'pnpm run dev',  // npmよりpnpmの方が高速
+    command: 'node_modules/.bin/vite --port 5173',
     port: 5173,
     reuseExistingServer: true,
     timeout: 30000,  // サーバー起動タイムアウト

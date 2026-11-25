@@ -1,4 +1,4 @@
-import { B as ZQ, Y as mQ, x as WQ, K as XQ, f as lg, U as L, O as Qg, J as VQ, g as vQ, o as BQ, N as CI, d as jQ, k as pg, M as OI, F as sI, Z as kI, P as yI, S as RA, l as EA, s as aI, a as zQ, G as KA, w as l, b as d, H as _Q, c as CQ, e as $Q, h as AB, A as fg, i as IB, j as gB, m as QB, n as BB, p as bg, L as TA, q as CB, u as EB, r as Pg, t as Fg, v as OA, y as _, z as qI, T as EI, C as EQ, D as DQ, E as DB, I as iB, Q as wB, R as oB, V as GB, W as ug, X as sB } from "./index-HS8UcIXW.js";
+import { B as ZQ, Y as mQ, x as WQ, K as XQ, d as lg, U as L, a as Qg, J as VQ, g as vQ, b as BQ, N as CI, c as jQ, G as pg, M as OI, O as sI, Z as kI, P as yI, e as RA, l as EA, s as aI, f as zQ, h as KA, w as l, o as d, k as _Q, i as CQ, j as $Q, m as AB, A as fg, n as IB, p as gB, q as QB, H as BB, r as bg, L as TA, t as CB, u as EB, v as Pg, y as Fg, z as OA, C as _, D as qI, T as EI, E as EQ, S as DQ, F as DB, I as iB, Q as wB, R as oB, V as GB, W as ug, X as sB } from "./index-DkyLEClg.js";
 const kB = new CQ(-1, 1, 1, -1, 0, 1);
 class yB extends GB {
   constructor() {
@@ -204,13 +204,13 @@ var NB = /* @__PURE__ */ iI(JI, 9), MB = /* @__PURE__ */ iI(yQ, 5), ZI = functio
       var xg = new Z(Math.max(qg * 2, ng));
       xg.set(g), g = xg;
     }
-  }, o = I.f || 0, G = I.p || 0, s = I.b || 0, k = I.l, y = I.d, S = I.m, J = I.n, a = B * 8;
+  }, o = I.f || 0, G = I.p || 0, s = I.b || 0, k = I.l, y = I.d, J = I.m, S = I.n, a = B * 8;
   do {
     if (!k) {
       o = wA(A, G, 1);
       var h = wA(A, G + 1, 3);
       if (G += 3, h)
-        if (h == 1) k = NB, y = MB, S = 9, J = 5;
+        if (h == 1) k = NB, y = MB, J = 9, S = 5;
         else if (h == 2) {
           var R = wA(A, G, 31) + 257, U = wA(A, G + 10, 15) + 4, c = R + wA(A, G + 5, 31) + 1;
           G += 14;
@@ -227,7 +227,7 @@ var NB = /* @__PURE__ */ iI(JI, 9), MB = /* @__PURE__ */ iI(yQ, 5), ZI = functio
             }
           }
           var UA = Y.subarray(0, R), gA = Y.subarray(R);
-          S = ZI(UA), J = ZI(gA), k = iI(UA, S), y = iI(gA, J);
+          J = ZI(UA), S = ZI(gA), k = iI(UA, J), y = iI(gA, S);
         } else z(1);
       else {
         var W = aQ(G) + 4, fI = A[W - 4] | A[W - 3] << 8, bI = W + fI;
@@ -244,7 +244,7 @@ var NB = /* @__PURE__ */ iI(JI, 9), MB = /* @__PURE__ */ iI(yQ, 5), ZI = functio
       }
     }
     E && w(s + 131072);
-    for (var uQ = (1 << S) - 1, TQ = (1 << J) - 1, PI = G; ; PI = G) {
+    for (var uQ = (1 << J) - 1, TQ = (1 << S) - 1, PI = G; ; PI = G) {
       var IA = k[mI(A, G) & uQ], dA = IA >> 4;
       if (G += IA & 15, G > a) {
         i && z(0);
@@ -280,7 +280,7 @@ var NB = /* @__PURE__ */ iI(JI, 9), MB = /* @__PURE__ */ iI(yQ, 5), ZI = functio
         for (; s < rg; ++s) g[s] = g[s - gA];
       }
     }
-    I.l = k, I.p = PI, I.b = s, I.f = o, k && (o = 1, I.m = S, I.d = y, I.n = J);
+    I.l = k, I.p = PI, I.b = s, I.f = o, k && (o = 1, I.m = J, I.d = y, I.n = S);
   } while (!o);
   return s != g.length && D ? uA(g, 0, s) : g.subarray(0, s);
 }, UB = /* @__PURE__ */ new Z(0), SA = function(A, I) {
@@ -394,8 +394,8 @@ function nB(A, I) {
     D = oA(A, E) == 101075792, D && (B = oA(A, E + 32), C = oA(A, E + 48));
   }
   for (var i = I && I.filter, w = 0; w < B; ++w) {
-    var o = rB(A, C, D), G = o[0], s = o[1], k = o[2], y = o[3], S = o[4], J = o[5], a = eB(A, J);
-    C = S, (!i || i({
+    var o = rB(A, C, D), G = o[0], s = o[1], k = o[2], y = o[3], J = o[4], S = o[5], a = eB(A, S);
+    C = J, (!i || i({
       name: y,
       size: s,
       originalSize: k,
@@ -660,15 +660,15 @@ var Tg = "    ", pB = class {
     }) ?? []) g.globals.add(s);
     const E = [], i = /* @__PURE__ */ new Map();
     function w(s, k, y) {
-      let S = i.get(s);
-      if (!S) {
-        S = {
+      let J = i.get(s);
+      if (!J) {
+        J = {
           sequence: g.nextSequence(),
           outNames: /* @__PURE__ */ new Map(),
           newOuts: /* @__PURE__ */ new Set()
-        }, i.set(s, S);
-        for (const J in s.inputs) {
-          let a = s.inputs[J];
+        }, i.set(s, J);
+        for (const S in s.inputs) {
+          let a = s.inputs[S];
           for (; a; ) {
             if (a instanceof HA) {
               a instanceof v && w(a.dyno, a.key);
@@ -680,7 +680,7 @@ var Tg = "    ", pB = class {
         }
         E.push(s);
       }
-      k && (y || S.newOuts.add(k), S.outNames.set(k, y ?? `${k}_${S.sequence}`));
+      k && (y || J.newOuts.add(k), J.outNames.set(k, y ?? `${k}_${J.sequence}`));
     }
     for (const s of C.roots) w(s);
     for (const s in B) {
@@ -712,14 +712,14 @@ var Tg = "    ", pB = class {
           h = h.dynoOut();
         }
       }
-      const S = i.get(s) ?? { outNames: /* @__PURE__ */ new Map() };
-      for (const [a, h] of S.outNames.entries()) y[a] = h;
-      const J = s.compile({
+      const J = i.get(s) ?? { outNames: /* @__PURE__ */ new Map() };
+      for (const [a, h] of J.outNames.entries()) y[a] = h;
+      const S = s.compile({
         inputs: k,
         outputs: y,
         compile: g
       });
-      o.push(J);
+      o.push(S);
     }
     const G = [];
     for (const s in I) B[s] instanceof YI && G.push(`${I[s]} = ${B[s].getLiteral()};`);
@@ -861,16 +861,16 @@ function lA(A, I) {
   for (const Q of A) I(Q) || (A[g++] = Q);
   A.length = g;
 }
-function Og(A, I, g, Q, B, C, D, E, i, w, o, G, s, k, y, S) {
-  const J = I * 4, [a, h] = A;
-  a[J] = vI(g), a[J + 1] = vI(Q), a[J + 2] = vI(B), a[J + 3] = aA(s), h[J] = aA(k) | aA(y) << 16, h[J + 1] = aA(S) | aA(Math.log(C)) << 16, h[J + 2] = aA(Math.log(D)) | aA(Math.log(E)) << 16, h[J + 3] = IC(i, w, o, G);
+function Og(A, I, g, Q, B, C, D, E, i, w, o, G, s, k, y, J) {
+  const S = I * 4, [a, h] = A;
+  a[S] = vI(g), a[S + 1] = vI(Q), a[S + 2] = vI(B), a[S + 3] = aA(s), h[S] = aA(k) | aA(y) << 16, h[S + 1] = aA(J) | aA(Math.log(C)) << 16, h[S + 2] = aA(Math.log(D)) | aA(Math.log(E)) << 16, h[S + 3] = IC(i, w, o, G);
 }
 function Cg(A, I) {
   const g = FQ, Q = I * 4, [B, C] = A;
   return g.center.x = jI(B[Q]), g.center.y = jI(B[Q + 1]), g.center.z = jI(B[Q + 2]), g.opacity = hA(B[Q + 3] & 65535), g.color.r = hA(C[Q] & 65535), g.color.g = hA(C[Q] >>> 16), g.color.b = hA(C[Q + 1] & 65535), g.scales.x = Math.exp(hA(C[Q + 1] >>> 16)), g.scales.y = Math.exp(hA(C[Q + 2] & 65535)), g.scales.z = Math.exp(hA(C[Q + 2] >>> 16)), gC(C[Q + 3], g.quaternion), g;
 }
-function Zg(A, I, g, Q, B, C, D, E, i, w, o, G, s, k, y, S, J) {
-  const a = NI((k - 0) / 1), h = NI((y - 0) / 1), R = NI((S - 0) / 1), U = NI(s), c = $B(XB.set(i, w, o, G)), Y = c & 255, n = c >>> 8 & 255, N = c >>> 16 & 255, e = -12, V = 254 / (9 - e), BA = C < VI ? 0 : Math.min(255, Math.max(1, Math.round((Math.log(C) - e) * V) + 1)), j = D < VI ? 0 : Math.min(255, Math.max(1, Math.round((Math.log(D) - e) * V) + 1)), W = E < VI ? 0 : Math.min(255, Math.max(1, Math.round((Math.log(E) - e) * V) + 1)), IA = aA(g), JA = aA(Q), UA = aA(B), gA = I * 4;
+function Zg(A, I, g, Q, B, C, D, E, i, w, o, G, s, k, y, J, S) {
+  const a = NI((k - 0) / 1), h = NI((y - 0) / 1), R = NI((J - 0) / 1), U = NI(s), c = $B(XB.set(i, w, o, G)), Y = c & 255, n = c >>> 8 & 255, N = c >>> 16 & 255, e = -12, V = 254 / (9 - e), BA = C < VI ? 0 : Math.min(255, Math.max(1, Math.round((Math.log(C) - e) * V) + 1)), j = D < VI ? 0 : Math.min(255, Math.max(1, Math.round((Math.log(D) - e) * V) + 1)), W = E < VI ? 0 : Math.min(255, Math.max(1, Math.round((Math.log(E) - e) * V) + 1)), IA = aA(g), JA = aA(Q), UA = aA(B), gA = I * 4;
   A[gA] = a | h << 8 | R << 16 | U << 24, A[gA + 1] = IA | JA << 16, A[gA + 2] = UA | Y << 16 | n << 24, A[gA + 3] = BA | j << 8 | W << 16 | N << 24;
 }
 var XB = new RA(), FQ = {
@@ -887,8 +887,8 @@ function Eg(A, I, g) {
   Q.scales.x = k === 0 ? 0 : Math.exp(G + (k - 1) * s);
   const y = i >>> 8 & 255;
   Q.scales.y = y === 0 ? 0 : Math.exp(G + (y - 1) * s);
-  const S = i >>> 16 & 255;
-  return Q.scales.z = S === 0 ? 0 : Math.exp(G + (S - 1) * s), AC(E >>> 16 & 65535 | i >>> 8 & 16711680, Q.quaternion), Q;
+  const J = i >>> 16 & 255;
+  return Q.scales.z = J === 0 ? 0 : Math.exp(G + (J - 1) * s), AC(E >>> 16 & 65535 | i >>> 8 & 16711680, Q.quaternion), Q;
 }
 function p(A) {
   const I = M, g = Math.max(1, Math.min(sA, Math.ceil(A / I))), Q = Math.ceil(A / (I * g));
@@ -945,12 +945,12 @@ function AC(A, I) {
 }
 function IC(A, I, g, Q) {
   const B = Math.sqrt(A * A + I * I + g * g + Q * Q), C = (Q < 0 ? -A : A) / B, D = (Q < 0 ? -I : I) / B, E = (Q < 0 ? -g : g) / B, i = (Q < 0 ? -Q : Q) / B, w = 2 * Math.acos(i), o = Math.sqrt(C * C + D * D + E * E), G = o < 1e-6 ? 1 : C / o, s = o < 1e-6 ? 0 : D / o, k = o < 1e-6 ? 0 : E / o, y = Math.abs(G) + Math.abs(s) + Math.abs(k);
-  let S = G / y, J = s / y;
+  let J = G / y, S = s / y;
   if (k < 0) {
-    const c = S;
-    S = (1 - Math.abs(J)) * (S >= 0 ? 1 : -1), J = (1 - Math.abs(c)) * (J >= 0 ? 1 : -1);
+    const c = J;
+    J = (1 - Math.abs(S)) * (J >= 0 ? 1 : -1), S = (1 - Math.abs(c)) * (S >= 0 ? 1 : -1);
   }
-  const a = S * 0.5 + 0.5, h = J * 0.5 + 0.5, R = Math.round(a * 1023), U = Math.round(h * 1023);
+  const a = J * 0.5 + 0.5, h = S * 0.5 + 0.5, R = Math.round(a * 1023), U = Math.round(h * 1023);
   return Math.round(w * (4095 / Math.PI)) << 20 | U << 10 | R;
 }
 function gC(A, I) {
@@ -958,8 +958,8 @@ function gC(A, I) {
   let E = (C - 0.5) * 2, i = (D - 0.5) * 2;
   const w = 1 - (Math.abs(E) + Math.abs(i)), o = Math.max(-w, 0);
   E += E >= 0 ? -o : o, i += i >= 0 ? -o : o;
-  const G = Math.sqrt(E * E + i * i + w * w), s = G < 1e-6 ? 0 : E / G, k = G < 1e-6 ? 0 : i / G, y = G < 1e-6 ? 0 : w / G, S = B / 4095 * Math.PI * 0.5, J = Math.sin(S), a = Math.cos(S);
-  return I.set(s * J, k * J, y * J, a), I;
+  const G = Math.sqrt(E * E + i * i + w * w), s = G < 1e-6 ? 0 : E / G, k = G < 1e-6 ? 0 : i / G, y = G < 1e-6 ? 0 : w / G, J = B / 4095 * Math.PI * 0.5, S = Math.sin(J), a = Math.cos(J);
+  return I.set(s * S, k * S, y * S, a), I;
 }
 function QC(A, I) {
   const g = [];
@@ -3406,7 +3406,7 @@ var lC = class extends t {
       inputs: { gsplat: A },
       globals: () => [iA],
       statements: ({ inputs: I, outputs: g }) => {
-        const { gsplat: Q } = I, { flags: B, active: C, index: D, center: E, scales: i, quaternion: w, rgba: o, rgb: G, opacity: s, x: k, y, z: S, r: J, g: a, b: h } = g;
+        const { gsplat: Q } = I, { flags: B, active: C, index: D, center: E, scales: i, quaternion: w, rgba: o, rgb: G, opacity: s, x: k, y, z: J, r: S, g: a, b: h } = g;
         return [
           B ? `${B} = ${Q ? `${Q}.flags` : "0u"};` : null,
           C ? `${C} = isGsplatActive(${Q ? `${Q}.flags` : "0u"});` : null,
@@ -3419,8 +3419,8 @@ var lC = class extends t {
           s ? `${s} = ${Q ? `${Q}.rgba.a` : "0.0"};` : null,
           k ? `${k} = ${Q ? `${Q}.center.x` : "0.0"};` : null,
           y ? `${y} = ${Q ? `${Q}.center.y` : "0.0"};` : null,
-          S ? `${S} = ${Q ? `${Q}.center.z` : "0.0"};` : null,
-          J ? `${J} = ${Q ? `${Q}.rgba.r` : "0.0"};` : null,
+          J ? `${J} = ${Q ? `${Q}.center.z` : "0.0"};` : null,
+          S ? `${S} = ${Q ? `${Q}.rgba.r` : "0.0"};` : null,
           a ? `${a} = ${Q ? `${Q}.rgba.g` : "0.0"};` : null,
           h ? `${h} = ${Q ? `${Q}.rgba.b` : "0.0"};` : null
         ].filter(Boolean);
@@ -3466,10 +3466,10 @@ var lC = class extends t {
         b: y
       },
       globals: () => [iA],
-      statements: ({ inputs: S, outputs: J }) => {
-        const { gsplat: a } = J;
+      statements: ({ inputs: J, outputs: S }) => {
+        const { gsplat: a } = S;
         if (!a) return [];
-        const { gsplat: h, flags: R, index: U, center: c, scales: Y, quaternion: n, rgba: N, rgb: e, opacity: V, x: BA, y: j, z: W, r: IA, g: JA, b: UA } = S;
+        const { gsplat: h, flags: R, index: U, center: c, scales: Y, quaternion: n, rgba: N, rgb: e, opacity: V, x: BA, y: j, z: W, r: IA, g: JA, b: UA } = J;
         return [
           `${a}.flags = ${R ?? (h ? `${h}.flags` : "0u")};`,
           `${a}.index = ${U ?? (h ? `${h}.index` : "0")};`,
@@ -3583,7 +3583,7 @@ var bC = class extends t {
       inputs: { covsplat: A },
       globals: () => [vA],
       statements: ({ inputs: I, outputs: g }) => {
-        const { covsplat: Q } = I, { flags: B, active: C, index: D, center: E, rgba: i, rgb: w, opacity: o, x: G, y: s, z: k, r: y, g: S, b: J } = g;
+        const { covsplat: Q } = I, { flags: B, active: C, index: D, center: E, rgba: i, rgb: w, opacity: o, x: G, y: s, z: k, r: y, g: J, b: S } = g;
         return [
           B ? `${B} = ${Q ? `${Q}.flags` : "0u"};` : null,
           C ? `${C} = isCovSplatActive(${Q ? `${Q}.flags` : "0u"});` : null,
@@ -3596,8 +3596,8 @@ var bC = class extends t {
           s ? `${s} = ${Q ? `${Q}.center.y` : "0.0"};` : null,
           k ? `${k} = ${Q ? `${Q}.center.z` : "0.0"};` : null,
           y ? `${y} = ${Q ? `${Q}.rgba.r` : "0.0"};` : null,
-          S ? `${S} = ${Q ? `${Q}.rgba.g` : "0.0"};` : null,
-          J ? `${J} = ${Q ? `${Q}.rgba.b` : "0.0"};` : null
+          J ? `${J} = ${Q ? `${Q}.rgba.g` : "0.0"};` : null,
+          S ? `${S} = ${Q ? `${Q}.rgba.b` : "0.0"};` : null
         ].filter(Boolean);
       }
     });
@@ -3638,24 +3638,24 @@ var bC = class extends t {
       },
       globals: () => [vA],
       statements: ({ inputs: k, outputs: y }) => {
-        const { covsplat: S } = y;
-        if (!S) return [];
-        const { covsplat: J, flags: a, index: h, center: R, rgba: U, rgb: c, opacity: Y, x: n, y: N, z: e, r: V, g: BA, b: j } = k;
+        const { covsplat: J } = y;
+        if (!J) return [];
+        const { covsplat: S, flags: a, index: h, center: R, rgba: U, rgb: c, opacity: Y, x: n, y: N, z: e, r: V, g: BA, b: j } = k;
         return [
-          `${S}.flags = ${a ?? (J ? `${J}.flags` : "0u")};`,
-          `${S}.index = ${h ?? (J ? `${J}.index` : "0")};`,
-          `${S}.center = ${R ?? (J ? `${J}.center` : "vec3(0.0, 0.0, 0.0)")};`,
-          `${S}.rgba = ${U ?? (J ? `${J}.rgba` : "vec4(0.0, 0.0, 0.0, 0.0)")};`,
-          c ? `${S}.rgba.rgb = ${c};` : null,
-          Y ? `${S}.rgba.a = ${Y};` : null,
-          n ? `${S}.center.x = ${n};` : null,
-          N ? `${S}.center.y = ${N};` : null,
-          e ? `${S}.center.z = ${e};` : null,
-          V ? `${S}.rgba.r = ${V};` : null,
-          BA ? `${S}.rgba.g = ${BA};` : null,
-          j ? `${S}.rgba.b = ${j};` : null,
-          `${S}.xxyyzz = ${J ? `${J}.xxyyzz` : "vec3(0.0, 0.0, 0.0)"};`,
-          `${S}.xyxzyz = ${J ? `${J}.xyxzyz` : "vec3(0.0, 0.0, 0.0)"};`
+          `${J}.flags = ${a ?? (S ? `${S}.flags` : "0u")};`,
+          `${J}.index = ${h ?? (S ? `${S}.index` : "0")};`,
+          `${J}.center = ${R ?? (S ? `${S}.center` : "vec3(0.0, 0.0, 0.0)")};`,
+          `${J}.rgba = ${U ?? (S ? `${S}.rgba` : "vec4(0.0, 0.0, 0.0, 0.0)")};`,
+          c ? `${J}.rgba.rgb = ${c};` : null,
+          Y ? `${J}.rgba.a = ${Y};` : null,
+          n ? `${J}.center.x = ${n};` : null,
+          N ? `${J}.center.y = ${N};` : null,
+          e ? `${J}.center.z = ${e};` : null,
+          V ? `${J}.rgba.r = ${V};` : null,
+          BA ? `${J}.rgba.g = ${BA};` : null,
+          j ? `${J}.rgba.b = ${j};` : null,
+          `${J}.xxyyzz = ${S ? `${S}.xxyyzz` : "vec3(0.0, 0.0, 0.0)"};`,
+          `${J}.xyxzyz = ${S ? `${S}.xyxzyz` : "vec3(0.0, 0.0, 0.0)"};`
         ].filter(Boolean);
       }
     });
@@ -7151,10 +7151,10 @@ var qE = class {
     }
   }
   async asyncInitialize(A) {
-    const { url: I, fileBytes: g, fileType: Q, fileName: B, stream: C, streamLength: D, requestHeader: E, withCredentials: i, maxSplats: w, constructSplats: o, onProgress: G, splatEncoding: s, lod: k, nonLod: y, lodAbove: S } = A;
+    const { url: I, fileBytes: g, fileType: Q, fileName: B, stream: C, streamLength: D, requestHeader: E, withCredentials: i, maxSplats: w, constructSplats: o, onProgress: G, splatEncoding: s, lod: k, nonLod: y, lodAbove: J } = A;
     if (this.packedSplats) {
       if (I || g || C || o) {
-        const J = {
+        const S = {
           url: I,
           fileBytes: g,
           fileType: Q,
@@ -7169,13 +7169,13 @@ var qE = class {
           splatEncoding: s,
           lod: k,
           nonLod: y,
-          lodAbove: S
+          lodAbove: J
         };
-        this.packedSplats.reinitialize(J);
+        this.packedSplats.reinitialize(S);
       }
       await this.packedSplats.initialized, this.splats = this.packedSplats;
     } else if (this.extSplats && (I || g || C || o)) {
-      const J = o;
+      const S = o;
       this.extSplats.reinitialize({
         url: I,
         fileBytes: g,
@@ -7186,11 +7186,11 @@ var qE = class {
         requestHeader: E,
         withCredentials: i,
         maxSplats: w,
-        construct: J,
+        construct: S,
         onProgress: G,
         lod: k,
         nonLod: y,
-        lodAbove: S
+        lodAbove: J
       }), await this.extSplats.initialized, this.splats = this.extSplats;
     }
     this.splats && (this.numSplats = this.splats.getNumSplats(), this.updateGenerator());
@@ -7275,39 +7275,39 @@ var qE = class {
       this.context.covTransform.update(this) && (w = !0), this.context.covViewToWorld.updateFromMatrix(Q) && this.enableViewToWorld && (w = !0);
       const y = Q.clone().invert();
       this.context.covWorldToView.updateFromMatrix(y) && this.enableWorldToView && (w = !0);
-      const S = this.matrixWorld.clone().invert().multiply(Q);
-      this.context.covViewToObject.updateFromMatrix(S) && (this.enableViewToObject || this.context.splats.hasRgbDir()) && (w = !0);
+      const J = this.matrixWorld.clone().invert().multiply(Q);
+      this.context.covViewToObject.updateFromMatrix(J) && (this.enableViewToObject || this.context.splats.hasRgbDir()) && (w = !0);
     } else {
       this.context.transform.update(this) && (w = !0), this.context.viewToWorld.updateFromMatrix(Q) && this.enableViewToWorld && (w = !0);
       const y = Q.clone().invert();
       this.context.worldToView.updateFromMatrix(y) && this.enableWorldToView && (w = !0);
-      const S = new aI().compose(this.context.transform.translate.value, this.context.transform.rotate.value, new L().setScalar(this.context.transform.scale.value)).invert().multiply(Q);
-      this.context.viewToObject.updateFromMatrix(S) && (this.enableViewToObject || this.context.splats.hasRgbDir()) && (w = !0);
+      const J = new aI().compose(this.context.transform.translate.value, this.context.transform.rotate.value, new L().setScalar(this.context.transform.scale.value)).invert().multiply(Q);
+      this.context.viewToObject.updateFromMatrix(J) && (this.enableViewToObject || this.context.splats.hasRgbDir()) && (w = !0);
     }
     const G = new EA(this.recolor.r, this.recolor.g, this.recolor.b, this.opacity);
     G.equals(this.context.recolor.value) || (this.context.recolor.value.copy(G), w = !0);
     const s = this.editable ? (this.edits ?? []).concat(D) : [];
     this.editable && !this.edits && this.traverseVisible((y) => {
       lQ(y) && s.push(y);
-    }), s.sort((y, S) => y.ordering - S.ordering);
+    }), s.sort((y, J) => y.ordering - J.ordering);
     const k = s.map((y) => {
       if (y.sdfs != null) return {
         edit: y,
         sdfs: y.sdfs
       };
-      const S = [];
-      return y.traverseVisible((J) => {
-        KE(J) && S.push(J);
+      const J = [];
+      return y.traverseVisible((S) => {
+        KE(S) && J.push(S);
       }), {
         edit: y,
-        sdfs: S
+        sdfs: J
       };
     });
     if (k.length > 0 && !this.rgbaDisplaceEdits) {
-      const y = k.length, S = k.reduce((J, a) => J + a.sdfs.length, 0);
+      const y = k.length, J = k.reduce((S, a) => S + a.sdfs.length, 0);
       this.rgbaDisplaceEdits = new eE({
         maxEdits: y,
-        maxSdfs: S
+        maxSdfs: J
       }), this.generatorDirty = !0;
     }
     if (this.rgbaDisplaceEdits) {
@@ -7324,40 +7324,40 @@ var qE = class {
     if (!YC() || !this.raycastable || !this.packedSplats && !this.extSplats && !this.paged) return;
     const g = this.paged != null, Q = g ? this.paged?.pager?.extSplats ?? !1 : this.extSplats != null, { near: B, far: C, ray: D } = A, E = this.matrixWorld.clone().invert(), i = new yI().setFromMatrix4(E), w = D.origin.clone().applyMatrix4(E), o = D.direction.clone().applyMatrix3(i), G = CC(), s = G.length / 4;
     let k = 0;
-    const y = this.raycastIndices?.numSplats ?? (g ? this.paged?.numSplats : this.context.numSplats.value) ?? 0, S = this.raycastIndices?.indices ?? (g ? this.paged?.dynoIndices.value.image.data : this.context.enableLod.value ? this.context.lodIndices.value.image.data : null) ?? null;
+    const y = this.raycastIndices?.numSplats ?? (g ? this.paged?.numSplats : this.context.numSplats.value) ?? 0, J = this.raycastIndices?.indices ?? (g ? this.paged?.dynoIndices.value.image.data : this.context.enableLod.value ? this.context.lodIndices.value.image.data : null) ?? null;
     if (Q) {
-      const J = EC(), a = g ? this.paged?.pager?.packedTexture.value.image.data : S ? this.extSplats?.lodSplats?.extArrays[0] : this.extSplats?.extArrays[0], h = g ? this.paged?.pager?.extTexture.value.image.data : S ? this.extSplats?.lodSplats?.extArrays[1] : this.extSplats?.extArrays[1];
+      const S = EC(), a = g ? this.paged?.pager?.packedTexture.value.image.data : J ? this.extSplats?.lodSplats?.extArrays[0] : this.extSplats?.extArrays[0], h = g ? this.paged?.pager?.extTexture.value.image.data : J ? this.extSplats?.lodSplats?.extArrays[1] : this.extSplats?.extArrays[1];
       if (!a || !h) return;
       for (let R = 0; R < y; R += s) {
         const U = Math.min(s, y - R);
-        if (!S)
-          G.set(a.subarray(R * 4, (R + U) * 4)), J.set(h.subarray(R * 4, (R + U) * 4));
+        if (!J)
+          G.set(a.subarray(R * 4, (R + U) * 4)), S.set(h.subarray(R * 4, (R + U) * 4));
         else for (let Y = 0; Y < U; ++Y) {
-          const n = S[R + Y], N = Y * 4, e = n * 4;
-          G[N] = a[e], G[N + 1] = a[e + 1], G[N + 2] = a[e + 2], G[N + 3] = a[e + 3], J[N] = h[e], J[N + 1] = h[e + 1], J[N + 2] = h[e + 2], J[N + 3] = h[e + 3];
+          const n = J[R + Y], N = Y * 4, e = n * 4;
+          G[N] = a[e], G[N + 1] = a[e + 1], G[N + 2] = a[e + 2], G[N + 3] = a[e + 3], S[N] = h[e], S[N + 1] = h[e + 1], S[N + 2] = h[e + 2], S[N + 3] = h[e + 3];
         }
         const c = DC(w.x, w.y, w.z, o.x, o.y, o.z, this.minRaycastOpacity, B, C, U);
         k = this.appendRaycastBuffer(k, c);
       }
     } else {
-      const J = g ? this.paged?.pager?.packedTexture.value.image.data : S ? this.packedSplats?.lodSplats?.packedArray : this.packedSplats?.packedArray;
-      if (!J) return;
+      const S = g ? this.paged?.pager?.packedTexture.value.image.data : J ? this.packedSplats?.lodSplats?.packedArray : this.packedSplats?.packedArray;
+      if (!S) return;
       const a = (g ? this.paged?.splatEncoding : this.packedSplats?.splatEncoding) ?? eA;
       for (let h = 0; h < y; h += s) {
         const R = Math.min(s, y - h);
-        if (!S) G.set(J.subarray(h * 4, (h + R) * 4));
+        if (!J) G.set(S.subarray(h * 4, (h + R) * 4));
         else for (let c = 0; c < R; ++c) {
-          const Y = S[h + c], n = c * 4, N = Y * 4;
-          G[n] = J[N], G[n + 1] = J[N + 1], G[n + 2] = J[N + 2], G[n + 3] = J[N + 3];
+          const Y = J[h + c], n = c * 4, N = Y * 4;
+          G[n] = S[N], G[n + 1] = S[N + 1], G[n + 2] = S[N + 2], G[n + 3] = S[N + 3];
         }
         const U = iC(w.x, w.y, w.z, o.x, o.y, o.z, this.minRaycastOpacity, B, C, R, a.lnScaleMin, a.lnScaleMax, a.lodOpacity);
         k = this.appendRaycastBuffer(k, U);
       }
     }
-    for (const J of yA.raycastBuffer.subarray(0, k)) {
-      const a = D.direction.clone().multiplyScalar(J).add(D.origin);
+    for (const S of yA.raycastBuffer.subarray(0, k)) {
+      const a = D.direction.clone().multiplyScalar(S).add(D.origin);
       I.push({
-        distance: J,
+        distance: S,
         point: a,
         object: this
       });
@@ -7473,9 +7473,9 @@ var IQ = (() => {
   }
   loadInternal({ packedSplats: A, extSplats: I, url: g, fileBytes: Q, fileType: B, fileName: C, stream: D, streamLength: E, onLoad: i, onProgress: w, onError: o, lod: G, nonLod: s, lodAbove: k, lodBase: y }) {
     Q instanceof ArrayBuffer && (Q = new Uint8Array(Q));
-    const S = Q ? void 0 : this.manager.resolveURL((this.path ?? "") + (g ?? ""));
-    let J = D?.getReader();
-    this.manager.itemStart(S ?? ""), lI.withWorker(async (a) => {
+    const J = Q ? void 0 : this.manager.resolveURL((this.path ?? "") + (g ?? ""));
+    let S = D?.getReader();
+    this.manager.itemStart(J ?? ""), lI.withWorker(async (a) => {
       const h = A?.lod ?? I?.lod;
       h && (G = h);
       const R = A?.nonLod ?? I?.nonLod;
@@ -7488,20 +7488,20 @@ var IQ = (() => {
           total: BA
         })), e.nextChunk) {
           let j;
-          if (!J) j = /* @__PURE__ */ new Uint8Array(0);
+          if (!S) j = /* @__PURE__ */ new Uint8Array(0);
           else {
-            const { done: W, value: IA } = await J.read();
-            W ? (J.releaseLock(), J = void 0, j = /* @__PURE__ */ new Uint8Array(0)) : j = IA;
+            const { done: W, value: IA } = await S.read();
+            W ? (S.releaseLock(), S = void 0, j = /* @__PURE__ */ new Uint8Array(0)) : j = IA;
           }
           a.call("nextChunk", { chunk: j });
         }
-      }, c = S ? new URL(S, window.location.href).toString() : void 0, Y = await a.call(I ? "loadExtSplats" : "loadPackedSplats", {
+      }, c = J ? new URL(J, window.location.href).toString() : void 0, Y = await a.call(I ? "loadExtSplats" : "loadPackedSplats", {
         url: c,
         requestHeader: this.requestHeader,
         withCredentials: this.withCredentials,
         fileBytes: Q?.slice(),
         fileType: B,
-        pathName: S || C,
+        pathName: J || C,
         chunked: D !== void 0,
         chunkedLength: E,
         encoding: A?.splatEncoding,
@@ -7517,9 +7517,9 @@ var IQ = (() => {
       let N;
       I ? (N = I, I.initialize(n)) : (N = A ?? new VA(), N.initialize(n)), i?.(N);
     }).catch((a) => {
-      this.manager.itemError(S ?? ""), o?.(a);
+      this.manager.itemError(J ?? ""), o?.(a);
     }).finally(() => {
-      this.manager.itemEnd(S ?? "");
+      this.manager.itemEnd(J ?? "");
     });
   }
   async loadInternalAsync({ packedSplats: A, extSplats: I, url: g, fileBytes: Q, fileType: B, fileName: C, stream: D, streamLength: E, onProgress: i, lod: w, nonLod: o, lodAbove: G, lodBase: s }) {
@@ -8139,9 +8139,9 @@ var K, $A = (K = class {
     I.traverseVisible((h) => {
       h instanceof Sg && (!Q.layers || Q.layers.test(h.layers)) && G.push(h);
     });
-    const s = G.map((h) => h.numSplats), { maxSplats: k, mapping: y } = this.generateMapping(s), S = D.mapping.reduce((h, R) => (h.set(R.node, R), h), /* @__PURE__ */ new Map());
+    const s = G.map((h) => h.numSplats), { maxSplats: k, mapping: y } = this.generateMapping(s), J = D.mapping.reduce((h, R) => (h.set(R.node, R), h), /* @__PURE__ */ new Map());
     this.mapping = [], this.numSplats = 0, y.forEach(({ base: h, count: R }, U) => {
-      const c = G[U], Y = S.get(c);
+      const c = G[U], Y = J.get(c);
       Y && Y.count !== c.numSplats && c.updateMappingVersion();
       const { generator: n, covGenerator: N } = c;
       if ((n || N) && R > 0) {
@@ -8157,8 +8157,8 @@ var K, $A = (K = class {
         }), this.numSplats = Math.max(this.numSplats, h + R);
       }
     });
-    const { splatsUpdated: J, mappingUpdated: a } = D.checkVersions(this.mapping);
-    return this.version = D.version + (J ? 1 : 0), this.mappingVersion = D.mappingVersion + (a ? 1 : 0), {
+    const { splatsUpdated: S, mappingUpdated: a } = D.checkVersions(this.mapping);
+    return this.version = D.version + (S ? 1 : 0), this.mappingVersion = D.mappingVersion + (a ? 1 : 0), {
       sameMapping: !a,
       version: this.version,
       mappingVersion: this.mappingVersion,
@@ -8313,13 +8313,13 @@ var K, $A = (K = class {
       const { width: w, height: o, doubleBuffer: G, superXY: s, ...k } = A.target, y = Math.max(1, Math.min(4, s ?? 1));
       if (w * y > 8192 || o * y > 8192) throw new Error("Target size too large");
       this.superXY = y;
-      const S = w * y, J = o * y, a = {
+      const J = w * y, S = o * y, a = {
         format: kI,
         type: sI,
         colorSpace: OI,
         ...k
       };
-      this.target = new pg(S, J, a), G && (this.backTarget = new pg(S, J, a));
+      this.target = new pg(J, S, a), G && (this.backTarget = new pg(J, S, a));
     }
   }
   static makeUniforms() {
@@ -8382,17 +8382,17 @@ var K, $A = (K = class {
   onBeforeRender(A, I, g) {
     const Q = r.sparkOverride ?? this, B = A.info.render.frame, C = B !== Q.lastFrame;
     if (Q.lastFrame = B, Q.autoUpdate && C) {
-      const y = Q.preUpdate && !A.xr.isPresenting, S = A.xr.isPresenting ? A.xr.getCamera() : g;
+      const y = Q.preUpdate && !A.xr.isPresenting, J = A.xr.isPresenting ? A.xr.getCamera() : g;
       y ? Q.updateInternal({
         scene: I,
-        camera: S,
+        camera: J,
         autoUpdate: !0
-      }).catch((J) => Q.dropErrorIfDisposed(J)) : Q.updateTimeoutId === void 0 && (Q.updateTimeoutId = setTimeout(() => {
+      }).catch((S) => Q.dropErrorIfDisposed(S)) : Q.updateTimeoutId === void 0 && (Q.updateTimeoutId = setTimeout(() => {
         Q.updateTimeoutId = void 0, Q.updateInternal({
           scene: I,
-          camera: S,
+          camera: J,
           autoUpdate: !0
-        }).catch((J) => Q.dropErrorIfDisposed(J));
+        }).catch((S) => Q.dropErrorIfDisposed(S));
       }, 1));
     }
     const D = A.getRenderTarget(), E = XE(D), i = g.viewport ?? A.getCurrentViewport(new EA());
@@ -8449,12 +8449,12 @@ var K, $A = (K = class {
       previous: this.current,
       lodInstances: this.enableLod ? this.lodInstances : void 0
     });
-    for (const S of o) if (S instanceof MA && !S.isInitialized && !this.initWatched.has(S)) {
-      this.initWatched.add(S);
-      const J = () => {
-        S.removeEventListener("initialized", J), this.initWatched.delete(S), this.setDirty();
+    for (const J of o) if (J instanceof MA && !J.isInitialized && !this.initWatched.has(J)) {
+      this.initWatched.add(J);
+      const S = () => {
+        J.removeEventListener("initialized", S), this.initWatched.delete(J), this.setDirty();
       };
-      S.addEventListener("initialized", J);
+      J.addEventListener("initialized", S);
     }
     let s = !0;
     const k = D || i !== this.current.version, y = w !== this.display.mappingVersion;
@@ -8633,12 +8633,12 @@ var K, $A = (K = class {
     }
   }
   async updateLodInstances(A, I, g, Q, B, C, D) {
-    const E = /* @__PURE__ */ new Map(), i = new aI().compose(B, C, new L().setScalar(1)), w = g.reduce((J, a) => {
+    const E = /* @__PURE__ */ new Map(), i = new aI().compose(B, C, new L().setScalar(1)), w = g.reduce((S, a) => {
       E.set(a.uuid, a);
       const h = a.matrixWorld.clone().invert().multiply(i), R = a.packedSplats?.lodSplats ?? a.extSplats?.lodSplats ?? a.paged;
-      if (!R) return J;
+      if (!R) return S;
       const U = this.lodIds.get(R);
-      return !U || this.pager && a.paged && U.rootPage === void 0 || (J[a.uuid] = {
+      return !U || this.pager && a.paged && U.rootPage === void 0 || (S[a.uuid] = {
         instanceId: a.uuid,
         lodId: U.lodId,
         rootPage: U.rootPage,
@@ -8648,7 +8648,7 @@ var K, $A = (K = class {
         coneFov0: a.coneFov0 ?? this.coneFov0,
         coneFov: a.coneFov ?? this.coneFov,
         coneFoveate: a.coneFoveate ?? this.coneFoveate
-      }), J;
+      }), S;
     }, {}), o = performance.now(), G = await A.call("traverseLodTrees", {
       maxSplats: Q,
       pixelScaleLimit: D,
@@ -8659,10 +8659,10 @@ var K, $A = (K = class {
     this.lastTraverseTime = performance.now() - o;
     const { keyIndices: s, chunks: k, pixelLimit: y } = G;
     this.lastPixelLimit = y;
-    const S = Object.values(s).reduce((J, { numSplats: a }) => J + a, 0);
+    const J = Object.values(s).reduce((S, { numSplats: a }) => S + a, 0);
     if (this.updateLodIndices(E, s), this.pager) {
       this.pager.processUploads();
-      const J = g.map((a) => {
+      const S = g.map((a) => {
         if (!a.paged || !this.pager) return null;
         const h = a.getWorldPosition(new L());
         return {
@@ -8670,7 +8670,7 @@ var K, $A = (K = class {
           distance: h.distanceTo(B)
         };
       }).filter((a) => a !== null);
-      !this.pageSizeWarning && J.length > this.pager.maxPages && (this.pageSizeWarning = !0, console.warn(`# paged SplatMeshes exceeds maxPages: ${J.length} > ${this.pager.maxPages}`)), J.sort((a, h) => a.distance - h.distance), this.pager.fetchPriority = J.map(({ splats: a }) => ({
+      !this.pageSizeWarning && S.length > this.pager.maxPages && (this.pageSizeWarning = !0, console.warn(`# paged SplatMeshes exceeds maxPages: ${S.length} > ${this.pager.maxPages}`)), S.sort((a, h) => a.distance - h.distance), this.pager.fetchPriority = S.map(({ splats: a }) => ({
         splats: a,
         chunk: 0
       }));
@@ -8685,13 +8685,13 @@ var K, $A = (K = class {
     }
     if (this.lodRaycast && performance.now() - this.lastLodRaycastTime >= this.lodRaycastIntervalMs) {
       this.lastLodRaycastTime = performance.now();
-      const J = performance.now(), a = await A.call("traverseLodTrees", {
-        maxSplats: Math.min(this.lodRaycast, Math.round(S * 0.1)),
+      const S = performance.now(), a = await A.call("traverseLodTrees", {
+        maxSplats: Math.min(this.lodRaycast, Math.round(J * 0.1)),
         pixelScaleLimit: D,
         instances: w,
         traverseMode: this.lodTraverseMode
       });
-      performance.now() - J;
+      performance.now() - S;
       const { keyIndices: h } = a;
       Object.values(h).reduce((R, { numSplats: U }) => R + U, 0);
       for (const [R, U] of Object.entries(h)) {
@@ -8752,8 +8752,8 @@ var K, $A = (K = class {
     for (; i < g; ) {
       const o = Math.floor(i / E), G = o * E, s = Math.min(sA, Math.ceil((g - G) / M)), k = M * s * 4, y = C.subarray(G * 4, G * 4 + k);
       I.setRenderTarget(A.target, o);
-      const S = I.readRenderTargetPixelsAsync(A.target, 0, 0, M, s, y, void 0, A.extSplats ? 2 : 1);
-      w.push(S), this.flushAfterRead && I.getContext().flush(), i += M * s;
+      const J = I.readRenderTargetPixelsAsync(A.target, 0, 0, M, s, y, void 0, A.extSplats ? 2 : 1);
+      w.push(J), this.flushAfterRead && I.getContext().flush(), i += M * s;
     }
     return this.resetRenderState(I, D), Promise.all(w).then(() => Q);
   }
@@ -8800,16 +8800,16 @@ var K, $A = (K = class {
       const G = o * C;
       for (let s = 0; s < C; s++) {
         const k = s * B;
-        let y = 0, S = 0, J = 0, a = 0;
+        let y = 0, J = 0, S = 0, a = 0;
         for (let R = 0; R < B; R++) {
           const U = (o * B + R) * A;
           for (let c = 0; c < B; c++) {
             const Y = (U + k + c) * 4;
-            y += Q[Y], S += Q[Y + 1], J += Q[Y + 2], a += Q[Y + 3];
+            y += Q[Y], J += Q[Y + 1], S += Q[Y + 2], a += Q[Y + 3];
           }
         }
         const h = (G + s) * 4;
-        i[h] = y / w, i[h + 1] = S / w, i[h + 2] = J / w, i[h + 3] = a / w;
+        i[h] = y / w, i[h + 1] = J / w, i[h + 2] = S / w, i[h + 3] = a / w;
       }
     }
     return i;
@@ -8950,36 +8950,36 @@ async function QQ(A, I) {
     );
   });
 }
-async function $E(A, I, g) {
+async function $E(A, I, g, Q) {
   if (g.throwIfAborted(), !I.url) throw new Error("No Gaussian splat URL provided");
-  const Q = await _E(I.url, g);
+  const B = await _E(I.url, g);
   g.throwIfAborted();
-  const B = !bQ(Q) && !zE(I.url) ? $.SPLAT : void 0, C = new WE({ renderer: A.renderer }), D = new MA({
-    fileBytes: Q,
+  const C = !bQ(B) && !zE(I.url) ? $.SPLAT : void 0, D = new WE({ renderer: A.renderer }), E = new MA({
+    fileBytes: B,
     fileName: I.url,
-    ...B ? { fileType: B } : {}
+    ...C ? { fileType: C } : {}
   });
-  D.quaternion.set(1, 0, 0, 0), D.initialized.catch(() => {
+  E.quaternion.set(1, 0, 0, 0), E.initialized.catch(() => {
   });
-  let E = !1;
-  const i = () => {
-    E || (E = !0, D.dispose(), C.dispose());
+  let i = !1;
+  const w = () => {
+    i || (i = !0, E.dispose(), D.dispose());
   };
-  C.material.addEventListener("dispose", i);
-  let w;
+  D.material.addEventListener("dispose", w);
+  let o;
   try {
-    await QQ(D.initialized, g), g.throwIfAborted();
-    const o = (J, a) => {
-      a <= 0 || (A.camera.fov = vE(a), A.camera.updateProjectionMatrix());
-    }, { width: G, height: s } = A.size;
-    o(G, s), w = A.onResize(o);
-    const k = lg(I.cameraPosition) ?? new L(...gQ.position), y = lg(I.cameraTarget) ?? new L(...gQ.target), S = { position: k, target: y };
-    return A.camera.position.copy(S.position), A.camera.lookAt(S.target), A.camera.updateMatrixWorld(), A.scene.add(C, D), A.renderer.getDrawingBufferSize(C.renderSize), await QQ(
-      C.update({ scene: A.scene, camera: A.camera }),
+    await QQ(E.initialized, g), g.throwIfAborted();
+    const G = (a, h) => {
+      h <= 0 || (A.camera.fov = vE(h), A.camera.updateProjectionMatrix());
+    }, { width: s, height: k } = A.size;
+    G(s, Q ?? k), Q === void 0 && (o = A.onResize(G));
+    const y = lg(I.cameraPosition) ?? new L(...gQ.position), J = lg(I.cameraTarget) ?? new L(...gQ.target), S = { position: y, target: J };
+    return A.camera.position.copy(S.position), A.camera.lookAt(S.target), A.camera.updateMatrixWorld(), A.scene.add(D, E), A.renderer.getDrawingBufferSize(D.renderSize), await QQ(
+      D.update({ scene: A.scene, camera: A.camera }),
       g
     ), g.throwIfAborted(), { home: S };
-  } catch (o) {
-    throw w?.(), A.scene.remove(C, D), i(), o;
+  } catch (G) {
+    throw o?.(), A.scene.remove(D, E), w(), G;
   }
 }
 class ID {

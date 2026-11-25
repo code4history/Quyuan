@@ -19,7 +19,7 @@ describe('QyViewer navigation compatibility', () => {
     viewer = document.createElement('qy-viewer') as QyViewer;
     document.body.appendChild(viewer);
     await waitForUpdate();
-    ccViewer = viewer.shadowRoot!.querySelector('cc-viewer') as CcViewer;
+    ccViewer = viewer.shadowRoot!.querySelector('qy-viewer-inner') as CcViewer;
   });
 
   it('forwards items, index and loop options to the inner cc-viewer', async () => {

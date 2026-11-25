@@ -1,9 +1,6 @@
 import { QyElement } from '../../base/qy-element.js';
 import { MediaItem } from '@c4h/chuci';
-/**
- * Wrapper component that delegates to Chuci's cc-viewer
- * while maintaining the qy-viewer interface
- */
+/** Wrapper preserving the public qy-viewer interface. */
 export declare class QyViewer extends QyElement {
     private _currentSlideIndex;
     private _currentType;

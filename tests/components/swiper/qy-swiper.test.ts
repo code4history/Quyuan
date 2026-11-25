@@ -154,6 +154,44 @@ describe('qy-swiper', () => {
     document.createElement = originalCreateElement
   })
 
+  it('keeps timers, observers and handlers off while disconnected', async () => {
+    vi.useFakeTimers()
+    const observe = vi.fn()
+    vi.stubGlobal('ResizeObserver', class { observe = observe; disconnect() {} })
+    try {
+      const swiper = document.createElement('qy-swiper')
+      swiper.setAttribute('autoplay', '')
+      const wrapper = document.createElement('div')
+      const slide = () => {
+        const node = document.createElement('qy-swiper-slide')
+        node.setAttribute('thumbnail-url', 'thumb.jpg')
+        return node
+      }
+      wrapper.append(slide(), slide())
+      swiper.append(wrapper)
+      container.append(swiper)
+      expect(vi.getTimerCount()).toBe(1)
+      swiper.remove()
+      const observations = observe.mock.calls.length
+      swiper.toggleAttribute('has-thumb')
+      await Promise.resolve()
+      expect(observe).toHaveBeenCalledTimes(observations)
+      expect(vi.getTimerCount()).toBe(0)
+      swiper.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
+      expect(swiper.index).toBe(0)
+
+      container.append(swiper)
+      expect(vi.getTimerCount()).toBe(1)
+      wrapper.lastElementChild!.remove()
+      await Promise.resolve()
+      expect(swiper.shadowRoot!.querySelectorAll('.cc-slide')).toHaveLength(1)
+      expect(vi.getTimerCount()).toBe(0)
+    } finally {
+      vi.unstubAllGlobals()
+      vi.useRealTimers()
+    }
+  })
+
   it('should re-render when slides are added dynamically', async () => {
     container.innerHTML = `<qy-swiper></qy-swiper>`
 

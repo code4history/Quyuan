@@ -14,6 +14,7 @@
 - `thumbnail-url` がない `qy-swiper-slide` で、Chuci の IndexedDB キャッシュと自動サムネイル生成を使うようにした。作成ツールは `@c4h/chuci` の `generateThumbnail` と `readMediaItem` を `qy-swiper-slide` にも使える。
 
 #### 2.0 の修正
+- 旧 Chuci が先に登録されたページでも `qy-swiper` からビューアを開けるようにした。DOM から外したスライダーでは監視と自動送りを解除する。
 - Chuci 2.0 へ追随し、Gaussian の `camera-position`・`camera-target`、3D メッシュの `show-texture`・`fit-to-container` が実際の表示へ反映されない問題を修正。
 - 1.1.1 の「既知の問題」にあった、Chuci の `realIndex` のずれによる閉じた後の画像のずれを解消。2.0 では Swiper を外したため、不具合の対象だった仕組み自体がなくなる。
 
@@ -27,6 +28,7 @@
 - Added Chuci's IndexedDB cache and automatic thumbnail generation to `qy-swiper-slide` elements without `thumbnail-url`. Authoring tools can use `@c4h/chuci`'s `generateThumbnail` and `readMediaItem` with `qy-swiper-slide` too.
 
 #### 2.0 fixed
+- The Quyuan viewer opens from `qy-swiper` even when an older Chuci bundle registered its elements first. Removing a carousel now stops its observers and autoplay.
 - Followed Chuci 2.0 to apply Gaussian `camera-position` and `camera-target`, and 3D model `show-texture` and `fit-to-container`, to the rendered view.
 - Resolved the Chuci `realIndex` drift listed under "Known issues" in 1.1.1, which could show a different image after closing the viewer. In 2.0, removing Swiper removes the mechanism that contained the bug.
 
