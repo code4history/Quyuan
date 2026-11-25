@@ -99,6 +99,59 @@ Gaussian のカメラ属性と 3D モデルのテクスチャ・自動フィッ�
 前後へ移動し、Escape で閉じます。スワイプによる前後移動はなく、ボタンと
 キーボードを使います。
 
+## 2.0 への移行
+
+### HTML の要素だけを使う場合
+
+既存の `qy-swiper`・`qy-swiper-slide` のマークアップに API の変更はありません。
+Chuci から継承する共通の見た目と、依存・配置の変化を確認してください。Swiper.js・
+viewer.js・gsplat・A-Frame はなくなり、three.js は同梱です。ESM ビルドでは別チャンクの
+Spark を必要時に読み込めるよう、`dist/` の全ファイルを一緒に配置してください。
+UMD・CDN ビルドは別チャンクを読み込まず、Spark を内包しています。テンプレート専用
+入口に変更はありません。
+
+以前は表示に効かなかった属性も見直してください。Gaussian の
+`camera-position`・`camera-target` と、3D モデルの `show-texture`・
+`fit-to-container` が実際に効くようになりました。`fit-to-container` は真偽属性なので、
+`fit-to-container="false"` と書いても有効です。無効にするには属性自体を外して
+ください。
+
+### JavaScript で直接ビューアを操作する場合
+
+旧来の URL・種類・属性を渡す呼び出しを `MediaItem[]` と最初の番号に変えます。
+カルーセルのメソッドは番号だけを受け取ります。
+
+```javascript
+// 旧
+const swiper = document.querySelector('qy-swiper');
+const viewer = document.querySelector('qy-viewer');
+viewer.setSwiper(swiper);
+viewer.open('photo.jpg', 'image', { caption: '写真' });
+viewer.setCurrentSlideIndex(0);
+await swiper.openViewer('photo.jpg', 'image', 0);
+
+// 新
+const items = [
+  { url: 'photo.jpg', type: 'image', caption: '写真' },
+  { url: 'next.jpg', type: 'image', caption: '次の写真' }
+];
+await viewer.open(items, 0, { loop: true });
+await swiper.openViewer(0);
+```
+
+`setSwiper`・`setCurrentSlideIndex` は削除されました。`swiper.openViewer(index)` で
+開く場合、`setSwiper` は不要です。直接操作するビューアの番号は、
+`setCurrentSlideIndex` の代わりに `cc-viewer-index-change` の `detail.index` で
+追跡します。
+
+```javascript
+document.addEventListener('cc-viewer-index-change', (event) => {
+  console.log(event.detail.index);
+});
+```
+
+単一の `qy-viewer` を使います。以前のメディア別 Chuci `cc-viewer-*` 要素はありません。
+
 ## カルーセルとビューアの操作
 
 | 操作 | 2D 画像 | 3D モデル・Gaussian | 360° パノラマ |
@@ -133,7 +186,9 @@ Gaussian のカメラ属性と 3D モデルのテクスチャ・自動フィッ�
 `thumbnail-url` がないスライドは Chuci の IndexedDB キャッシュ
 （`chuci-thumbnails`）を使い、必要に応じて一時的に種類のアイコンを表示し、
 不足分を裏で生成します。現在のスライドを優先し、1 件ずつ生成します。
-失敗時はアイコンのままとし、失敗はページの寿命の間だけ記憶します。
+YouTube の取得に失敗した場合は、動画 ID があれば公開サムネイルの URL を直接画像に
+使います。その他の失敗時は種類のアイコンのままとし、失敗はページの寿命の間だけ
+記憶します。
 
 作成ツールからは `@c4h/chuci` が公開する同じ API を直接呼べます。
 Quyuan はこの API を再エクスポートしません。
@@ -152,20 +207,24 @@ generateThumbnail(
 ```javascript
 import { generateThumbnail, readMediaItem } from '@c4h/chuci';
 
-async function createAndStoreThumbnail(slide, storeBlob) {
-  const controller = new AbortController();
+async function appendSlideWithThumbnail(swiper, slide, storeBlob, signal) {
   const blob = await generateThumbnail(readMediaItem(slide), {
     maxSize: 256,
-    signal: controller.signal
+    signal
   });
   const storedUrl = await storeBlob(blob);
   slide.setAttribute('thumbnail-url', storedUrl);
+  swiper.append(slide); // スライドを挿入する前に URL を設定する。
 }
+
+const controller = new AbortController();
+await appendSlideWithThumbnail(swiper, slide, storeBlob, controller.signal);
+// 未完了の処理を中断する場合: controller.abort();
 ```
 
-- `image`・`video` は WebP、`panorama`・`3dmodel`・`gaussian` は PNG を出力します。`youtube` は公開サムネイルの Blob を返します。
+- `image`・`video` は WebP、`panorama`・`3dmodel`・`gaussian` は PNG を出力します。`youtube` は公開サムネイルを取得したままの Blob で返し、`maxSize` への縮小はしません。YouTube の動画 ID を抽出できない URL では失敗します。
 - 動画は 0.5 秒の位置を使い、短い動画ではその直前の利用可能なコマを使います。
-- Node だけの環境ではなくブラウザ用 API です。パノラマ・3D モデル・Gaussian は WebGL が必要です。
+- Node だけの環境ではなくブラウザ用 API です。画像・動画の生成には `OffscreenCanvas` が必要で、画像には `createImageBitmap` も必要です。パノラマ・3D モデル・Gaussian の生成には WebGL 2 が必要です。YouTube のサムネイル取得には `OffscreenCanvas`・WebGL のどちらも不要です。
 - 別サイトの画像・動画フレーム・テクスチャ・モデル・スプラット・YouTube の公開サムネイルなど、メディアのピクセルを fetch または canvas へ取り出す場合は配信元の CORS 許可が必要です。
 - Gaussian の生成では Spark を必要時に読み込みます。
 
@@ -275,4 +334,4 @@ result.features.forEach(feature => {
 ## 関連
 
 - [API インデックス](README.ja.md) — インストール / クイックスタート / エコシステム
-- [メイン README](../README.ja.md) — インストール / クイックスタート / エコシステム
+- [メイン README](../../README.ja.md) — インストール / クイックスタート / エコシステム

@@ -169,16 +169,22 @@ pnpm run test:e2e   # E2E テストの実行
 
 > ランタイム要件（特定リリースに紐づく）。
 
-- Node.js と pnpm（開発時）
-- ブラウザ: Chrome / Edge / Firefox / Safari（最新版）・Web Components サポート必須
+- 開発時: Node.js と pnpm。
+- 全コンポーネント: Web Components（Custom Elements・Shadow DOM）をサポートするブラウザ。
+- パノラマ・3D モデル・Gaussian の表示とサムネイル生成: WebGL 2。
+- 画像・動画のサムネイル生成: `OffscreenCanvas`。画像では `createImageBitmap` も使用。
+- YouTube のサムネイル取得: `fetch`。`OffscreenCanvas`・WebGL は不要。
+- サムネイルの永続キャッシュ: IndexedDB。利用できない場合も、閲覧とメモリ内サムネイルは動作。
 
 <!-- SECTION 7: Peer Dependencies -->
 ## マルチメディア依存
 
 UI 入口は `@c4h/chuci` `^2.0.0` を optional peer dependency とし、配布する UI
 ビルドに同梱します。Chuci のカルーセルとビューアは Swiper.js・viewer.js・
-gsplat・A-Frame を使わず、three.js を同梱し、Gaussian スプラットでは Spark を
-必要時に読み込みます。テンプレート専用入口では Chuci は不要です。
+gsplat・A-Frame を使わず、three.js を同梱します。ESM ビルドでは Gaussian
+スプラット用の Spark を別チャンクとして必要時に読み込むため、`dist/` の全ファイルを
+一緒に配置してください。UMD・CDN ビルドは Spark を内包しています。
+テンプレート専用入口では Chuci は不要です。
 
 <!-- SECTION 8: Ecosystem / Related Repositories -->
 ## エコシステム

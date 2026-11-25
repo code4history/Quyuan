@@ -98,6 +98,60 @@ These events bubble and cross shadow DOM boundaries. Left and Right Arrow keys
 navigate, and Escape closes the viewer. Viewer navigation uses buttons and the
 keyboard rather than swipe gestures.
 
+## Migrating to 2.0
+
+### HTML-only use
+
+Existing `qy-swiper` and `qy-swiper-slide` markup needs no API changes. Review
+the shared appearance and dependency/deployment changes inherited from Chuci:
+Swiper.js, viewer.js, gsplat, and A-Frame are gone; three.js is bundled. With
+the ESM build, keep every file in `dist/` together so the separate Spark chunk
+can load on demand. The UMD/CDN build contains Spark instead of loading a
+separate chunk. The template-only entry point is unaffected.
+
+Review attributes that previously did not affect rendering. Gaussian
+`camera-position` and `camera-target`, and 3D model `show-texture` and
+`fit-to-container`, now work. `fit-to-container` is a boolean attribute, so
+`fit-to-container="false"` still enables fitting. Remove the attribute to
+disable it.
+
+### Direct JavaScript viewer control
+
+Convert the old URL/type/attributes form to `MediaItem[]` plus an initial index.
+The carousel method now takes only the index:
+
+```javascript
+// Before
+const swiper = document.querySelector('qy-swiper');
+const viewer = document.querySelector('qy-viewer');
+viewer.setSwiper(swiper);
+viewer.open('photo.jpg', 'image', { caption: 'A photo' });
+viewer.setCurrentSlideIndex(0);
+await swiper.openViewer('photo.jpg', 'image', 0);
+
+// After
+const items = [
+  { url: 'photo.jpg', type: 'image', caption: 'A photo' },
+  { url: 'next.jpg', type: 'image', caption: 'Next photo' }
+];
+await viewer.open(items, 0, { loop: true });
+await swiper.openViewer(0);
+```
+
+`setSwiper` and `setCurrentSlideIndex` have been removed. A viewer opened with
+`swiper.openViewer(index)` needs no separate `setSwiper` call. Track direct
+viewer navigation with `cc-viewer-index-change` and its `detail.index` instead
+of `setCurrentSlideIndex`:
+
+```javascript
+document.addEventListener('cc-viewer-index-change', (event) => {
+  console.log(event.detail.index);
+});
+```
+
+Use the single `qy-viewer`; the former media-specific Chuci `cc-viewer-*`
+elements are no longer available.
+
 ## Viewer and Carousel Controls
 
 | Input | 2D image | 3D model / Gaussian | 360° panorama |
@@ -133,8 +187,10 @@ debug panel appears at the top left.
 Slides without `thumbnail-url` use Chuci's IndexedDB cache
 (`chuci-thumbnails`), temporarily show a media-type icon if necessary, and
 generate missing thumbnails in the background. The current slide has priority,
-and generation proceeds one item at a time. Failures leave the icon in place
-and are remembered only for the page lifetime.
+and generation proceeds one item at a time. After a failed YouTube fetch, the
+carousel uses the public thumbnail URL directly when a video ID is available;
+other failures leave the media-type icon in place. Failures are remembered only
+for the page lifetime.
 
 Authoring tools can call the same API directly from `@c4h/chuci`; Quyuan does
 not re-export it.
@@ -154,20 +210,24 @@ the stored image URL.
 ```javascript
 import { generateThumbnail, readMediaItem } from '@c4h/chuci';
 
-async function createAndStoreThumbnail(slide, storeBlob) {
-  const controller = new AbortController();
+async function appendSlideWithThumbnail(swiper, slide, storeBlob, signal) {
   const blob = await generateThumbnail(readMediaItem(slide), {
     maxSize: 256,
-    signal: controller.signal
+    signal
   });
   const storedUrl = await storeBlob(blob);
   slide.setAttribute('thumbnail-url', storedUrl);
+  swiper.append(slide); // Set the URL before inserting the slide.
 }
+
+const controller = new AbortController();
+await appendSlideWithThumbnail(swiper, slide, storeBlob, controller.signal);
+// To cancel an unfinished operation: controller.abort();
 ```
 
-- `image` and `video` produce WebP. `panorama`, `3dmodel`, and `gaussian` produce PNG. `youtube` returns the public YouTube thumbnail Blob.
+- `image` and `video` produce WebP. `panorama`, `3dmodel`, and `gaussian` produce PNG. `youtube` returns the public YouTube thumbnail Blob as fetched, without resizing it to `maxSize`; a URL without an extractable YouTube video ID rejects.
 - Video thumbnails use the frame at 0.5 seconds, or the nearest available earlier frame for shorter videos.
-- This browser API is not available in Node-only environments. Panorama, 3D model, and Gaussian thumbnails require WebGL.
+- This browser API is not available in Node-only environments. Image and video generation requires `OffscreenCanvas` (images also require `createImageBitmap`). Panorama, 3D model, and Gaussian generation requires WebGL 2. YouTube thumbnail retrieval requires neither `OffscreenCanvas` nor WebGL.
 - The media server must permit CORS whenever media pixels are fetched or copied to a canvas, including cross-origin images, video frames, textures, models, splats, and YouTube's public thumbnail.
 - Gaussian generation loads Spark on demand.
 
@@ -277,4 +337,4 @@ result.features.forEach(feature => {
 ## See also
 
 - [API index](README.md) — install / quick start / ecosystem
-- [Main README](../README.md) — install / quick start / ecosystem
+- [Main README](../../README.md) — install / quick start / ecosystem

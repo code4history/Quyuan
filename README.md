@@ -173,16 +173,22 @@ pnpm run test:e2e   # Run E2E tests
 
 > Runtime requirements (release-dependent).
 
-- Node.js and pnpm (for development)
-- Browser: Chrome / Edge / Firefox / Safari (latest) — requires Web Components support
+- Development: Node.js and pnpm.
+- All components: a browser with Web Components support (Custom Elements and Shadow DOM).
+- Panorama, 3D model, and Gaussian viewing/thumbnails: WebGL 2.
+- Image and video thumbnail generation: `OffscreenCanvas`; image generation also uses `createImageBitmap`.
+- YouTube thumbnail retrieval: `fetch`; neither `OffscreenCanvas` nor WebGL is required.
+- Persistent thumbnail caching: IndexedDB. If unavailable, browsing and in-memory thumbnails still work.
 
 <!-- SECTION 7: Peer Dependencies -->
 ## Multimedia dependency
 
 The UI entry uses `@c4h/chuci` `^2.0.0` as an optional peer dependency and
 bundles it in the distributed UI build. Chuci's carousel and viewers do not use
-Swiper.js, viewer.js, gsplat, or A-Frame; they bundle three.js and load Spark on
-demand for Gaussian splats. The template-only entry does not require Chuci.
+Swiper.js, viewer.js, gsplat, or A-Frame; they bundle three.js. The ESM build
+loads a separate Spark chunk on demand for Gaussian splats, so keep all `dist/`
+files together. The UMD/CDN build contains Spark. The template-only entry does
+not require Chuci.
 
 <!-- SECTION 8: Ecosystem / Related Repositories -->
 ## Ecosystem

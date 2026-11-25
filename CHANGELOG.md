@@ -7,7 +7,7 @@
 ### 日本語
 
 #### 2.0 の破壊的変更
-- `@c4h/chuci` の optional peer 依存を `^2.0.0` へ更新し、自前のカルーセルと統一ビューアへ追随した。Chuci のメディア別 `cc-viewer-*` 要素・`setSwiper`・`setCurrentSlideIndex`・`cc-swiper.slider` はなくなり、`qy-swiper` のスライド変更イベントは `slidechange` ではなく `cc-swiper-index-change`（`detail.index`）を使う。`qy-swiper`・`qy-swiper-slide`・`qy-viewer` のタグ、スライド属性、`currenttype`・`currentslideindex`、CSS 変数は維持する。
+- `@c4h/chuci` の optional peer 依存を `^2.0.0` へ更新し、自前のカルーセルと統一ビューアへ追随した。`qy-viewer.open(url, type, attributes)` は `open(items, index, { loop })` に、`qy-swiper.openViewer(imageUrl, imageType, slideIndex)` は `openViewer(index)` に変更した。Chuci のメディア別 `cc-viewer-*` 要素・`setSwiper`・`setCurrentSlideIndex`・`cc-swiper.slider` はなくなり、`qy-swiper` のスライド変更イベントは `slidechange` ではなく `cc-swiper-index-change`（`detail.index`）を使う。`qy-swiper`・`qy-swiper-slide`・`qy-viewer` のタグ、スライド属性、`currenttype`・`currentslideindex`、CSS 変数は維持する。
 - カルーセルと画像・360 度ビューアを Chuci の実装へ替え、Gaussian の描画を Spark へ移した。Swiper・viewer.js・gsplat・A-Frame を使わず、three.js を同梱し、Spark は必要時に読み込む。
 
 #### 2.0 の追加
@@ -20,7 +20,7 @@
 ### English
 
 #### 2.0 breaking changes
-- Updated the optional `@c4h/chuci` peer dependency to `^2.0.0` and adopted its own carousel and unified viewer. Chuci's media-specific `cc-viewer-*` elements, `setSwiper`, `setCurrentSlideIndex`, and `cc-swiper.slider` are gone. `qy-swiper` now emits `cc-swiper-index-change` (`detail.index`) rather than `slidechange`. The `qy-swiper`, `qy-swiper-slide`, and `qy-viewer` tags, slide attributes, `currenttype` and `currentslideindex`, and CSS variables remain compatible.
+- Updated the optional `@c4h/chuci` peer dependency to `^2.0.0` and adopted its own carousel and unified viewer. Replaced `qy-viewer.open(url, type, attributes)` with `open(items, index, { loop })`, and `qy-swiper.openViewer(imageUrl, imageType, slideIndex)` with `openViewer(index)`. Chuci's media-specific `cc-viewer-*` elements, `setSwiper`, `setCurrentSlideIndex`, and `cc-swiper.slider` are gone. `qy-swiper` now emits `cc-swiper-index-change` (`detail.index`) rather than `slidechange`. The `qy-swiper`, `qy-swiper-slide`, and `qy-viewer` tags, slide attributes, `currenttype` and `currentslideindex`, and CSS variables remain compatible.
 - Replaced the carousel and image/panorama viewers with Chuci's implementations and moved Gaussian rendering to Spark. Removed Swiper, viewer.js, gsplat, and A-Frame; three.js is bundled and Spark loads on demand.
 
 #### 2.0 added
