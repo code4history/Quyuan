@@ -63,8 +63,8 @@ export class QyViewer extends QyElement {
     this.items = items.slice();
     this.ccViewer.style.display = 'block';
     this.ccViewer.open(items, index, opts);
-    this.currentSlideIndex = index;
-    this.currentType = this.items[index]?.type ?? '';
+    this.currentSlideIndex = this.ccViewer.index;
+    this.currentType = this.items[this.ccViewer.index]?.type ?? '';
   }
 
   close() {

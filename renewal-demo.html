@@ -57,7 +57,17 @@
   <script type="module">
     import 'leaflet/dist/leaflet.css';
     import L from 'leaflet';
+    import markerIcon2xUrl from 'leaflet/dist/images/marker-icon-2x.png?url';
+    import markerIconUrl from 'leaflet/dist/images/marker-icon.png?url';
+    import markerShadowUrl from 'leaflet/dist/images/marker-shadow.png?url';
     import './src/index.ts';
+
+    delete L.Icon.Default.prototype._getIconUrl;
+    L.Icon.Default.mergeOptions({
+      iconRetinaUrl: markerIcon2xUrl,
+      iconUrl: markerIconUrl,
+      shadowUrl: markerShadowUrl,
+    });
 
     const allMedia = document.querySelector('#all-media');
     document.querySelectorAll('[data-open-index]').forEach((button) => {

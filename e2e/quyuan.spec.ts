@@ -36,30 +36,37 @@ test.describe('Quyuan E2E Tests', () => {
           }
         }]
       };
-      
+
       const templates = {
         html: '<h1>{{ name }}</h1><p>{{ description }}</p>'
       };
-      
+
       return window.Quyuan.templateExtractor({ geojson, templates });
     });
-    
+
     expect(result).toBeDefined();
     expect(result.features[0].result.html).toContain('<h1>Test Feature</h1>');
     expect(result.features[0].result.html).toContain('<p>Test Description</p>');
   });
 
   test('should render qy-viewer component', async ({ page }) => {
-    await page.evaluate(() => {
-      const viewer = document.createElement('qy-viewer');
-      viewer.setAttribute('urls', JSON.stringify(['/assets/test.jpg']));
-      document.getElementById('viewer-container').appendChild(viewer);
+    await page.evaluate(async () => {
+      const viewer = document.createElement('qy-viewer') as any;
+      document.getElementById('viewer-container')!.appendChild(viewer);
+      await customElements.whenDefined('qy-viewer');
+      await viewer.updateComplete;
+      await viewer.open([{
+        url: '/assets/chikubushima.jpg',
+        type: 'image',
+        thumbnailUrl: '',
+        caption: 'render test',
+        fitToContainer: false,
+        debugMode: false,
+      }], 0, { loop: false });
     });
-    
-    // Wait for custom element to be defined
-    await page.waitForFunction(() => customElements.get('qy-viewer'));
-    
-    const viewer = await page.locator('qy-viewer');
-    await expect(viewer).toBeVisible();
+
+    const viewer = page.locator('qy-viewer');
+    await expect(viewer.locator('cc-viewer').locator('.backdrop')).toBeVisible();
+    await expect(viewer).toHaveAttribute('currenttype', 'image');
   });
 });

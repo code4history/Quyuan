@@ -1,4 +1,4 @@
-import { test, expect, type Page } from '@playwright/test';
+import { test, expect, type Locator, type Page } from '@playwright/test';
 
 const mediaTypes = ['image', 'panorama', 'youtube', 'video', '3dmodel', 'gaussian'] as const;
 
@@ -31,6 +31,30 @@ async function closeViewer(page: Page) {
   await expect(innerViewer(page).locator('.backdrop')).toBeHidden();
 }
 
+async function waitForSlideAlignment(swiper: Locator, selectedIndex: number) {
+  await expect.poll(() => swiper.evaluate((element, index) => {
+    const root = (element as any).shadowRoot as ShadowRoot;
+    const viewport = root.querySelector('#viewport');
+    const panels = Array.from(root.querySelectorAll('.cc-slide')) as HTMLElement[];
+    const selected = panels.find((panel) => panel.dataset.index === String(index));
+    if (!viewport || !selected) return false;
+
+    const viewportBox = viewport.getBoundingClientRect();
+    const selectedBox = selected.getBoundingClientRect();
+    const tolerance = 1;
+    const selectedIsAligned =
+      Math.abs(selectedBox.left - viewportBox.left) <= tolerance &&
+      Math.abs(selectedBox.right - viewportBox.right) <= tolerance;
+    const neighborsAreHidden = panels
+      .filter((panel) => panel !== selected)
+      .every((panel) => {
+        const box = panel.getBoundingClientRect();
+        return box.right <= viewportBox.left + tolerance || box.left >= viewportBox.right - tolerance;
+      });
+    return selectedIsAligned && neighborsAreHidden;
+  }, selectedIndex)).toBe(true);
+}
+
 async function indexedDbThumbnailCount(page: Page): Promise<number> {
   return page.evaluate(() => new Promise<number>((resolve, reject) => {
     const request = indexedDB.open('chuci-thumbnails');
@@ -51,11 +75,16 @@ async function indexedDbThumbnailCount(page: Page): Promise<number> {
 
 test.describe('viewer renewal', () => {
   test.describe.configure({ mode: 'serial' });
+  test.beforeEach(({ browserName }) => {
+    test.skip(browserName !== 'chromium', 'renewal e2e は Chromium 専用');
+  });
 
   test('swipe in leaflet popup changes slide and map center stays the same', async ({ page }) => {
     await page.goto('/renewal-demo.html');
-    await expect(page.locator('#leaflet-map .leaflet-marker-icon')).toBeVisible();
-    await page.locator('#leaflet-map .leaflet-marker-icon').click();
+    const markerIcon = page.locator('#leaflet-map .leaflet-marker-icon');
+    await expect(markerIcon).toBeVisible();
+    await expect.poll(() => markerIcon.evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0)).toBe(true);
+    await markerIcon.click();
     const swiper = page.locator('.leaflet-popup-content qy-swiper');
     await expect(swiper.locator('.cc-slide')).toHaveCount(2);
     await page.waitForTimeout(500);
@@ -72,6 +101,7 @@ test.describe('viewer renewal', () => {
     await page.mouse.up();
 
     await expect.poll(() => swiper.evaluate((element: any) => element.index)).toBe(1);
+    await waitForSlideAlignment(swiper, 1);
     const after = await page.evaluate(() => {
       const center = (window as any).renewalDemo.map.getCenter();
       return { lat: center.lat, lng: center.lng };
@@ -149,13 +179,15 @@ test.describe('viewer renewal', () => {
       if (message.type() === 'error') consoleErrors.push(message.text());
     });
     await page.goto('/e2e-test.html');
-    await page.evaluate(() => {
+    await page.evaluate(async () => {
       const viewer = document.createElement('qy-viewer') as any;
       viewer.id = 'context-stress-viewer';
       document.body.append(viewer);
+      await viewer.updateComplete;
+      const ccViewer = viewer.shadowRoot?.querySelector('cc-viewer') as any;
       (window as any).visibleContextLosses = 0;
-      document.addEventListener('webglcontextlost', () => {
-        const backdrop = viewer.shadowRoot?.querySelector('cc-viewer')?.shadowRoot?.querySelector('.backdrop');
+      ccViewer.shadowRoot.addEventListener('webglcontextlost', () => {
+        const backdrop = ccViewer.shadowRoot.querySelector('.backdrop');
         if (backdrop && !backdrop.hidden) (window as any).visibleContextLosses += 1;
       }, true);
     });
@@ -177,67 +209,111 @@ test.describe('viewer renewal', () => {
     }
     expect(await page.evaluate(() => (window as any).visibleContextLosses)).toBe(0);
     expect(consoleErrors, `30 回の開閉中に console.error が出ました:\n${consoleErrors.join('\n')}`).toEqual([]);
+
+    await test.step('intentional context loss is observed on the visible canvas', async () => {
+      await page.evaluate(async (mediaItem) => {
+        await (document.querySelector('#context-stress-viewer') as any).open([mediaItem], 0, { loop: false });
+      }, item);
+      await waitForViewerReady(page, 'intentional context loss');
+      await page.evaluate(() => {
+        const viewer = document.querySelector('#context-stress-viewer') as any;
+        const canvas = viewer.shadowRoot?.querySelector('cc-viewer')?.shadowRoot?.querySelector('canvas') as HTMLCanvasElement;
+        const gl = canvas.getContext('webgl2') ?? canvas.getContext('webgl');
+        const extension = gl?.getExtension('WEBGL_lose_context');
+        if (!extension) throw new Error('WEBGL_lose_context is unavailable');
+        extension.loseContext();
+      });
+      await expect.poll(() => page.evaluate(() => (window as any).visibleContextLosses)).toBe(1);
+      await closeViewer(page);
+    });
   });
 
-  test('thumbnail generated for slide without thumbnail-url and reused from IndexedDB after reload', async ({ page }) => {
-    await page.goto('/e2e-test.html');
-    const createSwiper = () => page.evaluate(() => {
-      document.querySelector('#cache-swiper')?.remove();
+  test('thumbnail honors cross-origin CORS and reuses an allowed result from IndexedDB after reload', async ({ page }) => {
+    const createSwiper = (id: string, imageUrl: string) => page.evaluate(({ id: swiperId, imageUrl: url }) => {
+      document.querySelector(`#${swiperId}`)?.remove();
       const swiper = document.createElement('qy-swiper') as any;
-      swiper.id = 'cache-swiper';
+      swiper.id = swiperId;
       swiper.style.cssText = 'display:block;width:320px;height:240px';
       const slide = document.createElement('qy-swiper-slide');
-      slide.setAttribute('image-url', '/assets/chikubushima.jpg?thumbnail-e2e=1');
+      slide.setAttribute('image-url', url);
       slide.setAttribute('image-type', 'image');
       slide.setAttribute('caption', 'generated thumbnail');
       swiper.append(slide);
       document.body.append(swiper);
+    }, { id, imageUrl });
+    const allowedUrl = 'http://cors-allowed.test/thumbnail.jpg';
+    let sourceRequestsAfterReload = 0;
+    let reuseFromCache = false;
+    await page.route(allowedUrl, (route) => {
+      if (reuseFromCache) {
+        sourceRequestsAfterReload += 1;
+        return route.abort();
+      }
+      return route.fulfill({
+        path: 'public/assets/chikubushima.jpg',
+        contentType: 'image/jpeg',
+        headers: { 'access-control-allow-origin': '*' },
+      });
     });
-    await createSwiper();
+
+    await page.goto('/e2e-test.html');
+    await createSwiper('cache-swiper', allowedUrl);
     const generated = page.locator('#cache-swiper .viewer');
     await expect.poll(() => generated.getAttribute('src')).toMatch(/^blob:/);
     expect(await indexedDbThumbnailCount(page)).toBe(1);
 
-    let sourceRequestsAfterReload = 0;
-    await page.route('**/assets/chikubushima.jpg?thumbnail-e2e=1', (route) => {
-      sourceRequestsAfterReload += 1;
-      return route.abort();
-    });
+    reuseFromCache = true;
     await page.reload();
-    await createSwiper();
+    await createSwiper('cache-swiper', allowedUrl);
     await expect.poll(() => generated.getAttribute('src')).toMatch(/^blob:/);
     expect(sourceRequestsAfterReload).toBe(0);
+    expect(await indexedDbThumbnailCount(page)).toBe(1);
+
+    const deniedUrl = 'http://cors-denied.test/thumbnail.jpg';
+    let deniedRequests = 0;
+    await page.route(deniedUrl, (route) => {
+      deniedRequests += 1;
+      return route.fulfill({
+        path: 'public/assets/chikubushima.jpg',
+        contentType: 'image/jpeg',
+        headers: { 'access-control-allow-origin': 'http://not-the-editor.invalid' },
+      });
+    });
+    await createSwiper('cache-denied', deniedUrl);
+    const denied = page.locator('#cache-denied .viewer');
+    const iconSource = await denied.getAttribute('src');
+    expect(iconSource).toMatch(/^data:image\//);
+    await expect.poll(() => deniedRequests).toBe(1);
+    await expect.poll(() => page.locator('#cache-denied').evaluate((element: any) => element.pendingThumbnails.size)).toBe(0);
+    await expect(denied).toHaveAttribute('src', iconSource!);
     expect(await indexedDbThumbnailCount(page)).toBe(1);
   });
 
   test('gaussian camera-position changes the initial view', async ({ page }) => {
     test.setTimeout(180_000);
     await page.setViewportSize({ width: 160, height: 90 });
-    await page.goto('/e2e-test.html');
-    const createViewer = () => page.evaluate(() => {
-      const viewer = document.createElement('qy-viewer') as any;
-      viewer.id = 'gaussian-viewer';
-      document.body.append(viewer);
-    });
-    await createViewer();
-    const openGaussian = async (cameraPosition?: string) => {
-      await page.evaluate(async (position) => {
-        const item = {
-          url: 'https://t.tilemap.jp/3ddata/okuman.splat',
-          type: 'gaussian',
-          thumbnailUrl: '',
-          caption: 'camera comparison',
-          fitToContainer: false,
-          debugMode: false,
-          ...(position ? { cameraPosition: position } : {}),
-        };
-        await (document.querySelector('#gaussian-viewer') as any).open([item], 0, { loop: false });
-      }, cameraPosition);
+    const createSwiper = (cameraPosition?: string) => page.evaluate((position) => {
+      const swiper = document.createElement('qy-swiper') as any;
+      swiper.id = 'gaussian-swiper';
+      swiper.style.cssText = 'display:block;width:160px;height:90px';
+      const slide = document.createElement('qy-swiper-slide');
+      slide.setAttribute('image-url', 'https://t.tilemap.jp/3ddata/okuman.splat');
+      slide.setAttribute('image-type', 'gaussian');
+      slide.setAttribute('thumbnail-url', '/assets/jizo.png');
+      slide.setAttribute('caption', 'camera comparison');
+      if (position) slide.setAttribute('camera-position', position);
+      swiper.append(slide);
+      document.body.append(swiper);
+    }, cameraPosition);
+    const openGaussian = async () => {
+      await page.evaluate(async () => {
+        await (document.querySelector('#gaussian-swiper') as any).openViewer(0);
+      });
       await waitForViewerReady(page, 'https://t.tilemap.jp/3ddata/okuman.splat');
       await expect(innerViewer(page).locator('canvas')).toBeVisible();
       return page.evaluate(() => new Promise<string>((resolve, reject) => {
         requestAnimationFrame(() => {
-          const canvas = (document.querySelector('#gaussian-viewer') as any)
+          const canvas = (document.querySelector('qy-viewer') as any)
             ?.shadowRoot?.querySelector('cc-viewer')?.shadowRoot?.querySelector('canvas');
           if (!canvas) {
             reject(new Error('Gaussian canvas not found'));
@@ -248,11 +324,13 @@ test.describe('viewer renewal', () => {
       }));
     };
 
+    await page.goto('/e2e-test.html');
+    await createSwiper();
     const defaultView = await openGaussian();
     await closeViewer(page);
     await page.reload();
-    await createViewer();
-    const customView = await openGaussian('8,4,8');
+    await createSwiper('8,4,8');
+    const customView = await openGaussian();
     expect(defaultView).not.toBe(customView);
   });
 });

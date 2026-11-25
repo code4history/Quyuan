@@ -24,6 +24,7 @@ describe('QyViewer navigation compatibility', () => {
 
   it('forwards items, index and loop options to the inner cc-viewer', async () => {
     const open = vi.spyOn(ccViewer, 'open').mockImplementation(() => {});
+    vi.spyOn(ccViewer, 'index', 'get').mockReturnValue(1);
 
     await viewer.open(items, 1, { loop: true });
 
@@ -32,6 +33,20 @@ describe('QyViewer navigation compatibility', () => {
     expect(viewer.currentType).toBe('video');
     expect(viewer.getAttribute('currentslideindex')).toBe('1');
     expect(viewer.getAttribute('currenttype')).toBe('video');
+  });
+
+  it('reflects the inner viewer index after Chuci normalizes the requested index', async () => {
+    vi.spyOn(ccViewer, 'open').mockImplementation(() => {});
+    vi.spyOn(ccViewer, 'index', 'get').mockReturnValue(2);
+    const sixItems = [...items, ...items];
+
+    await viewer.open(sixItems, 8, { loop: true });
+
+    expect(ccViewer.open).toHaveBeenCalledWith(sixItems, 8, { loop: true });
+    expect(viewer.currentSlideIndex).toBe(2);
+    expect(viewer.currentType).toBe('3dmodel');
+    expect(viewer.getAttribute('currentslideindex')).toBe('2');
+    expect(viewer.getAttribute('currenttype')).toBe('3dmodel');
   });
 
   it('reflects composed Chuci navigation events in compatibility attributes', async () => {
