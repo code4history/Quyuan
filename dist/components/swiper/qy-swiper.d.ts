@@ -11,3 +11,9 @@ declare class QySwiper extends CcSwiper {
 declare class QySwiperSlide extends CcSwiperSlide {
 }
 export { QySwiper, QySwiperSlide };
+declare global {
+    interface HTMLElementTagNameMap {
+        'qy-swiper': QySwiper;
+        'qy-swiper-slide': QySwiperSlide;
+    }
+}

@@ -100,3 +100,10 @@ if (!customElements.get('qy-swiper-slide')) {
 }
 
 export { QySwiper, QySwiperSlide }
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'qy-swiper': QySwiper
+    'qy-swiper-slide': QySwiperSlide
+  }
+}
