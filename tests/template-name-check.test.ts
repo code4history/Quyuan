@@ -61,12 +61,19 @@ describe('strings in name positions reach the generated code', () => {
       'a caller keyword name',
       `{% macro m() %}{{ caller() }}{% endmacro %}{% call(${quotedPayload}=1) m() %}{% endcall %}`,
     ],
-    ['an import target', `{% import "x" as ${quotedPayload} %}`],
-    ['an imported name', `{% from "x" import ${quotedPayload} %}`],
-    ['an import alias', `{% from "x" import a as ${quotedPayload} %}`],
   ]
   it.each(refusedAsTarget)('refuses %s', (_label, template) => {
     expect(() => render(template)).toThrow(PLAIN_NAMES_ONLY)
+    expect(pwned()).toBeUndefined()
+  })
+
+  // The tags that load another template are refused as a whole.
+  it.each<[string, string]>([
+    ['an import target', `{% import "x" as ${quotedPayload} %}`],
+    ['an imported name', `{% from "x" import ${quotedPayload} %}`],
+    ['an import alias', `{% from "x" import a as ${quotedPayload} %}`],
+  ])('refuses %s', (_label, template) => {
+    expect(() => render(template)).toThrow(NOT_ALLOWED)
     expect(pwned()).toBeUndefined()
   })
 
@@ -174,5 +181,22 @@ describe('ordinary templates keep working', () => {
 
   it('leaves the syntax error of a template to Nunjucks', () => {
     expect(() => render('{% if %}')).toThrow(/parseIf|expected/)
+  })
+})
+
+describe('templates that are not strings', () => {
+  const renderRaw = (template: unknown): void => {
+    Quyuan.templateExtractor({
+      geojson: { type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [0, 0] } },
+      templates: { html: template as string },
+    })
+  }
+
+  it.each([
+    ['an object', { type: 'string', src: '{{ a }}' }],
+    ['a number', 1],
+    ['null', null],
+  ])('refuses %s', (_label, template) => {
+    expect(() => renderRaw(template)).toThrow(/Templates must be strings/)
   })
 })

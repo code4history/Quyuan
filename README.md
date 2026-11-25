@@ -36,6 +36,10 @@ Quyuan is open-source under the MIT License.
 
 Templates are compiled to code by Nunjucks and run with access to the data you pass in. **Quyuan is not a sandbox.** Nunjucks is not a sandbox either: the checks Quyuan applies while a template renders close the known routes to arbitrary JavaScript, but they do not make a template from an untrusted author safe to evaluate. Use templates only from authors you trust, and never build templates from end-user input.
 
+A template holds everything it renders. The tags that load another template (`{% include %}`, `{% import %}`, `{% from %}` and `{% extends %}`) are refused, and a template that uses one fails with an error before it renders. Macros defined in the same template keep working.
+
+A template renders on the main thread and Quyuan sets no limit on its time or its number of iterations, so a slow template (a very large loop, or a slow regular expression) holds the page until it finishes.
+
 <!-- SECTION 5: Quick Start -->
 ## Quick Start
 

@@ -55,7 +55,6 @@ interface NunjucksNode {
   right?: NunjucksNode
   val?: NunjucksNode
   args?: { children: NunjucksNode[] }
-  names?: { children: NunjucksNode[] }
   children?: NunjucksNode[]
 }
 
@@ -107,13 +106,6 @@ const assignedNodes = (node: NunjucksNode): (NunjucksNode | undefined)[] => {
     case 'Macro':
     case 'Caller':
       return [node.name]
-    case 'Import':
-      return [node.target]
-    case 'FromImport':
-      // `{% from "x" import a as b %}` is a Pair whose value is the alias.
-      return (node.names?.children ?? []).map((child) =>
-        child.typename === 'Pair' ? (child.value as NunjucksNode | undefined) : child
-      )
     default:
       return []
   }
@@ -134,10 +126,6 @@ const otherNameNodes = (node: NunjucksNode): (NunjucksNode | undefined)[] => {
         ? (last.children ?? []).map((pair) => pair.key)
         : []
     }
-    case 'FromImport':
-      return (node.names?.children ?? []).flatMap((child) =>
-        child.typename === 'Pair' ? [child.key] : []
-      )
     default:
       return []
   }
@@ -149,7 +137,15 @@ const assertPlainName = (node: NunjucksNode | undefined): void => {
   }
 }
 
+// The tags that read another template: `{% include %}`, `{% import %}`,
+// `{% from %}` and `{% extends %}`. What they read would not pass through the
+// checks here, so a template holds everything it renders.
+const LOADING_NODES = new Set(['Include', 'Import', 'FromImport', 'Extends'])
+
 const assertSafeNode = (node: NunjucksNode): void => {
+  if (LOADING_NODES.has(node.typename)) {
+    throw new Error('Loading another template is not allowed in templates')
+  }
   if (node.typename === 'Symbol') {
     assertSafeName(node.value)
   } else if (node.typename === 'Is') {
@@ -159,8 +155,8 @@ const assertSafeNode = (node: NunjucksNode): void => {
   } else if (node.typename === 'FunCall') {
     assertSafeCallee(node.name)
   }
-  // Top-level `{% set %}`, `{% macro %}` and `{% import %}` write into the render
-  // context, which is a plain object: `{% set __proto__ = [] %}` would replace
+  // Top-level `{% set %}` and `{% macro %}` write into the render context, which
+  // is a plain object: `{% set __proto__ = [] %}` would replace
   // its prototype.
   for (const assigned of assignedNodes(node)) {
     assertPlainName(assigned)
@@ -185,9 +181,13 @@ const walkNodes = (value: unknown, visit: (node: NunjucksNode) => void): void =>
   }
 }
 
-// Refuses a template before it compiles if it holds a name that would break out
-// of the generated code or an assignment that would reach the context prototype.
+// Refuses a template before it compiles if it loads another template, or holds
+// a name that would break out of the generated code or an assignment that would
+// reach the context prototype.
 const assertSafeTemplate = (templateRaw: string): void => {
+  if (typeof templateRaw !== 'string') {
+    throw new Error('Templates must be strings')
+  }
   const api = nunjucks as unknown as NunjucksParserApi
   let root: NunjucksNode
   try {
@@ -221,8 +221,14 @@ const getNunjucksRuntime = (): NunjucksRuntime | undefined =>
 // whose filter, test and global tables only answer their own entries. Without
 // this, a filter name such as `valueOf` or `constructor` resolves to a method
 // inherited from Object.prototype.
+//
+// The environment has no loader. By default Nunjucks gives it one that fetches
+// templates over HTTP in a browser and reads files in Node, and it adds another
+// for `window.nunjucksPrecompiled` even when it is given an empty list, so the
+// list is emptied after the environment is built.
 const createEnvironment = (): nunjucks.Environment => {
-  const env = new nunjucks.Environment()
+  const env = new nunjucks.Environment([])
+  ;(env as unknown as { loaders: unknown[] }).loaders = []
   const tables = env as unknown as NunjucksEnvironmentTables
   tables.getFilter = function (this: NunjucksEnvironmentTables, name: string) {
     if (!hasOwn(this.filters, name) || !this.filters[name]) {
