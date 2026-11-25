@@ -72,6 +72,10 @@ Chuci へ渡します。
 Gaussian のカメラ属性と 3D モデルのテクスチャ・自動フィット属性は、実際の
 表示へ反映されます。
 
+`youtube` は `youtube.com`・`youtu.be`・`youtube-nocookie.com` の HTTP または
+HTTPS URL から動画 ID を抽出し、HTTPS の埋め込み URL に変換します。有効な動画 ID を
+抽出できない場合、ビューアは共通のエラー表示を出し、自動サムネイルは種類のアイコンのままです。
+
 ### `<qy-viewer>`
 
 `qy-swiper` から自動で開く全画面ビューアです。旧 Chuci が先に登録されたページでも、
@@ -183,12 +187,15 @@ document.addEventListener('cc-viewer-index-change', (event) => {
 
 ## サムネイル生成 API
 
-`thumbnail-url` がないスライドは Chuci の IndexedDB キャッシュ
-（`chuci-thumbnails`）を使い、必要に応じて一時的に種類のアイコンを表示し、
-不足分を裏で生成します。現在のスライドを優先し、1 件ずつ生成します。
-YouTube の取得に失敗した場合は、動画 ID があれば公開サムネイルの URL を直接画像に
-使います。その他の失敗時は種類のアイコンのままとし、失敗はページの寿命の間だけ
-記憶します。
+`thumbnail-url` を最優先し、指定がなければ IndexedDB（`chuci-thumbnails`）の保存済み画像を使います。
+生成するのは現在表示中のスライドと前後 1 枚で、現在のスライドから 1 件ずつ処理します。
+他のスライドは表示位置の近くに移ったときに生成します。鍵と取得には、文書の基準 URL で解決した
+絶対 URL（`image-url`・`material-url`）を使います。
+
+生成時に取得する元データは、OBJ・MTL・テクスチャを含めて応答 1 件につき 64 MiB までです。
+上限を超えると種類のアイコンのままとし、IndexedDB には保存しません。
+YouTube の公開サムネイルを CORS などで取得できない場合は、有効な動画 ID があれば公開画像 URL を直接使います。
+その他の失敗時は種類のアイコンのままとし、失敗はページを開いている間だけ記憶します。
 
 作成ツールからは `@c4h/chuci` が公開する同じ API を直接呼べます。
 Quyuan はこの API を再エクスポートしません。
@@ -228,6 +235,17 @@ await appendSlideWithThumbnail(swiper, slide, storeBlob, controller.signal);
 - Node だけの環境ではなくブラウザ用 API です。画像・動画の生成には `OffscreenCanvas` が必要で、画像には `createImageBitmap` も必要です。パノラマ・3D モデル・Gaussian の生成には WebGL 2 が必要です。YouTube のサムネイル取得には `OffscreenCanvas`・WebGL のどちらも不要です。
 - 別サイトの画像・動画フレーム・テクスチャ・モデル・スプラット・YouTube の公開サムネイルなど、メディアのピクセルを fetch または canvas へ取り出す場合は配信元の CORS 許可が必要です。
 - Gaussian の生成では Spark を必要時に読み込みます。
+
+## Content Security Policy
+
+ホストページに CSP を設定する場合は、使う機能に応じて次の許可を追加してください。
+
+- Gaussian（Spark）には `script-src` の `'wasm-unsafe-eval'` と `worker-src` の `blob:` が必要です。Blob の Worker 作成時に例外が起きると、Spark は `data:` の Worker を試します。このフォールバックを使う場合は `worker-src` に `data:` も許可してください。
+- サムネイルの自動生成では、`img-src` の `blob:` を生成した画像に、`data:` を種類のアイコンに使います。パノラマやモデルのテクスチャを読み込む際にも Blob 画像を使います。動画サムネイルの生成には `media-src` の `blob:` が必要です。 カルーセルの前後ボタンも `img-src` の `data:` を使います。
+- YouTube の再生には `frame-src https://www.youtube.com https://www.youtube-nocookie.com` が必要です。YouTube の公開サムネイルを取得するため `connect-src` に、画像として直接表示するフォールバックのため `img-src` に `https://i.ytimg.com` を許可してください。
+- パッケージと遅延読み込みチャンクの配信元は `script-src`、fetch するメディアの配信元は `connect-src` に許可してください。直接表示する画像・動画の配信元はそれぞれ `img-src`・`media-src` に許可してください。`blob:` や `data:` のメディアを指定する場合も、実際に使うスキームを許可してください。
+- コンポーネントは Shadow DOM にインラインの `<style>` を挿入します。`style-src-elem`（指定しない場合は `style-src`）で、配布物中のスタイル本文に対応するハッシュを指定するなどして、このスタイルを許可してください。
+- Quyuan はブラウザでテンプレート文字列をコンパイルする際に Nunjucks を使います。テンプレートエンジンをブラウザで使う場合は、`@c4h/quyuan/template` を含め、`script-src` に `'unsafe-eval'` が必要です。
 
 ## スタイリング
 

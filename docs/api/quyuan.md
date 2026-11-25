@@ -71,6 +71,11 @@ templates and passes them to Chuci.
 value is empty. Gaussian camera attributes and 3D model texture/fit attributes
 are applied to the rendered view.
 
+The `youtube` type extracts a video ID from an HTTP or HTTPS URL on `youtube.com`,
+`youtu.be`, or `youtube-nocookie.com` and converts it to an HTTPS embed URL.
+If no valid ID can be extracted, the viewer shows its shared error panel and the
+automatic thumbnail remains a media-type icon.
+
 ### `<qy-viewer>`
 
 The fullscreen viewer automatically opened by `qy-swiper`. It wraps Chuci's
@@ -185,13 +190,18 @@ debug panel appears at the top left.
 
 ## Thumbnail Generation API
 
-Slides without `thumbnail-url` use Chuci's IndexedDB cache
-(`chuci-thumbnails`), temporarily show a media-type icon if necessary, and
-generate missing thumbnails in the background. The current slide has priority,
-and generation proceeds one item at a time. After a failed YouTube fetch, the
-carousel uses the public thumbnail URL directly when a video ID is available;
-other failures leave the media-type icon in place. Failures are remembered only
-for the page lifetime.
+An explicit `thumbnail-url` takes precedence, followed by cached results from IndexedDB
+(`chuci-thumbnails`). The carousel generates missing thumbnails one at a time for the
+current slide and its immediate neighbors. Other slides become eligible as you navigate.
+The cache key and fetch use the same absolute source and material URLs, resolved against
+the document's base URL.
+
+Thumbnail generation limits each fetched response to 64 MiB, including OBJ, MTL, and
+texture responses. Over-limit sources keep the media-type icon and are never stored in
+IndexedDB. If fetching a YouTube thumbnail fails because of CORS or a similar error,
+the carousel can use the public image URL directly when a video ID is available.
+Other failures leave the media-type icon in place. Failures are remembered for the
+page lifetime.
 
 Authoring tools can call the same API directly from `@c4h/chuci`; Quyuan does
 not re-export it.
@@ -232,6 +242,17 @@ await appendSlideWithThumbnail(swiper, slide, storeBlob, controller.signal);
 - This browser API is not available in Node-only environments. Image and video generation requires `OffscreenCanvas` (images also require `createImageBitmap`). Panorama, 3D model, and Gaussian generation requires WebGL 2. YouTube thumbnail retrieval requires neither `OffscreenCanvas` nor WebGL.
 - The media server must permit CORS whenever media pixels are fetched or copied to a canvas, including cross-origin images, video frames, textures, models, splats, and YouTube's public thumbnail.
 - Gaussian generation loads Spark on demand.
+
+## Content Security Policy
+
+If the host page sets a CSP, add the source expressions needed by the features you use.
+
+- Gaussian (Spark) uses `'wasm-unsafe-eval'` in `script-src` and `blob:` in `worker-src`. If creating the Blob worker throws, Spark tries a `data:` worker. Allow `data:` in `worker-src` only if you need that fallback.
+- Automatic thumbnails use `blob:` for generated images and `data:` for media-type icons in `img-src`. The panorama and model texture decoders also use Blob images. Video thumbnail generation uses `blob:` in `media-src`. The carousel also uses `data:` image masks for its navigation arrows.
+- YouTube playback uses `frame-src https://www.youtube.com https://www.youtube-nocookie.com`. For YouTube thumbnails, allow `https://i.ytimg.com` in `connect-src` for the fetch and in `img-src` for the direct-image fallback.
+- Allow the origins that serve the package and its lazy-loaded chunks in `script-src`, fetched media in `connect-src`, and directly loaded images and video in `img-src` and `media-src` respectively. Use the actual source scheme for any `blob:` or `data:` media you supply.
+- The components insert inline `<style>` blocks in their shadow roots. Permit those blocks in `style-src-elem` (or `style-src` if it governs style elements), for example by allowing hashes that match the bundled style text.
+- Quyuan uses Nunjucks to compile template strings in the browser. Browser-side template rendering requires `'unsafe-eval'` in `script-src`, including with the `@c4h/quyuan/template` entry point. This applies when you use the template engine.
 
 ## Styling
 
