@@ -23498,7 +23498,7 @@ async function tv(r, e, t) {
       if (r.showTexture !== !1 && m.textureLoadFailed)
         throw new Error("Failed to load a required model texture");
     } else {
-      const { prepareGaussianScene: m } = await import("./gaussian-renderer-CCqRMf0K-CRneyC91.js");
+      const { prepareGaussianScene: m } = await import("./gaussian-renderer-Djlgc7HR-DMetH2-G.js");
       t.throwIfAborted(), await m(l, r, t, Yg);
     }
     t.throwIfAborted();
@@ -24125,7 +24125,9 @@ class Nt extends Ts {
     this.startAutoplay();
   }
   startAutoplay() {
-    this.pauseAutoplay(), this.isConnected && !this.viewerOpen && this.autoplay && this.items.length > 1 && (this.timer = setInterval(() => this.step(1), ot.slideAutoplayMs));
+    this.pauseAutoplay(), this.isConnected && !this.viewerOpen && this.autoplay && this.items.length > 1 && (this.timer = setInterval(() => {
+      this.drag || this.step(1);
+    }, ot.slideAutoplayMs));
   }
   async openViewer(e) {
     if (!this.isConnected || this.slides.length === 0) return;
@@ -24390,7 +24392,7 @@ async function _v(r) {
     case "3dmodel":
       return new Bg();
     case "gaussian": {
-      const { GaussianRenderer: e } = await import("./gaussian-renderer-CCqRMf0K-CRneyC91.js");
+      const { GaussianRenderer: e } = await import("./gaussian-renderer-Djlgc7HR-DMetH2-G.js");
       return new e();
     }
     default:
