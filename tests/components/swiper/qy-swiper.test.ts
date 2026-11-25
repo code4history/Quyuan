@@ -93,10 +93,10 @@ describe('qy-swiper', () => {
     const shadowRoot = swiper?.shadowRoot
     expect(shadowRoot).toBeDefined()
 
-    const swiperSlides = shadowRoot?.querySelectorAll('.swiper-slide')
+    const swiperSlides = shadowRoot?.querySelectorAll('.cc-slide')
     expect(swiperSlides?.length).toBeGreaterThan(0)
 
-    const caption = shadowRoot?.querySelector('.slider-caption')
+    const caption = shadowRoot?.querySelector('#caption .cc-bar-caption')
     expect(caption?.textContent).toBe('Test caption')
   })
 
@@ -118,8 +118,6 @@ describe('qy-swiper', () => {
 
     // Mock qy-viewer creation
     const mockViewer = {
-      setSwiper: vi.fn(),
-      setCurrentSlideIndex: vi.fn(),
       open: vi.fn()
     }
 
@@ -139,14 +137,18 @@ describe('qy-swiper', () => {
       customElements.define('qy-viewer', class extends HTMLElement { })
     }
 
-    await swiper.openViewer('image1.jpg', 'image', 0)
+    await swiper.openViewer(0)
 
-    // Wait for async operations
-    await new Promise(resolve => setTimeout(resolve, 150))
-
-    expect(mockViewer.setSwiper).toHaveBeenCalledWith(swiper)
-    expect(mockViewer.setCurrentSlideIndex).toHaveBeenCalledWith(0)
-    expect(mockViewer.open).toHaveBeenCalledWith('image1.jpg', 'image', expect.any(Object))
+    expect(mockViewer.open).toHaveBeenCalledWith([
+      {
+        url: 'image1.jpg',
+        type: 'image',
+        thumbnailUrl: 'thumb1.jpg',
+        caption: '',
+        fitToContainer: false,
+        debugMode: false
+      }
+    ], 0, { loop: false })
 
     // Restore createElement
     document.createElement = originalCreateElement
@@ -174,7 +176,7 @@ describe('qy-swiper', () => {
     expect(swiper.slides.length).toBe(1)
 
     // Check if slide is rendered in shadow DOM
-    const shadowSlides = swiper.shadowRoot?.querySelectorAll('.swiper-slide')
+    const shadowSlides = swiper.shadowRoot?.querySelectorAll('.cc-slide')
     expect(shadowSlides?.length).toBeGreaterThan(0)
   })
 })

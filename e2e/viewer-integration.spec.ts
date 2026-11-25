@@ -51,8 +51,8 @@ test.describe('Viewer Integration', () => {
         
         const shadowRoot = swiper.shadowRoot;
         const slides = swiper.slides || [];
-        const wrapper = shadowRoot?.querySelector('.swiper-wrapper');
-        const shadowSlides = shadowRoot?.querySelectorAll('.swiper-slide') || [];
+        const wrapper = shadowRoot?.querySelector('#track');
+        const shadowSlides = shadowRoot?.querySelectorAll('.cc-slide') || [];
         
         return {
           hasShadowRoot: !!shadowRoot,
@@ -66,19 +66,9 @@ test.describe('Viewer Integration', () => {
       
       console.log('Swiper state:', swiperState);
       
-      // Try to click on the thumbnail
-      const clickResult = await page.evaluate(() => {
-        const swiper = document.querySelector('.leaflet-popup-content qy-swiper') as any;
-        if (!swiper || !swiper.shadowRoot) return { error: 'No swiper shadow root' };
-        
-        const thumbnail = swiper.shadowRoot.querySelector('.swiper-slide img');
-        if (!thumbnail) return { error: 'No thumbnail found' };
-        
-        // Simulate click
-        thumbnail.click();
-        
-        return { clicked: true };
-      });
+      // Click the rendered thumbnail with real pointer input (the new slider opens on pointerup).
+      await page.locator('.leaflet-popup-content qy-swiper .cc-slide img').click();
+      const clickResult = { clicked: true };
       
       console.log('Click result:', clickResult);
       
@@ -99,14 +89,24 @@ test.describe('Viewer Integration', () => {
           shadowContent: shadowRoot?.innerHTML || 'No shadow content',
           ccViewerExists: !!ccViewer,
           viewerProperties: {
-            swiper: !!viewer.swiper,
             currentSlideIndex: viewer.currentSlideIndex,
-            currentType: viewer.currentType
+            currentType: viewer.currentType,
+            innerBackdropVisible: ccViewer?.shadowRoot?.querySelector('.backdrop')?.hidden === false
           }
         };
       });
       
       console.log('Viewer state after click:', viewerState);
+      expect(viewerState).toMatchObject({
+        exists: true,
+        hasShadowRoot: true,
+        ccViewerExists: true,
+        viewerProperties: {
+          currentSlideIndex: 0,
+          currentType: 'image',
+          innerBackdropVisible: true
+        }
+      });
       
       // Check @c4h/chuci components registration
       const componentsRegistered = await page.evaluate(() => {
@@ -154,9 +154,9 @@ test.describe('Viewer Integration', () => {
       expect(mediaType).toBe('youtube');
       console.log('Media type for 茂林寺:', mediaType);
       
-      // Close popup
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(500);
+      // Close popup before selecting the next marker.
+      await page.locator('.leaflet-popup-close-button').click();
+      await expect(page.locator('.leaflet-popup-content')).toHaveCount(0);
     }
     
     // Test image (東武館林駅)

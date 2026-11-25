@@ -47,7 +47,7 @@
     "nunjucks": "^3.2.4"
   },
   "peerDependencies": {
-    "@c4h/chuci": "^1.0.2"
+    "@c4h/chuci": "^2.0.0"
   },
   "peerDependenciesMeta": {
     "@c4h/chuci": {
@@ -55,6 +55,7 @@
     }
   },
   "devDependencies": {
+    "@c4h/chuci": "link:../Chuci",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.62.1",
     "@testing-library/dom": "^10.4.1",

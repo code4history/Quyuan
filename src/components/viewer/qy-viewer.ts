@@ -1,43 +1,30 @@
 import { QyElement } from '../../base/qy-element.js';
 import '@c4h/chuci';
 import { CcViewer } from '@c4h/chuci';
-import type { QySwiper } from '../swiper/qy-swiper';
+import type { MediaItem } from '@c4h/chuci';
 
 /**
  * Wrapper component that delegates to Chuci's cc-viewer
  * while maintaining the qy-viewer interface
  */
 export class QyViewer extends QyElement {
-  private _swiper?: QySwiper;
   private _currentSlideIndex: number = 0;
   private _currentType: string = "";
   private ccViewer?: CcViewer;
+  private items: MediaItem[] = [];
 
   static get observedAttributes() {
     return ['currentslideindex', 'currenttype']
-  }
-
-  get swiper() {
-    return this._swiper;
-  }
-  set swiper(value: QySwiper | undefined) {
-    const oldValue = this._swiper;
-    if (oldValue !== value) {
-      this._swiper = value;
-      this.updated(new Map([['swiper', oldValue]]));
-    }
   }
 
   get currentSlideIndex() {
     return this._currentSlideIndex;
   }
   set currentSlideIndex(value: number | undefined) {
-    const oldValue = this._currentSlideIndex;
     const newValue = value ?? 0;
-    if (oldValue !== newValue) {
+    if (this._currentSlideIndex !== newValue) {
       this._currentSlideIndex = newValue;
       this.setAttribute('currentslideindex', String(newValue));
-      this.updated(new Map([['currentSlideIndex', oldValue]]));
     }
   }
 
@@ -45,16 +32,14 @@ export class QyViewer extends QyElement {
     return this._currentType;
   }
   set currentType(value: string | undefined) {
-    const oldValue = this._currentType;
     const newValue = value ?? "";
-    if (oldValue !== newValue) {
+    if (this._currentType !== newValue) {
       this._currentType = newValue;
       if (newValue) {
         this.setAttribute('currenttype', newValue);
       } else {
         this.removeAttribute('currenttype');
       }
-      this.updated(new Map([['currentType', oldValue]]));
     }
   }
 
@@ -62,103 +47,47 @@ export class QyViewer extends QyElement {
     if (oldVal !== newVal) {
       if (name === 'currentslideindex') {
         this._currentSlideIndex = newVal ? Number(newVal) : 0;
-        this.updated(new Map([['currentSlideIndex', oldVal ? Number(oldVal) : undefined]]));
       } else if (name === 'currenttype') {
         this._currentType = newVal || "";
-        this.updated(new Map([['currentType', oldVal]]));
       }
     }
     super.attributeChangedCallback(name, oldVal, newVal);
   }
 
-  async open(imgUrl: string, type: string, attributes?: Record<string, unknown>) {
-    this.currentType = type;
-
-    // If cc-viewer not ready yet, wait for it
+  async open(items: MediaItem[], index: number, opts?: { loop?: boolean }) {
     if (!this.ccViewer) {
-      if (!this.ccViewer) {
-        await new Promise(resolve => requestAnimationFrame(resolve));
-        this.ccViewer = (this.shadowRoot!.querySelector('cc-viewer') as unknown as CcViewer) || undefined;
-      }
+      await customElements.whenDefined('cc-viewer');
+      this.ccViewer = this.shadowRoot!.querySelector('cc-viewer') as CcViewer;
     }
 
-    if (this.ccViewer) {
-      this.ccViewer.style.display = 'block'; // Ensure visible
-      this.ccViewer.open(imgUrl, type, attributes);
-    } else {
-      console.warn('[qy-viewer] cc-viewer still not found');
-    }
+    this.items = items.slice();
+    this.ccViewer.style.display = 'block';
+    this.ccViewer.open(items, index, opts);
+    this.currentSlideIndex = index;
+    this.currentType = this.items[index]?.type ?? '';
   }
 
   close() {
     this.currentType = '';
-    if (this.ccViewer) {
-      this.ccViewer.style.display = 'none';
-      if ('close' in this.ccViewer && typeof (this.ccViewer as Record<string, unknown>).close === 'function') {
-        (this.ccViewer as { close: () => void }).close();
-      }
-    }
+    this.ccViewer?.close();
   }
 
-  setSwiper(swiper: QySwiper) {
-    this.swiper = swiper;
-    if (this.ccViewer && this.ccViewer.setSwiper) {
-      this.ccViewer.setSwiper(swiper);
-    }
-  }
-
-  setCurrentSlideIndex(index: number) {
-    this.currentSlideIndex = index;
-    if (this.ccViewer && this.ccViewer.setCurrentSlideIndex) {
-      this.ccViewer.setCurrentSlideIndex(index);
-    }
-  }
-
-  protected async firstUpdated() {
-    // Force render to ensure shadow DOM is populated
-    // this.requestUpdate(); // Lit specific
-    // await this.updateComplete; // Lit specific
-    this.render();
-
-    const event = new CustomEvent('load');
-    this.dispatchEvent(event);
-
-    // Wait for cc-viewer to be defined
-    await customElements.whenDefined('cc-viewer');
-
-    // Get reference to cc-viewer with a small delay to ensure it's fully initialized
-    await new Promise(resolve => setTimeout(resolve, 100));
-
-    this.ccViewer = (this.shadowRoot!.querySelector('cc-viewer') as unknown as CcViewer) || undefined;
-
-    if (this.ccViewer) {
-      if (this.swiper && this.ccViewer.setSwiper) {
-        this.ccViewer.setSwiper(this.swiper);
-      }
-      if (this.currentSlideIndex !== undefined && this.ccViewer.setCurrentSlideIndex) {
-        this.ccViewer.setCurrentSlideIndex(this.currentSlideIndex);
-      }
-    }
-  }
-
-  protected updated(changedProperties: Map<string | number | symbol, unknown>) {
-    // super.updated(changedProperties); // QyElement doesn't have updated by default, but we can call it
-
-    // Update cc-viewer when properties change
-    if (this.ccViewer) {
-      if (changedProperties.has('swiper') && this.ccViewer.setSwiper) {
-        this.ccViewer.setSwiper(this.swiper);
-      }
-      if (changedProperties.has('currentSlideIndex') && this.ccViewer.setCurrentSlideIndex) {
-        this.ccViewer.setCurrentSlideIndex(this.currentSlideIndex || 0);
-      }
-    }
+  protected firstUpdated() {
+    this.ccViewer = this.shadowRoot!.querySelector('cc-viewer') as CcViewer;
+    this.ccViewer.addEventListener('cc-viewer-index-change', (event) => {
+      const { index } = (event as CustomEvent<{ index: number }>).detail;
+      this.currentSlideIndex = index;
+      this.currentType = this.items[index]?.type ?? '';
+    });
+    this.ccViewer.addEventListener('cc-viewer-close', () => {
+      this.items = [];
+      this.currentType = '';
+    });
+    this.dispatchEvent(new CustomEvent('load'));
   }
 
   protected render() {
-    // Guard: Do not re-render if cc-viewer already exists.
-    // This prevents destroying the cc-viewer instance when attributes change,
-    // which would cause state loss and detached element references.
+    // Keep the inner viewer alive when compatibility attributes change.
     if (this.shadowRoot?.querySelector('cc-viewer')) {
       return;
     }
@@ -168,7 +97,7 @@ export class QyViewer extends QyElement {
         :host {
           --qy-viewer-z-index: 1000;
         }
-        
+
         cc-viewer {
           --cc-viewer-z-index: var(--qy-viewer-z-index);
         }

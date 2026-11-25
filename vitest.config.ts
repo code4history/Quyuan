@@ -10,7 +10,7 @@ export default defineConfig({
         url: 'http://localhost'
       }
     },
-    include: ['tests/**/*.test.{ts,js}'],
+    include: ['tests/**/*.test.{ts,js}', 'src/**/*.test.{ts,js}'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],

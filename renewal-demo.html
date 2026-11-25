@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quyuan viewer renewal demo</title>
+  <style>
+    body { margin: 0; padding: 24px; font-family: sans-serif; background: #f4f4f4; color: #222; }
+    main { max-width: 860px; margin: 0 auto; }
+    section { margin-bottom: 28px; padding: 16px; background: #fff; border-radius: 8px; }
+    qy-swiper { display: block; width: 100%; height: 360px; }
+    #autoplay-slider { height: 240px; }
+    #media-buttons { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    #media-buttons button { padding: 8px 12px; cursor: pointer; }
+    #leaflet-map { width: 100%; height: 360px; background: #dfe5e8; }
+    .leaflet-popup-content qy-swiper { width: 320px; height: 220px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Quyuan viewer renewal demo</h1>
+    <section>
+      <h2>全 6 種類のメディア</h2>
+      <div id="media-buttons" aria-label="Open media type">
+        <button type="button" data-open-index="0">画像</button>
+        <button type="button" data-open-index="1">360 度</button>
+        <button type="button" data-open-index="2">YouTube</button>
+        <button type="button" data-open-index="3">動画</button>
+        <button type="button" data-open-index="4">3D メッシュ</button>
+        <button type="button" data-open-index="5">Gaussian</button>
+      </div>
+      <qy-swiper id="all-media">
+        <qy-swiper-slide image-url="/assets/chikubushima.jpg" thumbnail-url="/assets/chikubushima.jpg" image-type="image" caption="画像：竹生島"></qy-swiper-slide>
+        <qy-swiper-slide image-url="/assets/azumaya_panorama1.png" thumbnail-url="/assets/azumaya_panorama1.png" image-type="panorama" caption="360 度：東屋"></qy-swiper-slide>
+        <qy-swiper-slide image-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" thumbnail-url="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" image-type="youtube" caption="YouTube 動画"></qy-swiper-slide>
+        <qy-swiper-slide image-url="https://www.w3schools.com/html/mov_bbb.mp4" thumbnail-url="/assets/chikubushima.jpg" image-type="video" caption="MP4 動画"></qy-swiper-slide>
+        <qy-swiper-slide image-url="data:text/plain,v%20-1%20-1%200%0Av%201%20-1%200%0Av%200%201%200%0Af%201%202%203" thumbnail-url="/assets/jizo.png" image-type="3dmodel" caption="3D メッシュ：三角形" debug-mode></qy-swiper-slide>
+        <qy-swiper-slide image-url="https://t.tilemap.jp/3ddata/okuman.splat" thumbnail-url="/assets/jizo.png" image-type="gaussian" caption="Gaussian Splatting：奥万" debug-mode></qy-swiper-slide>
+      </qy-swiper>
+    </section>
+
+    <section>
+      <h2>自動送りとビューアの同期</h2>
+      <qy-swiper id="autoplay-slider" autoplay>
+        <qy-swiper-slide image-url="/assets/chikubushima.jpg" thumbnail-url="/assets/chikubushima.jpg" image-type="image" caption="自動送り 1"></qy-swiper-slide>
+        <qy-swiper-slide image-url="/assets/TatebayashiStation.jpg" thumbnail-url="/assets/TatebayashiStation.jpg" image-type="image" caption="自動送り 2"></qy-swiper-slide>
+      </qy-swiper>
+    </section>
+
+    <section>
+      <h2>Leaflet ポップアップ</h2>
+      <div id="leaflet-map"></div>
+    </section>
+    <div id="thumbnail-fixture"></div>
+  </main>
+
+  <script type="module">
+    import 'leaflet/dist/leaflet.css';
+    import L from 'leaflet';
+    import './src/index.ts';
+
+    const allMedia = document.querySelector('#all-media');
+    document.querySelectorAll('[data-open-index]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const index = Number(button.getAttribute('data-open-index'));
+        allMedia.goTo(index, { animate: false });
+        void allMedia.openViewer(index);
+      });
+    });
+
+    const map = L.map('leaflet-map').setView([36.23569, 139.53341], 14);
+    L.marker([36.23569, 139.53341]).addTo(map).bindPopup(`
+      <qy-swiper>
+        <qy-swiper-slide image-url="/assets/chikubushima.jpg" thumbnail-url="/assets/chikubushima.jpg" image-type="image" caption="ポップアップ 1"></qy-swiper-slide>
+        <qy-swiper-slide image-url="/assets/TatebayashiStation.jpg" thumbnail-url="/assets/TatebayashiStation.jpg" image-type="image" caption="ポップアップ 2"></qy-swiper-slide>
+      </qy-swiper>
+    `, { maxWidth: 360 });
+
+    window.renewalDemo = { map, allMedia };
+  </script>
+</body>
+</html>

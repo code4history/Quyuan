@@ -66,7 +66,7 @@ test.describe('Leaflet Popup with qy-swiper', () => {
         const swiper = document.querySelector('.leaflet-popup-content qy-swiper');
         if (!swiper || !swiper.shadowRoot) return null;
         
-        const wrapper = swiper.shadowRoot.querySelector('.swiper-wrapper');
+        const wrapper = swiper.shadowRoot.querySelector('#track');
         return {
           wrapperExists: !!wrapper,
           wrapperChildCount: wrapper ? wrapper.children.length : 0,
@@ -90,7 +90,7 @@ test.describe('Leaflet Popup with qy-swiper', () => {
         
         // Check if slides are initialized
         if (swiper.shadowRoot) {
-          const shadowSlides = swiper.shadowRoot.querySelectorAll('.swiper-slide');
+          const shadowSlides = swiper.shadowRoot.querySelectorAll('.cc-slide');
           slidesInfo['shadowSlidesCount'] = shadowSlides.length;
           slidesInfo['firstSlideContent'] = shadowSlides[0]?.innerHTML || null;
         }
@@ -112,7 +112,7 @@ test.describe('Leaflet Popup with qy-swiper', () => {
         return {
           hasSlides: 'slides' in swiper,
           slideCount: swiper.slides ? swiper.slides.length : 0,
-          swiperInitialized: swiper.shadowRoot?.querySelector('.swiper-initialized') !== null
+          swiperInitialized: swiper.shadowRoot?.querySelector('#viewport') !== null
         };
       });
       
@@ -133,8 +133,8 @@ test.describe('Leaflet Popup with qy-swiper', () => {
       await markers[0].click();
       await page.waitForSelector('.leaflet-popup-content', { state: 'visible' });
       
-      // Try to click on a slide thumbnail
-      const slideSelector = '.leaflet-popup-content qy-swiper-slide';
+      // Click the rendered thumbnail inside the new slider shadow DOM.
+      const slideSelector = '.leaflet-popup-content qy-swiper .cc-slide img';
       const slideExists = await page.locator(slideSelector).count() > 0;
       
       if (slideExists) {
@@ -164,6 +164,8 @@ test.describe('Leaflet Popup with qy-swiper', () => {
         });
         
         console.log('After click:', afterClick);
+        expect(afterClick.viewerExists).toBe(true);
+        expect(afterClick.viewerVisible).toBe(true);
         
         // Take a screenshot after clicking
         await page.screenshot({ path: 'e2e/screenshots/leaflet-popup-after-click.png', fullPage: true });
