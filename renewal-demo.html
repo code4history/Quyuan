@@ -29,13 +29,14 @@
         <button type="button" data-open-index="4">3D メッシュ</button>
         <button type="button" data-open-index="5">Gaussian</button>
       </div>
-      <qy-swiper id="all-media">
-        <qy-swiper-slide image-url="/assets/chikubushima.jpg" thumbnail-url="/assets/chikubushima.jpg" image-type="image" caption="画像：竹生島"></qy-swiper-slide>
-        <qy-swiper-slide image-url="/assets/azumaya_panorama1.png" thumbnail-url="/assets/azumaya_panorama1.png" image-type="panorama" caption="360 度：東屋"></qy-swiper-slide>
-        <qy-swiper-slide image-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" thumbnail-url="https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg" image-type="youtube" caption="YouTube 動画"></qy-swiper-slide>
-        <qy-swiper-slide image-url="https://www.w3schools.com/html/mov_bbb.mp4" thumbnail-url="/assets/chikubushima.jpg" image-type="video" caption="MP4 動画"></qy-swiper-slide>
-        <qy-swiper-slide image-url="data:text/plain,v%20-1%20-1%200%0Av%201%20-1%200%0Av%200%201%200%0Af%201%202%203" thumbnail-url="/assets/jizo.png" image-type="3dmodel" caption="3D メッシュ：三角形" debug-mode></qy-swiper-slide>
-        <qy-swiper-slide image-url="https://t.tilemap.jp/3ddata/okuman.splat" thumbnail-url="/assets/jizo.png" image-type="gaussian" caption="Gaussian Splatting：奥万" debug-mode></qy-swiper-slide>
+      <!-- サムネイルは自動生成を見せるため、thumbnail-url を書かない（書くとそちらが優先される） -->
+      <qy-swiper id="all-media" has-thumb>
+        <qy-swiper-slide image-url="/assets/chikubushima.jpg" image-type="image" caption="画像：竹生島"></qy-swiper-slide>
+        <qy-swiper-slide image-url="/assets/azumaya_panorama1.png" image-type="panorama" caption="360 度：東屋"></qy-swiper-slide>
+        <qy-swiper-slide image-url="https://www.youtube.com/watch?v=dQw4w9WgXcQ" image-type="youtube" caption="YouTube 動画"></qy-swiper-slide>
+        <qy-swiper-slide image-url="/assets/demo-video.mp4" image-type="video" caption="MP4 動画（試験信号）"></qy-swiper-slide>
+        <qy-swiper-slide image-url="https://t.tilemap.jp/3ddata/okuman.obj" material-url="https://t.tilemap.jp/3ddata/okuman.mtl" camera-position="0,0.48,1.62" camera-target="0,0,0.3" image-type="3dmodel" caption="3D メッシュ：奥万の地蔵（テクスチャ付き）" debug-mode></qy-swiper-slide>
+        <qy-swiper-slide image-url="https://t.tilemap.jp/3ddata/okuman.splat" image-type="gaussian" caption="Gaussian Splatting：奥万の地蔵" debug-mode></qy-swiper-slide>
       </qy-swiper>
     </section>
 

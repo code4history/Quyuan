@@ -73,10 +73,26 @@ async function indexedDbThumbnailCount(page: Page): Promise<number> {
   }));
 }
 
+/**
+ * デモは人間が見るために実データ（奥万の OBJ 約 28 MB・splat 約 20 MB）を使う。
+ * 試験ではソフトウェア描画でも時間内に終わるよう、同じ URL を小さな代用品で返す。
+ */
+async function routeDemo3dToSmallFixtures(page: Page) {
+  const obj = 'v -0.5 0 0\nv 0.5 0 0\nv 0 1 0\nf 1 2 3\n';
+  await page.route('https://t.tilemap.jp/3ddata/okuman.obj', (route) => route.fulfill({ contentType: 'text/plain', body: obj }));
+  await page.route('https://t.tilemap.jp/3ddata/okuman.mtl', (route) => route.fulfill({ contentType: 'text/plain', body: 'newmtl m\nKd 0.8 0.6 0.4\n' }));
+  const splat = Buffer.alloc(32);
+  [0, 0, 0, 0.05, 0.05, 0.05].forEach((value, j) => splat.writeFloatLE(value, j * 4));
+  splat.set([255, 128, 64, 255], 24);
+  splat.set([255, 128, 128, 128], 28);
+  await page.route('https://t.tilemap.jp/3ddata/okuman.splat', (route) => route.fulfill({ contentType: 'application/octet-stream', body: splat }));
+}
+
 test.describe('viewer renewal', () => {
   test.describe.configure({ mode: 'serial' });
-  test.beforeEach(({ browserName }) => {
+  test.beforeEach(async ({ browserName, page }) => {
     test.skip(browserName !== 'chromium', 'renewal e2e は Chromium 専用');
+    await routeDemo3dToSmallFixtures(page);
   });
 
   test('swipe in leaflet popup changes slide and map center stays the same', async ({ page }) => {
