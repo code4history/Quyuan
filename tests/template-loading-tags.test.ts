@@ -104,7 +104,7 @@ describe('the template environment has no loader', () => {
 
   it.each(loadingTemplates)('makes no request for %s', (_label, template) => {
     skipStaticCheckOnce()
-    let out = ''
+    let out: string
     try {
       out = render(template, { name: 'other.html' })
     } catch {
