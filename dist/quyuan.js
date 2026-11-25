@@ -34791,6 +34791,8 @@ const pn = /* @__PURE__ */ Xb(Yb), ll = /* @__PURE__ */ new Set([
 }, ay = (i) => typeof i == "object" && i !== null && "typename" in i, cl = (i, e) => {
   Array.isArray(i) ? i.forEach((t) => cl(t, e)) : ay(i) && (e(i), Object.values(i).forEach((t) => cl(t, e)));
 }, ny = (i) => {
+  if (typeof i != "string")
+    throw new Error("Templates must be strings");
   const e = pn;
   let t;
   try {

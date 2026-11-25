@@ -185,6 +185,9 @@ const walkNodes = (value: unknown, visit: (node: NunjucksNode) => void): void =>
 // a name that would break out of the generated code or an assignment that would
 // reach the context prototype.
 const assertSafeTemplate = (templateRaw: string): void => {
+  if (typeof templateRaw !== 'string') {
+    throw new Error('Templates must be strings')
+  }
   const api = nunjucks as unknown as NunjucksParserApi
   let root: NunjucksNode
   try {

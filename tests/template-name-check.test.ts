@@ -183,3 +183,20 @@ describe('ordinary templates keep working', () => {
     expect(() => render('{% if %}')).toThrow(/parseIf|expected/)
   })
 })
+
+describe('templates that are not strings', () => {
+  const renderRaw = (template: unknown): void => {
+    Quyuan.templateExtractor({
+      geojson: { type: 'Feature', properties: {}, geometry: { type: 'Point', coordinates: [0, 0] } },
+      templates: { html: template as string },
+    })
+  }
+
+  it.each([
+    ['an object', { type: 'string', src: '{{ a }}' }],
+    ['a number', 1],
+    ['null', null],
+  ])('refuses %s', (_label, template) => {
+    expect(() => renderRaw(template)).toThrow(/Templates must be strings/)
+  })
+})

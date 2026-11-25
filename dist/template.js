@@ -2,9 +2,9 @@ function He(M) {
   return M && M.__esModule && Object.prototype.hasOwnProperty.call(M, "default") ? M.default : M;
 }
 var xe = { exports: {} };
-var Ye = xe.exports, Fe;
+var Ye = xe.exports, Re;
 function ze() {
-  return Fe || (Fe = 1, (function(M, ee) {
+  return Re || (Re = 1, (function(M, ee) {
     (function(D, A) {
       M.exports = A();
     })(typeof self < "u" ? self : Ye, function() {
@@ -71,15 +71,15 @@ function ze() {
             function I(f) {
               return m[f];
             }
-            function P(f, k, F) {
-              if (F.Update || (F = new y.TemplateError(F)), F.Update(f), !k) {
-                var B = F;
-                F = new Error(B.message), F.name = B.name;
+            function P(f, k, R) {
+              if (R.Update || (R = new y.TemplateError(R)), R.Update(f), !k) {
+                var B = R;
+                R = new Error(B.message), R.name = B.name;
               }
-              return F;
+              return R;
             }
             y._prettifyError = P;
-            function C(f, k, F) {
+            function C(f, k, R) {
               var B, G;
               f instanceof Error && (G = f, f = G.name + ": " + G.message), Object.setPrototypeOf ? (B = new Error(f), Object.setPrototypeOf(B, C.prototype)) : (B = this, Object.defineProperty(B, "message", {
                 enumerable: !1,
@@ -108,7 +108,7 @@ function ze() {
                 }
               }), Object.defineProperty(B, "cause", {
                 value: G
-              }), B.lineno = k, B.colno = F, B.firstUpdate = !0, B.Update = function(Q) {
+              }), B.lineno = k, B.colno = R, B.firstUpdate = !0, B.Update = function(Q) {
                 var Z = "(" + (Q || "unknown path") + ")";
                 return this.firstUpdate && (this.lineno && this.colno ? Z += " [Line " + this.lineno + ", Column " + this.colno + "]" : this.lineno && (Z += " [Line " + this.lineno + "]")), Z += `
  `, this.firstUpdate && (Z += " "), this.message = Z + (this.message || ""), this.firstUpdate = !1, this;
@@ -156,10 +156,10 @@ function ze() {
               };
             }
             y.getAttrGetter = l;
-            function h(f, k, F) {
+            function h(f, k, R) {
               for (var B = {}, G = L(k) ? k : l(k), te = 0; te < f.length; te++) {
                 var J = f[te], le = G(J, te);
-                if (le === void 0 && F === !0)
+                if (le === void 0 && R === !0)
                   throw new TypeError('groupby: attribute "' + k + '" resolved to undefined');
                 (B[le] || (B[le] = [])).push(J);
               }
@@ -174,64 +174,64 @@ function ze() {
               var k = [];
               if (!f)
                 return k;
-              for (var F = f.length, B = t(arguments).slice(1), G = -1; ++G < F; )
+              for (var R = f.length, B = t(arguments).slice(1), G = -1; ++G < R; )
                 w(B, f[G]) === -1 && k.push(f[G]);
               return k;
             }
             y.without = i;
             function a(f, k) {
-              for (var F = "", B = 0; B < k; B++)
-                F += f;
-              return F;
+              for (var R = "", B = 0; B < k; B++)
+                R += f;
+              return R;
             }
             y.repeat = a;
-            function o(f, k, F) {
+            function o(f, k, R) {
               if (f != null) {
                 if (g.forEach && f.forEach === g.forEach)
-                  f.forEach(k, F);
+                  f.forEach(k, R);
                 else if (f.length === +f.length)
                   for (var B = 0, G = f.length; B < G; B++)
-                    k.call(F, f[B], B, f);
+                    k.call(R, f[B], B, f);
               }
             }
             y.each = o;
             function s(f, k) {
-              var F = [];
+              var R = [];
               if (f == null)
-                return F;
+                return R;
               if (g.map && f.map === g.map)
                 return f.map(k);
               for (var B = 0; B < f.length; B++)
-                F[F.length] = k(f[B], B);
-              return f.length === +f.length && (F.length = f.length), F;
+                R[R.length] = k(f[B], B);
+              return f.length === +f.length && (R.length = f.length), R;
             }
             y.map = s;
-            function u(f, k, F) {
+            function u(f, k, R) {
               var B = -1;
               function G() {
-                B++, B < f.length ? k(f[B], B, G, F) : F();
+                B++, B < f.length ? k(f[B], B, G, R) : R();
               }
               G();
             }
             y.asyncIter = u;
-            function c(f, k, F) {
+            function c(f, k, R) {
               var B = T(f || {}), G = B.length, te = -1;
               function J() {
                 te++;
                 var le = B[te];
-                te < G ? k(le, f[le], te, G, J) : F();
+                te < G ? k(le, f[le], te, G, J) : R();
               }
               J();
             }
             y.asyncFor = c;
-            function w(f, k, F) {
-              return Array.prototype.indexOf.call(f || [], k, F);
+            function w(f, k, R) {
+              return Array.prototype.indexOf.call(f || [], k, R);
             }
             y.indexOf = w;
             function T(f) {
               var k = [];
-              for (var F in f)
-                O(f, F) && k.push(F);
+              for (var R in f)
+                O(f, R) && k.push(R);
               return k;
             }
             y.keys = T;
@@ -247,12 +247,12 @@ function ze() {
               });
             }
             y._values = S;
-            function R(f, k) {
-              return f = f || {}, T(k).forEach(function(F) {
-                f[F] = k[F];
+            function F(f, k) {
+              return f = f || {}, T(k).forEach(function(R) {
+                f[R] = k[R];
               }), f;
             }
-            y._assign = y.extend = R;
+            y._assign = y.extend = F;
             function d(f, k) {
               if (e(k) || n(k))
                 return k.indexOf(f) !== -1;
@@ -368,16 +368,16 @@ function ze() {
               }
               var u = s.prototype;
               return u.set = function(w, T, x) {
-                var S = w.split("."), R = this.variables, d = this;
+                var S = w.split("."), F = this.variables, d = this;
                 if (x && (d = this.resolve(S[0], !0))) {
                   d.set(w, T);
                   return;
                 }
                 for (var f = 0; f < S.length - 1; f++) {
                   var k = S[f];
-                  R[k] || (R[k] = {}), R = R[k];
+                  F[k] || (F[k] = {}), F = F[k];
                 }
-                R[S[S.length - 1]] = T;
+                F[S[S.length - 1]] = T;
               }, u.get = function(w) {
                 var T = this.variables[w];
                 return T !== void 0 ? T : null;
@@ -397,16 +397,16 @@ function ze() {
               return function() {
                 for (var T = arguments.length, x = new Array(T), S = 0; S < T; S++)
                   x[S] = arguments[S];
-                var R = C(x), d, f = P(x);
-                if (R > s.length)
-                  d = x.slice(0, s.length), x.slice(d.length, R).forEach(function(B, G) {
+                var F = C(x), d, f = P(x);
+                if (F > s.length)
+                  d = x.slice(0, s.length), x.slice(d.length, F).forEach(function(B, G) {
                     G < u.length && (f[u[G]] = B);
                   }), d.push(f);
-                else if (R < s.length) {
-                  d = x.slice(0, R);
-                  for (var k = R; k < s.length; k++) {
-                    var F = s[k];
-                    d.push(f[F]), delete f[F];
+                else if (F < s.length) {
+                  d = x.slice(0, F);
+                  for (var k = F; k < s.length; k++) {
+                    var R = s[k];
+                    d.push(f[R]), delete f[R];
                   }
                   d.push(f);
                 } else
@@ -495,29 +495,29 @@ function ze() {
             function i(s, u, c, w) {
               if (g.isArray(s)) {
                 var T = s.length;
-                g.asyncIter(s, function(S, R, d) {
+                g.asyncIter(s, function(S, F, d) {
                   switch (u) {
                     case 1:
-                      c(S, R, T, d);
+                      c(S, F, T, d);
                       break;
                     case 2:
-                      c(S[0], S[1], R, T, d);
+                      c(S[0], S[1], F, T, d);
                       break;
                     case 3:
-                      c(S[0], S[1], S[2], R, T, d);
+                      c(S[0], S[1], S[2], F, T, d);
                       break;
                     default:
-                      S.push(R, T, d), c.apply(this, S);
+                      S.push(F, T, d), c.apply(this, S);
                   }
                 }, w);
               } else
-                g.asyncFor(s, function(S, R, d, f, k) {
-                  c(S, R, d, f, k);
+                g.asyncFor(s, function(S, F, d, f, k) {
+                  c(S, F, d, f, k);
                 }, w);
             }
             function a(s, u, c, w) {
               var T = 0, x, S;
-              function R(G, te) {
+              function F(G, te) {
                 T++, S[G] = te, T === x && w(null, S.join(""));
               }
               if (g.isArray(s))
@@ -528,16 +528,16 @@ function ze() {
                     var f = s[d];
                     switch (u) {
                       case 1:
-                        c(f, d, x, R);
+                        c(f, d, x, F);
                         break;
                       case 2:
-                        c(f[0], f[1], d, x, R);
+                        c(f[0], f[1], d, x, F);
                         break;
                       case 3:
-                        c(f[0], f[1], f[2], d, x, R);
+                        c(f[0], f[1], f[2], d, x, F);
                         break;
                       default:
-                        f.push(d, x, R), c.apply(this, f);
+                        f.push(d, x, F), c.apply(this, f);
                     }
                   }
               else {
@@ -545,9 +545,9 @@ function ze() {
                 if (x = k.length, S = new Array(x), x === 0)
                   w(null, "");
                 else
-                  for (var F = 0; F < k.length; F++) {
-                    var B = k[F];
-                    c(B, s[B], F, x, R);
+                  for (var R = 0; R < k.length; R++) {
+                    var B = k[R];
+                    c(B, s[B], R, x, F);
                   }
               }
             }
@@ -689,7 +689,7 @@ function ze() {
               fields: ["arr", "name", "body", "else_"]
             }), w = c.extend("AsyncEach"), T = c.extend("AsyncAll"), x = E.extend("Macro", {
               fields: ["name", "args", "body"]
-            }), S = x.extend("Caller"), R = E.extend("Import", {
+            }), S = x.extend("Caller"), F = E.extend("Import", {
               fields: ["template", "target", "withContext"]
             }), d = /* @__PURE__ */ (function(Y) {
               y(z, Y);
@@ -712,7 +712,7 @@ function ze() {
               }]), z;
             })(E), f = E.extend("FunCall", {
               fields: ["name", "args"]
-            }), k = f.extend("Filter"), F = k.extend("FilterAsync", {
+            }), k = f.extend("Filter"), R = k.extend("FilterAsync", {
               fields: ["name", "args", "symbol"]
             }), B = i.extend("KeywordArgs"), G = E.extend("Block", {
               fields: ["name", "body"]
@@ -799,11 +799,11 @@ function ze() {
               AsyncAll: T,
               Macro: x,
               Caller: S,
-              Import: R,
+              Import: F,
               FromImport: d,
               FunCall: f,
               Filter: k,
-              FilterAsync: F,
+              FilterAsync: R,
               KeywordArgs: B,
               Block: G,
               Super: te,
@@ -1093,8 +1093,8 @@ else {`), this._emit("cb()")), this._emitLine("}");
                     a.compile(t.body, i);
                   }), this._emitLine("}"), this._emitLine("}");
                 } else {
-                  var R = this._tmpid();
-                  i.set(t.name.value, R), this._emitLine("var " + s + " = " + u + ".length;"), this._emitLine("for(var " + o + "=0; " + o + " < " + u + ".length; " + o + "++) {"), this._emitLine("var " + R + " = " + u + "[" + o + "];"), this._emitLine('frame.set("' + t.name.value + '", ' + R + ");"), this._emitLoopBindings(t, u, o, s), this._withScopedSyntax(function() {
+                  var F = this._tmpid();
+                  i.set(t.name.value, F), this._emitLine("var " + s + " = " + u + ".length;"), this._emitLine("for(var " + o + "=0; " + o + " < " + u + ".length; " + o + "++) {"), this._emitLine("var " + F + " = " + u + "[" + o + "];"), this._emitLine('frame.set("' + t.name.value + '", ' + F + ");"), this._emitLoopBindings(t, u, o, s), this._withScopedSyntax(function() {
                     a.compile(t.body, i);
                   }), this._emitLine("}");
                 }
@@ -1103,10 +1103,10 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 var o = this, s = this._tmpid(), u = this._tmpid(), c = this._tmpid(), w = a ? "asyncAll" : "asyncEach";
                 if (i = i.push(), this._emitLine("frame = frame.push();"), this._emit("var " + c + " = runtime.fromIterator("), this._compileExpression(t.arr, i), this._emitLine(");"), t.name instanceof y.Array) {
                   var T = t.name.children.length;
-                  this._emit("runtime." + w + "(" + c + ", " + T + ", function("), t.name.children.forEach(function(R) {
-                    o._emit(R.value + ",");
-                  }), this._emit(s + "," + u + ",next) {"), t.name.children.forEach(function(R) {
-                    var d = R.value;
+                  this._emit("runtime." + w + "(" + c + ", " + T + ", function("), t.name.children.forEach(function(F) {
+                    o._emit(F.value + ",");
+                  }), this._emit(s + "," + u + ",next) {"), t.name.children.forEach(function(F) {
+                    var d = F.value;
                     i.set(d, d), o._emitLine('frame.set("' + d + '", ' + d + ");");
                   });
                 } else {
@@ -1114,8 +1114,8 @@ else {`), this._emit("cb()")), this._emitLine("}");
                   this._emitLine("runtime." + w + "(" + c + ", 1, function(" + x + ", " + s + ", " + u + ",next) {"), this._emitLine('frame.set("' + x + '", ' + x + ");"), i.set(x, x);
                 }
                 this._emitLoopBindings(t, c, s, u), this._withScopedSyntax(function() {
-                  var R;
-                  a && (R = o._pushBuffer()), o.compile(t.body, i), o._emitLine("next(" + s + (R ? "," + R : "") + ");"), a && o._popBuffer();
+                  var F;
+                  a && (F = o._pushBuffer()), o.compile(t.body, i), o._emitLine("next(" + s + (F ? "," + F : "") + ");"), a && o._popBuffer();
                 });
                 var S = this._tmpid();
                 this._emitLine("}, " + this._makeCallback(S)), this._addScopeLevel(), a && this._emitLine(this.buffer + " += " + S + ";"), t.else_ && (this._emitLine("if (!" + c + ".length) {"), this.compile(t.else_, i), this._emitLine("}")), this._emitLine("frame = frame.pop();");
@@ -1141,10 +1141,10 @@ else {`), this._emit("cb()")), this._emitLine("}");
                   var f = d.key.value;
                   a._emit('frame.set("' + f + '", '), a._emit('Object.prototype.hasOwnProperty.call(kwargs, "' + f + '")'), a._emit(' ? kwargs["' + f + '"] : '), a._compileExpression(d.value, S), a._emit(");");
                 });
-                var R = this._pushBuffer();
+                var F = this._pushBuffer();
                 return this._withScopedSyntax(function() {
                   a.compile(t.body, S);
-                }), this._emitLine("frame = " + (c ? "frame.pop();" : "callerFrame;")), this._emitLine("return new runtime.SafeString(" + R + ");"), this._emitLine("});"), this._popBuffer(), u;
+                }), this._emitLine("frame = " + (c ? "frame.pop();" : "callerFrame;")), this._emitLine("return new runtime.SafeString(" + F + ");"), this._emitLine("});"), this._popBuffer(), u;
               }, l.compileMacro = function(t, i) {
                 var a = this._compileMacro(t), o = t.name.value;
                 i.set(o, a), i.parent ? this._emitLine('frame.set("' + o + '", ' + a + ");") : (t.name.value.charAt(0) !== "_" && this._emitLine('context.addExport("' + o + '");'), this._emitLine('context.setVariable("' + o + '", ' + a + ");"));
@@ -1262,8 +1262,8 @@ else {`), this._emit("cb()")), this._emitLine("}");
               T.prototype = Object.create(x.prototype), T.prototype.constructor = T, b(T, x);
             }
             function b(T, x) {
-              return b = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(R, d) {
-                return R.__proto__ = d, R;
+              return b = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function(F, d) {
+                return F.__proto__ = d, F;
               }, b(T, x);
             }
             var m = A(12), _ = A(15), y = A(0), O = A(5), I = A(18), P = A(10), C = P.FileSystemLoader, E = P.WebLoader, L = P.PrecompiledLoader, e = A(20), n = A(21), r = A(1), p = r.Obj, l = r.EmitterObj, h = A(2), t = h.handleError, i = h.Frame, a = A(22);
@@ -1275,7 +1275,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
             var s = {
               type: "code",
               obj: {
-                root: function(x, S, R, d, f) {
+                root: function(x, S, F, d, f) {
                   try {
                     f(null, "");
                   } catch (k) {
@@ -1291,20 +1291,20 @@ else {`), this._emit("cb()")), this._emitLine("}");
               var S = x.prototype;
               return S.init = function(d, f) {
                 var k = this;
-                f = this.opts = f || {}, this.opts.dev = !!f.dev, this.opts.autoescape = f.autoescape != null ? f.autoescape : !0, this.opts.throwOnUndefined = !!f.throwOnUndefined, this.opts.trimBlocks = !!f.trimBlocks, this.opts.lstripBlocks = !!f.lstripBlocks, this.loaders = [], d ? this.loaders = y.isArray(d) ? d : [d] : C ? this.loaders = [new C("views")] : E && (this.loaders = [new E("/views")]), typeof window < "u" && window.nunjucksPrecompiled && this.loaders.unshift(new L(window.nunjucksPrecompiled)), this._initLoaders(), this.globals = n(), this.filters = {}, this.tests = {}, this.asyncFilters = [], this.extensions = {}, this.extensionsList = [], y._entries(I).forEach(function(F) {
-                  var B = F[0], G = F[1];
+                f = this.opts = f || {}, this.opts.dev = !!f.dev, this.opts.autoescape = f.autoescape != null ? f.autoescape : !0, this.opts.throwOnUndefined = !!f.throwOnUndefined, this.opts.trimBlocks = !!f.trimBlocks, this.opts.lstripBlocks = !!f.lstripBlocks, this.loaders = [], d ? this.loaders = y.isArray(d) ? d : [d] : C ? this.loaders = [new C("views")] : E && (this.loaders = [new E("/views")]), typeof window < "u" && window.nunjucksPrecompiled && this.loaders.unshift(new L(window.nunjucksPrecompiled)), this._initLoaders(), this.globals = n(), this.filters = {}, this.tests = {}, this.asyncFilters = [], this.extensions = {}, this.extensionsList = [], y._entries(I).forEach(function(R) {
+                  var B = R[0], G = R[1];
                   return k.addFilter(B, G);
-                }), y._entries(e).forEach(function(F) {
-                  var B = F[0], G = F[1];
+                }), y._entries(e).forEach(function(R) {
+                  var B = R[0], G = R[1];
                   return k.addTest(B, G);
                 });
               }, S._initLoaders = function() {
                 var d = this;
                 this.loaders.forEach(function(f) {
-                  f.cache = {}, typeof f.on == "function" && (f.on("update", function(k, F) {
-                    f.cache[k] = null, d.emit("update", k, F, f);
-                  }), f.on("load", function(k, F) {
-                    d.emit("load", k, F, f);
+                  f.cache = {}, typeof f.on == "function" && (f.on("update", function(k, R) {
+                    f.cache[k] = null, d.emit("update", k, R, f);
+                  }), f.on("load", function(k, R) {
+                    d.emit("load", k, R, f);
                   }));
                 });
               }, S.invalidateCache = function() {
@@ -1327,8 +1327,8 @@ else {`), this._emit("cb()")), this._emitLine("}");
                   throw new Error("global not found: " + d);
                 return this.globals[d];
               }, S.addFilter = function(d, f, k) {
-                var F = f;
-                return k && this.asyncFilters.push(d), this.filters[d] = F, this;
+                var R = f;
+                return k && this.asyncFilters.push(d), this.filters[d] = R, this;
               }, S.getFilter = function(d) {
                 if (!this.filters[d])
                   throw new Error("filter not found: " + d);
@@ -1340,9 +1340,9 @@ else {`), this._emit("cb()")), this._emitLine("}");
                   throw new Error("test not found: " + d);
                 return this.tests[d];
               }, S.resolveTemplate = function(d, f, k) {
-                var F = d.isRelative && f ? d.isRelative(k) : !1;
-                return F && d.resolve ? d.resolve(f, k) : k;
-              }, S.getTemplate = function(d, f, k, F, B) {
+                var R = d.isRelative && f ? d.isRelative(k) : !1;
+                return R && d.resolve ? d.resolve(f, k) : k;
+              }, S.getTemplate = function(d, f, k, R, B) {
                 var G = this, te = this, J = null;
                 if (d && d.raw && (d = d.raw), y.isFunction(k) && (B = k, k = null, f = f || !1), y.isFunction(f) && (B = f, f = !1), d instanceof w)
                   J = d;
@@ -1362,7 +1362,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
                   } else
                     return J;
                 var Q, Z = function(H, W) {
-                  if (!W && !H && !F && (H = new Error("template not found: " + d)), H)
+                  if (!W && !H && !R && (H = new Error("template not found: " + d)), H)
                     if (B) {
                       B(H);
                       return;
@@ -1381,20 +1381,20 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 return a(this, d);
               }, S.render = function(d, f, k) {
                 y.isFunction(f) && (k = f, f = null);
-                var F = null;
+                var R = null;
                 return this.getTemplate(d, function(B, G) {
                   if (B && k)
                     o(k, B);
                   else {
                     if (B)
                       throw B;
-                    F = G.render(f, k);
+                    R = G.render(f, k);
                   }
-                }), F;
-              }, S.renderString = function(d, f, k, F) {
-                y.isFunction(k) && (F = k, k = {}), k = k || {};
+                }), R;
+              }, S.renderString = function(d, f, k, R) {
+                y.isFunction(k) && (R = k, k = {}), k = k || {};
                 var B = new w(d, this, k.path);
-                return B.render(f, F);
+                return B.render(f, R);
               }, S.waterfall = function(d, f, k) {
                 return _(d, f, k);
               }, x;
@@ -1405,9 +1405,9 @@ else {`), this._emit("cb()")), this._emitLine("}");
               }
               var S = x.prototype;
               return S.init = function(d, f, k) {
-                var F = this;
+                var R = this;
                 this.env = k || new u(), this.ctx = y.extend({}, d), this.blocks = {}, this.exported = [], y.keys(f).forEach(function(B) {
-                  F.addBlock(B, f[B]);
+                  R.addBlock(B, f[B]);
                 });
               }, S.lookup = function(d) {
                 return d in this.env.globals && !(d in this.ctx) ? this.env.globals[d] : this.ctx[d];
@@ -1421,11 +1421,11 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 if (!this.blocks[d])
                   throw new Error('unknown block "' + d + '"');
                 return this.blocks[d][0];
-              }, S.getSuper = function(d, f, k, F, B, G) {
+              }, S.getSuper = function(d, f, k, R, B, G) {
                 var te = y.indexOf(this.blocks[f] || [], k), J = this.blocks[f][te + 1], le = this;
                 if (te === -1 || !J)
                   throw new Error('no super block available for "' + f + '"');
-                J(d, le, F, B, G);
+                J(d, le, R, B, G);
               }, S.addExport = function(d) {
                 this.exported.push(d);
               }, S.getExported = function() {
@@ -1440,7 +1440,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 return T.apply(this, arguments) || this;
               }
               var S = x.prototype;
-              return S.init = function(d, f, k, F) {
+              return S.init = function(d, f, k, R) {
                 if (this.env = f || new u(), y.isObject(d))
                   switch (d.type) {
                     case "code":
@@ -1456,7 +1456,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
                   this.tmplStr = d;
                 else
                   throw new Error("src must be a string or an object describing the source");
-                if (this.path = k, F)
+                if (this.path = k, R)
                   try {
                     this._compile();
                   } catch (B) {
@@ -1465,7 +1465,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 else
                   this.compiled = !1;
               }, S.render = function(d, f, k) {
-                var F = this;
+                var R = this;
                 typeof d == "function" ? (k = d, d = {}) : typeof f == "function" && (k = f, f = null);
                 var B = !f;
                 try {
@@ -1481,7 +1481,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 var le = null, fe = !1;
                 return this.rootRenderFunc(this.env, te, J, h, function(Q, Z) {
                   if (!(fe && k && typeof Z < "u"))
-                    if (Q && (Q = y._prettifyError(F.path, F.env.opts.dev, Q), fe = !0), k)
+                    if (Q && (Q = y._prettifyError(R.path, R.env.opts.dev, Q), fe = !0), k)
                       B ? o(k, Q, Z) : k(Q, Z);
                     else {
                       if (Q)
@@ -1498,10 +1498,10 @@ else {`), this._emit("cb()")), this._emitLine("}");
                     return k(G);
                   throw G;
                 }
-                var F = f ? f.push() : new i();
-                F.topLevel = !0;
+                var R = f ? f.push() : new i();
+                R.topLevel = !0;
                 var B = new c(d || {}, this.blocks, this.env);
-                this.rootRenderFunc(this.env, B, F, h, function(G) {
+                this.rootRenderFunc(this.env, B, R, h, function(G) {
                   G ? k(G, null) : k(null, B.getExported());
                 });
               }, S.compile = function() {
@@ -2017,7 +2017,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
           /***/
           (function(K, D, A) {
             var g = A(0), b = ` 
-	\r `, m = "()[]{}%*-+~/#,:|.<>=!", _ = "0123456789", y = "{%", O = "%}", I = "{{", P = "}}", C = "{#", E = "#}", L = "string", e = "whitespace", n = "data", r = "block-start", p = "block-end", l = "variable-start", h = "variable-end", t = "comment", i = "left-paren", a = "right-paren", o = "left-bracket", s = "right-bracket", u = "left-curly", c = "right-curly", w = "operator", T = "comma", x = "colon", S = "tilde", R = "pipe", d = "int", f = "float", k = "boolean", F = "none", B = "symbol", G = "special", te = "regex";
+	\r `, m = "()[]{}%*-+~/#,:|.<>=!", _ = "0123456789", y = "{%", O = "%}", I = "{{", P = "}}", C = "{#", E = "#}", L = "string", e = "whitespace", n = "data", r = "block-start", p = "block-end", l = "variable-start", h = "variable-end", t = "comment", i = "left-paren", a = "right-paren", o = "left-bracket", s = "right-bracket", u = "left-curly", c = "right-curly", w = "operator", T = "comma", x = "colon", S = "tilde", F = "pipe", d = "int", f = "float", k = "boolean", R = "none", B = "symbol", G = "special", te = "regex";
             function J(fe, Q, Z, V) {
               return {
                 type: fe,
@@ -2107,7 +2107,7 @@ else {`), this._emit("cb()")), this._emitLine("}");
                         j = S;
                         break;
                       case "|":
-                        j = R;
+                        j = F;
                         break;
                       default:
                         j = w;
@@ -2124,9 +2124,9 @@ else {`), this._emit("cb()")), this._emitLine("}");
                     if (W.match(/^(true|false)$/))
                       return J(k, W, V, H);
                     if (W === "none")
-                      return J(F, W, V, H);
+                      return J(R, W, V, H);
                     if (W === "null")
-                      return J(F, W, V, H);
+                      return J(R, W, V, H);
                     if (W)
                       return J(B, W, V, H);
                     throw new Error("Unexpected value while parsing: " + W);
@@ -2260,11 +2260,11 @@ else {`), this._emit("cb()")), this._emitLine("}");
               TOKEN_COMMA: T,
               TOKEN_COLON: x,
               TOKEN_TILDE: S,
-              TOKEN_PIPE: R,
+              TOKEN_PIPE: F,
               TOKEN_INT: d,
               TOKEN_FLOAT: f,
               TOKEN_BOOLEAN: k,
-              TOKEN_NONE: F,
+              TOKEN_NONE: R,
               TOKEN_SYMBOL: B,
               TOKEN_SPECIAL: G,
               TOKEN_REGEX: te
@@ -2563,13 +2563,13 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 var S = new Error("Unhandled error." + (x ? " (" + x.message + ")" : ""));
                 throw S.context = x, S;
               }
-              var R = T[s];
-              if (R === void 0)
+              var F = T[s];
+              if (F === void 0)
                 return !1;
-              if (typeof R == "function")
-                b(R, this, u);
+              if (typeof F == "function")
+                b(F, this, u);
               else
-                for (var d = R.length, f = p(R, d), c = 0; c < d; ++c)
+                for (var d = F.length, f = p(F, d), c = 0; c < d; ++c)
                   b(f[c], this, u);
               return !0;
             };
@@ -2992,13 +2992,13 @@ else {`), this._emit("cb()")), this._emitLine("}");
               return q < v.length && (X += v.substring(q)), b.copySafeness($, X);
             }
             m.replace = S;
-            function R(v) {
+            function F(v) {
               var N;
               return g.isString(v) ? N = o(v) : N = g.map(v, function(U) {
                 return U;
               }), N.reverse(), g.isString(v) ? b.copySafeness(v, N.join("")) : N;
             }
-            m.reverse = R;
+            m.reverse = F;
             function d(v, N, U) {
               N = N || 0;
               var j = Math.pow(10, N), $;
@@ -3033,10 +3033,10 @@ else {`), this._emit("cb()")), this._emitLine("}");
                 return !j && g.isString(ve) && g.isString(ye) && (ve = ve.toLowerCase(), ye = ye.toLowerCase()), ve < ye ? U ? 1 : -1 : ve > ye ? U ? -1 : 1 : 0;
               }), se;
             });
-            function F(v) {
+            function R(v) {
               return b.copySafeness(v, v);
             }
-            m.string = F;
+            m.string = R;
             function B(v, N) {
               v = _(v, "");
               var U = /<\/?([a-z][a-z0-9]*)\b[^>]*>|<!--[\s\S]*?-->/gi, j = te(v.replace(U, "")), $ = "";
@@ -3434,9 +3434,9 @@ else {`), this._emit("cb()")), this._emitLine("}");
                   o.colno--, o.index--;
                   try {
                     return L.apply(this);
-                  } catch (R) {
+                  } catch (F) {
                     var s = n(this.tokens), u = function() {
-                      return m._assign(a.tokens, s), R;
+                      return m._assign(a.tokens, s), F;
                     };
                     m._assign(this.tokens, o), this.peeked = !1;
                     var c = this.peekToken();
@@ -3627,9 +3627,11 @@ const Te = /* @__PURE__ */ He($e), Ce = /* @__PURE__ */ new Set([
     if (Ie(ee), Ce.has(String(ee?.value)))
       throw new Error("Assigning to `" + String(ee?.value) + "` is not allowed in templates");
   qe(M).forEach(Ie);
-}, nt = (M) => typeof M == "object" && M !== null && "typename" in M, Re = (M, ee) => {
-  Array.isArray(M) ? M.forEach((K) => Re(K, ee)) : nt(M) && (ee(M), Object.values(M).forEach((K) => Re(K, ee)));
+}, nt = (M) => typeof M == "object" && M !== null && "typename" in M, Fe = (M, ee) => {
+  Array.isArray(M) ? M.forEach((K) => Fe(K, ee)) : nt(M) && (ee(M), Object.values(M).forEach((K) => Fe(K, ee)));
 }, rt = (M) => {
+  if (typeof M != "string")
+    throw new Error("Templates must be strings");
   const ee = Te;
   let K;
   try {
@@ -3637,7 +3639,7 @@ const Te = /* @__PURE__ */ He($e), Ce = /* @__PURE__ */ new Set([
   } catch {
     return;
   }
-  Re(K, tt);
+  Fe(K, tt);
 }, it = () => Te.runtime, ot = () => {
   const M = new Te.Environment([]);
   M.loaders = [];
