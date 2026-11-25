@@ -2,6 +2,34 @@
 
 このプロジェクトの主な変更を記録します。版数は [Semantic Versioning](https://semver.org/) に従います。
 
+## [Unreleased]
+
+### 日本語
+
+#### 2.0 の破壊的変更
+- `@c4h/chuci` の optional peer 依存を `^2.0.0` へ更新し、自前のカルーセルと統一ビューアへ追随した。Chuci のメディア別 `cc-viewer-*` 要素・`setSwiper`・`setCurrentSlideIndex`・`cc-swiper.slider` はなくなり、`qy-swiper` のスライド変更イベントは `slidechange` ではなく `cc-swiper-index-change`（`detail.index`）を使う。`qy-swiper`・`qy-swiper-slide`・`qy-viewer` のタグ、スライド属性、`currenttype`・`currentslideindex`、CSS 変数は維持する。
+- カルーセルと画像・360 度ビューアを Chuci の実装へ替え、Gaussian の描画を Spark へ移した。Swiper・viewer.js・gsplat・A-Frame を使わず、three.js を同梱し、Spark は必要時に読み込む。
+
+#### 2.0 の追加
+- `thumbnail-url` がない `qy-swiper-slide` で、Chuci の IndexedDB キャッシュと自動サムネイル生成を使うようにした。作成ツールは `@c4h/chuci` の `generateThumbnail` と `readMediaItem` を `qy-swiper-slide` にも使える。
+
+#### 2.0 の修正
+- Chuci 2.0 へ追随し、Gaussian の `camera-position`・`camera-target`、3D メッシュの `show-texture`・`fit-to-container` が実際の表示へ反映されない問題を修正。
+- 1.1.1 の「既知の問題」にあった、Chuci の `realIndex` のずれによる閉じた後の画像のずれを解消。2.0 では Swiper を外したため、不具合の対象だった仕組み自体がなくなる。
+
+### English
+
+#### 2.0 breaking changes
+- Updated the optional `@c4h/chuci` peer dependency to `^2.0.0` and adopted its own carousel and unified viewer. Chuci's media-specific `cc-viewer-*` elements, `setSwiper`, `setCurrentSlideIndex`, and `cc-swiper.slider` are gone. `qy-swiper` now emits `cc-swiper-index-change` (`detail.index`) rather than `slidechange`. The `qy-swiper`, `qy-swiper-slide`, and `qy-viewer` tags, slide attributes, `currenttype` and `currentslideindex`, and CSS variables remain compatible.
+- Replaced the carousel and image/panorama viewers with Chuci's implementations and moved Gaussian rendering to Spark. Removed Swiper, viewer.js, gsplat, and A-Frame; three.js is bundled and Spark loads on demand.
+
+#### 2.0 added
+- Added Chuci's IndexedDB cache and automatic thumbnail generation to `qy-swiper-slide` elements without `thumbnail-url`. Authoring tools can use `@c4h/chuci`'s `generateThumbnail` and `readMediaItem` with `qy-swiper-slide` too.
+
+#### 2.0 fixed
+- Followed Chuci 2.0 to apply Gaussian `camera-position` and `camera-target`, and 3D model `show-texture` and `fit-to-container`, to the rendered view.
+- Resolved the Chuci `realIndex` drift listed under "Known issues" in 1.1.1, which could show a different image after closing the viewer. In 2.0, removing Swiper removes the mechanism that contained the bug.
+
 ## [1.1.1] - 2026-11-02
 
 1.1.1-rc.1 と同じ内容の正式版です（版番号と、内部依存の指定を RC から正式版（^1.0.2）へ戻したことだけが違います）。変更点は 1.1.1-rc.1 までの各項を参照してください。

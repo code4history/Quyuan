@@ -12,8 +12,8 @@
 Quyuan is a GeoJSON template engine with an integrated multimedia viewer.
 It processes GeoJSON features through Nunjucks templates to generate marker
 icons and popup HTML, and provides Web Components (`qy-swiper` /
-`qy-swiper-slide` / `qy-viewer`) for displaying images, panoramas, and videos
-inside popups.
+`qy-swiper-slide` / `qy-viewer`) for displaying images, panoramas, YouTube and
+MP4 videos, 3D models, and Gaussian splats inside popups.
 The project is named after
 [Qu Yuan (屈原)](https://en.wikipedia.org/wiki/Qu_Yuan), a Chinese poet and
 politician from the 4th century BC.
@@ -29,7 +29,8 @@ Quyuan is open-source under the MIT License.
 - GeoJSON template engine using Nunjucks syntax (per-feature processing)
 - Multiple template keys (marker icons, popup HTML, etc.) with results stored in each feature
 - Web Components-based multimedia viewer (`qy-swiper` / `qy-swiper-slide` / `qy-viewer`)
-- Supported media: images, 360-degree panoramas, YouTube videos, MP4 videos, 3D models (MTL), Gaussian Splatting
+- Supported media: images, 360-degree panoramas, YouTube videos, MP4 videos, 3D models (OBJ/MTL), Gaussian Splatting
+- Chuci's self-contained carousel and unified viewer, with automatic thumbnails cached in IndexedDB
 - Works with Leaflet, OpenLayers, and MapLibre GL (integration examples in `docs/api/`)
 
 ## Security
@@ -176,7 +177,12 @@ pnpm run test:e2e   # Run E2E tests
 - Browser: Chrome / Edge / Firefox / Safari (latest) — requires Web Components support
 
 <!-- SECTION 7: Peer Dependencies -->
-<!-- Quyuan has no peer dependencies. This section is omitted. -->
+## Multimedia dependency
+
+The UI entry uses `@c4h/chuci` `^2.0.0` as an optional peer dependency and
+bundles it in the distributed UI build. Chuci's carousel and viewers do not use
+Swiper.js, viewer.js, gsplat, or A-Frame; they bundle three.js and load Spark on
+demand for Gaussian splats. The template-only entry does not require Chuci.
 
 <!-- SECTION 8: Ecosystem / Related Repositories -->
 ## Ecosystem

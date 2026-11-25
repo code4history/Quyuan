@@ -10,7 +10,7 @@
 ## Quyuan について
 
 Quyuan は GeoJSON テンプレートエンジンと統合マルチメディアビューアです。
-GeoJSON の feature を Nunjucks テンプレートで処理し、マーカーアイコンとポップアップ HTML を生成します。また、画像・パノラマ・動画をポップアップ内で表示する Web Components（`qy-swiper` / `qy-swiper-slide` / `qy-viewer`）を提供します。
+GeoJSON の feature を Nunjucks テンプレートで処理し、マーカーアイコンとポップアップ HTML を生成します。また、画像・パノラマ・YouTube / MP4 動画・3D モデル・Gaussian スプラットをポップアップ内で表示する Web Components（`qy-swiper` / `qy-swiper-slide` / `qy-viewer`）を提供します。
 プロジェクト名は、紀元前4世紀の中国の詩人・政治家である
 [屈原 (Qu Yuan)](https://en.wikipedia.org/wiki/Qu_Yuan) に由来しています。
 
@@ -25,7 +25,8 @@ Quyuan は MIT License のオープンソースソフトウェアです。
 - Nunjucks 文法による GeoJSON テンプレートエンジン（feature ごとに処理）
 - 複数キーのテンプレート定義（マーカーアイコン・ポップアップ HTML 等）・結果は各 feature に格納
 - Web Components ベースのマルチメディアビューア（`qy-swiper` / `qy-swiper-slide` / `qy-viewer`）
-- 対応メディア: 画像・360度全球画像・YouTube 動画・MP4 動画・3D モデル (MTL)・Gaussian Splatting
+- 対応メディア: 画像・360度全球画像・YouTube 動画・MP4 動画・3D モデル（OBJ/MTL）・Gaussian Splatting
+- Chuci による自前実装のカルーセルと統一ビューア、IndexedDB に保存する自動サムネイル
 - Leaflet・OpenLayers・MapLibre GL と連携（統合例は `docs/api/` を参照）
 
 ## セキュリティ
@@ -172,7 +173,12 @@ pnpm run test:e2e   # E2E テストの実行
 - ブラウザ: Chrome / Edge / Firefox / Safari（最新版）・Web Components サポート必須
 
 <!-- SECTION 7: Peer Dependencies -->
-<!-- Quyuan には peer dependency はありません。本節は省略します。 -->
+## マルチメディア依存
+
+UI 入口は `@c4h/chuci` `^2.0.0` を optional peer dependency とし、配布する UI
+ビルドに同梱します。Chuci のカルーセルとビューアは Swiper.js・viewer.js・
+gsplat・A-Frame を使わず、three.js を同梱し、Gaussian スプラットでは Spark を
+必要時に読み込みます。テンプレート専用入口では Chuci は不要です。
 
 <!-- SECTION 8: Ecosystem / Related Repositories -->
 ## エコシステム

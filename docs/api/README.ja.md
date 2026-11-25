@@ -4,7 +4,7 @@
 
 ## リファレンス
 
-- [Web Components & 統合例](quyuan.ja.md) — `qy-swiper` / `qy-swiper-slide` / `qy-viewer` の属性とマップライブラリとの統合例
+- [Web Components & 統合例](quyuan.ja.md) — `qy-swiper` / `qy-swiper-slide` / `qy-viewer`・イベント・サムネイル生成・操作・スタイリング・地図ライブラリとの統合例
 
 ## 関連
 

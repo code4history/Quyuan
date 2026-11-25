@@ -4,7 +4,7 @@ This directory holds the release-dependent API signatures of `@c4h/quyuan`.
 
 ## Reference
 
-- [Web Components & Integration](quyuan.md) — `qy-swiper` / `qy-swiper-slide` / `qy-viewer` attributes and map library integration examples
+- [Web Components & Integration](quyuan.md) — `qy-swiper` / `qy-swiper-slide` / `qy-viewer`, events, thumbnail generation, controls, styling, and map library integration examples
 
 ## Related
 
