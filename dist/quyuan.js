@@ -3272,14 +3272,14 @@ class Yh extends sn {
         }, 100);
       });
     }
-    s.setSwiper(this), s.setCurrentSlideIndex(r ?? this.slider?.activeIndex ?? 0);
-    const a = this.slides[r ?? this.slider?.activeIndex ?? 0], n = {};
+    s.setSwiper(this), s.setCurrentSlideIndex(r ?? this.slider?.realIndex ?? 0);
+    const a = this.slides[r ?? this.slider?.realIndex ?? 0], n = {};
     a?.hasAttribute("fit-to-container") && (n.fitToContainer = !0), a?.hasAttribute("debug-mode") && (n.debugMode = !0), a?.hasAttribute("camera-position") && (n.cameraPosition = a.getAttribute("camera-position")), a?.hasAttribute("camera-target") && (n.cameraTarget = a.getAttribute("camera-target")), a?.hasAttribute("show-texture") && (n.showTexture = a.getAttribute("show-texture") === "true"), t === "3dmodel" && a?.hasAttribute("material-url") && (n.materialUrl = a.getAttribute("material-url")), s.open(e, t, n);
   }
   firstUpdated() {
   }
   /**
-   * m1-t9: スライド要素を DOM API で組み立てる（設計 §5 D1 の S1/S2/S7）。
+   * スライド要素を DOM API で組み立てる。
    *
    * 外部由来値（thumbnail-url / image-url / image-type / caption）は
    * すべて setAttribute と textContent で入れる。文字列補間を経由させない。
@@ -3298,14 +3298,15 @@ class Yh extends sn {
     });
   }
   /**
-   * m1-t9: ギャラリーのサムネイルを DOM API で組み立てる（設計 §5 D1 の S3）。
+   * ギャラリーのサムネイルを DOM API で組み立てる。
    *
    * background-image は **CSS コンテキスト**であり HTML エスケープでは守れない。
    * `escapeCssUrl` で `"` と `\` のみをエスケープして url("…") へ入れる。
    * `CSS.escape` は使わない — CSS 識別子用であり URL に適用すると `/` `:` `.` まで
-   * エスケープされて URL が壊れる（設計 §5 D1 の S3 セル）。
+   * エスケープされて URL が壊れる。
    */
   buildGalleryElements() {
+    if (!this.hasThumb) return;
     const e = this.query("#divGallery")?.querySelector(".swiper-wrapper");
     e && this.slides.forEach((t, r) => {
       const s = t.getAttribute("thumbnail-url") || "", a = document.createElement("div");
@@ -3462,9 +3463,7 @@ class Yh extends sn {
       </div>
     `;
     this.updateShadowRoot(r), this.buildSlideElements(), this.buildGalleryElements(), setTimeout(() => {
-      this.initializeSwiper(), this.queryAll(".gallery-thumb").forEach((s, a) => {
-        s.addEventListener("click", () => this.slider?.slideTo(a));
-      }), this.queryAll("img.viewer").forEach((s) => {
+      this.initializeSwiper(), this.queryAll("img.viewer").forEach((s) => {
         s.addEventListener("dragstart", (a) => a.preventDefault()), s.addEventListener("click", (a) => {
           if (this.isDragging) {
             this.isDragging = !1;
@@ -3642,11 +3641,10 @@ class os extends sn {
     }, 0);
   }
   /**
-   * m1-t9: 外部由来値（POI の URL 等）を描画後の DOM へ setAttribute で入れるフック。
+   * 外部由来値（POI の URL 等）を描画後の DOM へ setAttribute で入れるフック。
    *
    * getViewerContent() が返すテンプレートには **外部由来値を含めない**。
-   * 文字列補間すると属性ブレイクアウトが成立するためである
-   * （m1 包括セキュリティレビュー SRH-1・設計書 §5 D1）。
+   * 文字列補間すると属性ブレイクアウトが成立するためである。
    */
   applyExternalValues() {
   }
@@ -5746,7 +5744,7 @@ customElements.get("cc-viewer-image") || customElements.define("cc-viewer-image"
 class Ka extends os {
   imgUrl = "";
   /**
-   * m1-t9 D5（SRH-2）: aframe CDN の Subresource Integrity。
+   * aframe CDN の Subresource Integrity。
    *
    * 実際に取得して算出した（2026-08-01）:
    *   curl -sSL https://aframe.io/releases/1.4.0/aframe.min.js  → 1,325,299 bytes
@@ -5782,10 +5780,10 @@ class Ka extends os {
     `;
   }
   /**
-   * m1-t9 S4: srcdoc は **外部由来値を一切含まない固定文字列** である（設計 §5 D1）。
+   * srcdoc は **外部由来値を一切含まない固定文字列** である。
    *
    * 画像 URL は postMessage で iframe へ渡し、iframe 内で setAttribute する。
-   * `contentDocument` を使わないのは、D4 で `sandbox="allow-scripts"` を採ると
+   * `contentDocument` を使わないのは、`sandbox="allow-scripts"` を採ると
    * iframe が opaque origin になり親からのアクセスが遮断されるためである。
    * postMessage なら sandbox の有無にかかわらず成立する。
    *
@@ -5814,12 +5812,12 @@ class Ka extends os {
                 <a-entity camera look-controls="reverseMouseDrag: true"></a-entity>
               </a-scene>
               <script>
-                // m1-t9: 画像 URL は親から postMessage で受け取り setAttribute で入れる。
-                // srcdoc に埋めると属性ブレイクアウトが成立するため（SRH-1）。
+                // 画像 URL は親から postMessage で受け取り setAttribute で入れる。
+                // srcdoc に埋めると属性ブレイクアウトが成立するため。
                 window.addEventListener('message', function (e) {
-                  // m1-t9-hotfix-1: 正当な送り手は親フレームだけである。
+                  // 正当な送り手は親フレームだけである。
                   // origin ではなく source で照合する — 将来 sandbox を付けると
-                  // opaque origin になり e.origin が "null" になるため（m1-t9 D4 の実測）。
+                  // opaque origin になり e.origin が "null" になるため（実測）。
                   // source 照合なら sandbox の有無によらず成立する。
                   if (e.source !== parent) return;
                   var d = e.data;
@@ -5881,9 +5879,9 @@ class Ef extends os {
     const e = this.query(".iframe");
     e && (e.src = ""), this.videoUrl = "";
   }
-  // m1-t9 S5: src を**テンプレートに埋めない**。videoUrl は POI 由来の外部値であり、
-  // 文字列補間すると属性ブレイクアウトが成立する（設計 §5 D1）。
-  // src に入るのは toYouTubeIframeSrc が https に限った値だけ（A2-C-1・HR-16）。
+  // src を**テンプレートに埋めない**。videoUrl は POI 由来の外部値であり、
+  // 文字列補間すると属性ブレイクアウトが成立する。
+  // src に入るのは toYouTubeIframeSrc が https に限った値だけ。
   getViewerContent() {
     return '<iframe class="iframe" allowfullscreen></iframe>';
   }
@@ -5970,12 +5968,12 @@ class wf extends os {
     const e = this.query("video");
     e && e.addEventListener("error", (t) => this.handleVideoError(t));
   }
-  // m1-t9 S6: src を**テンプレートに埋めない**（設計 §5 D1）
+  // src を**テンプレートに埋めない**
   applyExternalValues() {
     const e = this.query("video");
     e && e.setAttribute("src", this.videoUrl);
   }
-  // m1-t9 S6(:95): エラー表示は innerHTML ではなく textContent で書く。
+  // エラー表示は innerHTML ではなく textContent で書く。
   // videoUrl は POI 由来の外部値であり、innerHTML では <img onerror> が実行される。
   handleVideoError(e) {
     const t = this.query(".video-container");
@@ -29069,7 +29067,9 @@ class Eb extends sn {
     const t = this.swiper.slides[e], r = t.getAttribute("image-url") || "", s = t.getAttribute("image-type") || "image", a = xa[this.currentType], n = this.query(a);
     n && n.close();
     const o = {};
-    t.hasAttribute("fit-to-container") && (o.fitToContainer = !0), t.hasAttribute("debug-mode") && (o.debugMode = !0), t.hasAttribute("camera-position") && (o.cameraPosition = t.getAttribute("camera-position")), t.hasAttribute("camera-target") && (o.cameraTarget = t.getAttribute("camera-target")), t.hasAttribute("show-texture") && (o.showTexture = t.getAttribute("show-texture") === "true"), t.hasAttribute("material-url") && (o.materialUrl = t.getAttribute("material-url")), this.currentSlideIndex = e, this.open(r, s, o), this.swiper.slider && this.swiper.slider.slideTo(e);
+    t.hasAttribute("fit-to-container") && (o.fitToContainer = !0), t.hasAttribute("debug-mode") && (o.debugMode = !0), t.hasAttribute("camera-position") && (o.cameraPosition = t.getAttribute("camera-position")), t.hasAttribute("camera-target") && (o.cameraTarget = t.getAttribute("camera-target")), t.hasAttribute("show-texture") && (o.showTexture = t.getAttribute("show-texture") === "true"), t.hasAttribute("material-url") && (o.materialUrl = t.getAttribute("material-url")), this.currentSlideIndex = e, this.open(r, s, o);
+    const l = this.swiper.slider;
+    l && (l.params?.loop ? l.slideToLoop(e) : l.slideTo(e));
   }
   updateNavigationButtons() {
     if (!this.swiper) return;

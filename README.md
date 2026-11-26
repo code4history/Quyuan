@@ -44,7 +44,7 @@ A template renders on the main thread and Quyuan sets no limit on its time or it
 ## Quick Start
 
 <!-- release-pinned:start -->
-> **Current release: `1.1.1`**. This block is the only place in
+> **Current release: `1.1.2-rc.1`**. This block is the only place in
 > this repository that carries a release version; everything outside it is
 > written against the 1.0 release.
 > npm: [`@c4h/quyuan`](https://www.npmjs.com/package/@c4h/quyuan)
@@ -131,7 +131,7 @@ pulling in the multimedia viewer dependencies.
 ### CDN (jsDelivr)
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@1.1.1/dist/quyuan.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@c4h/quyuan@1.1.2-rc.1/dist/quyuan.umd.js"></script>
 ```
 
 ### API reference

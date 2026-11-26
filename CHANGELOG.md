@@ -2,6 +2,24 @@
 
 このプロジェクトの主な変更を記録します。版数は [Semantic Versioning](https://semver.org/) に従います。
 
+## [1.1.2-rc.1] - 2026-11-26
+
+### Security
+- テンプレートが別のテンプレートを読み込めないようにした。テンプレートの環境に読み込み元（loader）を持たせず、別のテンプレートを読み込むタグ（`include`・`import`・`from`・`extends`）を使うテンプレートは描画の前に評価の誤りにする。読み込み先のテンプレートが関所の静的な検査を通らずに評価される経路があったため。文字列でないテンプレートも描画の前に断る
+- README に、テンプレートはメインスレッドで時間の上限なく描画されることを書き足した。信頼できる書き手のテンプレートだけを使う前提は変わらない
+- 開発用の依存の、脆弱性が報告された推移的な依存（`undici`・`fast-uri`・`minimatch`）を修正済みの版へ上げた。npm パッケージの実行時の依存は変わらない
+
+### Changed
+- 同梱する `@c4h/chuci` を Chuci の RC（1.0.3-rc.1）へ追随。1.1.1 の「既知の問題」に書いた、`cc-swiper` を「前へ」で 1 回戻したあと `cc-viewer` で画像を送ると閉じたときに別の画像が表示される不具合は、Chuci 1.0.3 で直った
+
+### Security (English)
+- Templates can no longer load other templates. The template environment has no loader, and a template that uses a tag that loads another template (`include`, `import`, `from`, `extends`) is refused before rendering, because a loaded template was evaluated without the static check. Templates that are not strings are refused as well
+- The README now states that a template renders on the main thread without a time limit. Only use templates from trusted authors, as before
+- Vulnerable transitive development dependencies (`undici`, `fast-uri`, `minimatch`) were raised to patched versions. The runtime dependencies of the npm package do not change
+
+### Changed (English)
+- The bundled `@c4h/chuci` follows the Chuci release candidate (1.0.3-rc.1). The known issue listed in 1.1.1 (after going back once with "previous" in `cc-swiper` and then navigating in `cc-viewer`, a different image was shown on close) is fixed in Chuci 1.0.3
+
 ## [1.1.1] - 2026-11-02
 
 1.1.1-rc.1 と同じ内容の正式版です（版番号と、内部依存の指定を RC から正式版（^1.0.2）へ戻したことだけが違います）。変更点は 1.1.1-rc.1 までの各項を参照してください。
